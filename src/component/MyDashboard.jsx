@@ -8,6 +8,7 @@ import { countryList } from '../data';
 import { DataContext } from '../context';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Alert from '../alert/Alert';
 
 const validationSchema = Yup.object().shape({
   leadDate: Yup.date()
@@ -29,7 +30,6 @@ const validationSchema = Yup.object().shape({
   .required('Phone Number is required'),
   state: Yup.string().required('State is required'),
   parentName: Yup.string().required('Parent Name is required'),
-  leadRepresentative: Yup.string().required('Lead Representative is required'),
   course: Yup.string().required('Course is required'),
   classMode: Yup.string().required('Class Mode is required'),
 });
@@ -44,9 +44,12 @@ const formattedTime = today.toTimeString().slice(0, 5);
 
 const MyDashboard = () => {
 
-  const { number, setNumber, code, setCode, country, setCountry, addLeadFunc, profileFunc } = useContext(DataContext);
+  
+
+  const { number, setNumber,setCourseName, code, setCode, country, setCountry, addLeadFunc, profileFunc,service,username,serviceFunc } = useContext(DataContext);
   const ctCode = code
   const ctnumber = number
+  
 
   const initialValues = {
     leadDate: formattedDate,
@@ -58,7 +61,7 @@ const MyDashboard = () => {
     countryCode: ctCode,
     country: '',
     location: '',
-    phoneNumber: number,
+    phoneNumber: ctnumber,
     state: '',
     parentName: '',
     leadRepresentative: '',
@@ -68,11 +71,14 @@ const MyDashboard = () => {
 
   useEffect(()=>{
     profileFunc()
+    serviceFunc()
     console.log("Profile Function run")
   },[])
   return (
     <>
+    <Alert />
       <div className="w-[100%] py-10 bg-blue-50">
+      
         <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
           <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">Add New Lead</h2>
           <Formik
@@ -80,7 +86,7 @@ const MyDashboard = () => {
             onSubmit={addLeadFunc}
             validationSchema={validationSchema}
           >
-            {() => (
+            {( values, handleSubmit, resetForm, setFieldValue ) => (
               <Form>
                 <div className="px-6 pb-4">
                   <h4 className="text-green-600 mb-2 text-center underline text-xl">Lead Details</h4>
@@ -295,10 +301,8 @@ const MyDashboard = () => {
               name="leadRepresentative"
               className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
             >
-              <option value="">--------Select------</option>
-              <option>Purpose 1</option>
-              <option>Purpose 2</option>
-              <option>Purpose 3</option>
+              
+              <option>{username}</option>
             </Field>
             <ErrorMessage name="leadRepresentative" component="div" className="text-red-500" />
           </div>
@@ -333,9 +337,11 @@ const MyDashboard = () => {
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                       >
                         <option value="">----Select------</option>
-                        <option>Course 1</option>
-                        <option>Course 2</option>
-                        <option>Course 3</option>
+                        {service?.map((element, index) => (
+                        <option key={index} value={element.id}>
+                          {element.ServiceName}
+                        </option>
+                      ))}
                       </Field>
                       <ErrorMessage name="course" component="div" className="text-red-500" />
                     </div>

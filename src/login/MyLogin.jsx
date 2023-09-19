@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext,useEffect,useState } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import { DataContext } from "../context";
@@ -9,13 +9,15 @@ const MyLogin = () => {
 
 
   const {loginFunc, invalidInfo, internalError,isLoading,setIsLoading,} = useContext(DataContext);
-
+useEffect(()=>{
+  setIsLoading(false)
+},[])
   
 
   return (
     <section className="gradient-form h-[100vh] bg-neutral-200  dark:bg-neutral-700">
       <div className=" h-full p-10">
-        <div className="g-6 flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200 md:w-[55%] mx-auto">
+        <div className="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200 md:w-[55%] mx-auto">
           <div className="w-full">
             <div className="block rounded-lg bg-white shadow-xl dark:bg-neutral-800">
               {/* Left column container */}
@@ -75,7 +77,6 @@ const MyLogin = () => {
           background: "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
         }}
         disabled={isLoading}
-        
       >
         {isLoading ? 'Loading...' : 'Login'}
       </button>
