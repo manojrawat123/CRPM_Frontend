@@ -49,9 +49,9 @@ const ConvertLead = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    axios.get(`http://127.0.0.1:8000/payments/${id}`, config).then((res)=>{
-    console.log(res.data)
-    setPaymetObj(res.data)
+    axios.get(`http://127.0.0.1:8000/payments/${id}/`, config).then((res)=>{
+    console.log(res.data);
+    setPaymetObj(res.data);
     }).catch((errr)=>{
       console.log(errr);
     });

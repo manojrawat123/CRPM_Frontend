@@ -20,16 +20,23 @@ import CustomerRegister from './pages/CustomerRegistrationFrom/CustomerRegister'
 import ConvertedLeadLink from './pages/ConvertedLeadLink/ConvertedLeadLink';
 import AddLostSale from './pages/addLostSale/AddLostSale';
 import MyNavbar from './component/Navbar/MyNavbar';
+import PaymentRefund from './pages/PaymentRefund/PaymentRefund';
+import PaymentDetails from './pages/paymentDetails/PaymentDetails';
+import PaymentLink from './pages/PaymentLink/PaymentLink';
+import PaymentRedirectLink from './pages/PaymentLink/PaymentRedirectLink';
+import AddStaffForm from './pages/AddStaffForm/AddStaffForm';
+import Batch from './pages/Batch/Batch';
+import EditStaffDetail from './pages/AddStaffForm/EditStaffDetails';
 
 function App() {
 
   return (
 
     <>
-    {/* {localStorage.getItem('token') && localStorage.getItem('brand')? <MyNavbar />: <></>} */}
+    {localStorage.getItem('token') && localStorage.getItem('brand')? <MyNavbar />: <></>}
     
     <Routes>      
-      <Route path='' Component={ProtectedRoutes} >
+      <Route path='' Component={ProtectedRoutes}>
         <Route index path='' Component={MyBrand} />
       </Route>
     <Route path='' Component={ProtectedRoutes} >
@@ -82,6 +89,33 @@ function App() {
         <Route path='/addlostsale/:id' Component={AddLostSale}/>
       </Route>
 
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/refund/:id' Component={PaymentRefund}/>
+      </Route>
+
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/paymentdetails' Component={PaymentDetails}/>
+      </Route>
+    
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/paymentlink' Component={PaymentLink}/>
+      </Route>
+
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/paymentredirectlink/:id' Component={PaymentRedirectLink}/>
+      </Route>
+
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/addstaff' Component={AddStaffForm}/>
+      </Route>
+
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/editstaff/:id' Component={EditStaffDetail}/>
+      </Route>
+      
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/batch' Component={Batch}/>
+      </Route>
 
      <Route path='/login' Component={MyLogin} />
 

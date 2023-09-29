@@ -17,10 +17,10 @@ const PaymentForm = () => {
   const selectedBrand = localStorage.getItem("brand")
   const navigate = useNavigate()
 
-  const [paymentmode, setPaymentMode] = useState([])
-  const [selectedServiceId, setSelectedServiceId] = useState('');
-  const [paymentType, setPaymentType] = useState([])
+  const [paymentmode, setPaymentMode] = useState([]); 
   const [paymentTypeId, setPaymentTypeID] = useState();
+  const [paymentType, setPaymentType] = useState([]);
+  const [selectedServiceId, setSelectedServiceId] = useState('');
   const [paymentModeId, setPaymentModeId] = useState();
   const [leadObj, setLeadObj] = useState();
   const [dataFetch, setDataFetched] = useState(false);
@@ -30,7 +30,7 @@ const PaymentForm = () => {
   const getLeadByIdFunc = async(id)=>{
     
   const token = localStorage.getItem("token");
-    const value = await axios.get(`http://localhost:8000/lead/${id}`, {
+    const value = await axios.get(`http://localhost:8000/lead/${id}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -57,7 +57,6 @@ const PaymentForm = () => {
     if (selectedBrand !== null) {
       axios.get(`http://127.0.0.1:8000/paymentmode/${selectedBrand}/`, config).then((response) => {
         setPaymentMode(response?.data);
-        
       }).catch((error) => {
         console.log(error)
       });
@@ -131,7 +130,6 @@ const PaymentForm = () => {
               const payment_mode_obj = paymentmode.find(
                 (mode) => mode.payment_mode === payment_mode_display
               );
-  
               console.log(payment_mode_display)
               console.log("payment_mode_obj:", payment_mode_obj);
               console.log("Selected Service Id", selectedServiceId);
@@ -142,9 +140,7 @@ const PaymentForm = () => {
                 "company": company,  // Other additional fields
                 "brand": selectedBrand,  // Other additional fields
                 "payment_purpose": serviceObject?.id || '',  // Other additional fields
-  
-                // Other additional fields
-                "payment_date": combinedDatetime,
+                "payment_date": combinedDatetime, // Payment Date
                 "payment_type_id": paymentTypeId,
                 "payment_mode_id": payment_mode_obj?.payment_mode_id || '',
               }

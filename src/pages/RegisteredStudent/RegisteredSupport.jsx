@@ -12,7 +12,7 @@ const RegisteredSupport = (props) => {
     const id = props?.student?.LeadID
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}`,{
+        axios.get(`http://localhost:8000/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
@@ -23,23 +23,33 @@ const RegisteredSupport = (props) => {
       }
 
     const feesFunc = ()=>{
-        axios.get(`http://localhost:8000/feetracer/${id}`,{
+        axios.get(`http://localhost:8000/feetracer/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
         }).then((value)=>{
           (value.data);
           console.log("Fees Details:",value.data);
-          const arrFees = value.data?.map((item,index)=>{
+          if (value.data?.length != 0){
+            const arrFees = value.data?.map((item,index)=>{
               return item?.fee_received
             })
   
               const sum = arrFees.reduce((accumulator, currentValue) => {
               return parseInt(accumulator, 10) +  parseInt(currentValue, 10);
           },);
+          
           console.log("Sum:", sum);
           setPaidFees(sum);
+          alert(sum);
           setFeesDetails(value.data[value.data.length - 1])
+          }
+          else{
+            setPaidFees(0)
+          }
+        }).catch((erro)=>{
+          console.log(erro);
+          alert("Some Error Occured in feetracer");
         })
     }
 
@@ -52,9 +62,9 @@ const RegisteredSupport = (props) => {
         feesFunc();
       },[])
 
-      if(!feesDetails){
-        return (<>Loading...</>)
-      }
+      // if(!feesDetails){
+      //   return (<>Loading...</>)
+      // }
 
 
   return (
@@ -77,9 +87,7 @@ const RegisteredSupport = (props) => {
         <br />
         <span className="font-bold">Pending Fee: </span>
 
-             {
-                props?.student?.TotalFee - paidFees
-              }
+             {props?.student?.TotalFee - paidFees}
             
         <br />
         <span className='font-bold'>

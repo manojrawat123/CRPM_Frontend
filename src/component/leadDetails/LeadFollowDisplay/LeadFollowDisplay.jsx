@@ -12,7 +12,7 @@ const LeadFollowDisplay = () => {
 
     useEffect(()=>{
       profileFunc()
-        const apiUrl = `http://localhost:8000/leadfollowup/${id}`;
+        const apiUrl = `http://localhost:8000/leadfollowup/${id}/`;
 const authToken = localStorage.getItem("token");
 
 // Define a function to make the GET request
@@ -36,7 +36,7 @@ const fetchData = async () => {
 // Call the fetchData function to make the GET request
 fetchData();
 
-axios.get(`http://localhost:8000/lead/${id}`, {
+axios.get(`http://localhost:8000/lead/${id}/`, {
   headers: {
     Authorization: `Bearer ${authToken}`,
   },

@@ -17,6 +17,7 @@ const AddFeesDetails = () => {
   const [leadObj, setLeadObj] = useState();
   const [feesObj, setFeesObj] = useState();
   const [load, setLoad] = useState(false);
+  const [leadId, setLeadId] = useState();
 
   const token = localStorage.getItem("token");
   const config = {
@@ -34,6 +35,7 @@ const AddFeesDetails = () => {
     }).then((values) => {
       console.log("Converted Data",values.data);
       setData(values?.data[0]);
+      setLeadId(values?.data[0]?.LeadID)
     })
   }
 
@@ -58,7 +60,7 @@ const AddFeesDetails = () => {
 
   useEffect(()=>{
     const paymentFunc = async()=>{
-      axios.get(`http://127.0.0.1:8000/payments/${id}/`, config).then((res)=>{
+      axios.get(`http://127.0.0.1:8000/paymentsbylead/${leadId}/`, config).then((res)=>{
       console.log(res.data);
       setPaymetObj(res.data);
       setLoad(true);
@@ -69,10 +71,10 @@ const AddFeesDetails = () => {
     
     const leadFunc = ()=>{
       setLoad(false)
-      axios.get(`http://localhost:8000/lead/${id}/`,config).then((values)=>{
-        console.log("Lead Data",values.data)
-        setLeadObj(values.data)
-        setLoad(true)
+      axios.get(`http://localhost:8000/lead/${leadId}/`,config).then((values)=>{
+        console.log("Lead Data",values.data);
+        setLeadObj(values.data);
+        setLoad(true);
       }).catch((err)=>{
         console.log(err)
       })
@@ -81,17 +83,13 @@ const AddFeesDetails = () => {
     leadFunc();
     convertedLeadGetFunc();  
     feesTrackerFunc();
-  },[])
+  },[leadId])
 
   useEffect(()=>{
     feesTrackerFunc()
   }, [feeReceived])
   // Define your options for Student and Payment ID fields
-  
 
-
-
-  
 if (load===false){
   return <>
   Loading Please wait...

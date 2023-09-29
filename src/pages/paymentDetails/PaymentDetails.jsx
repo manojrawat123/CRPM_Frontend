@@ -3,23 +3,41 @@ import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DataContext } from "../../context";
-import RegisteredSupport from "./RegisteredSupport";
+import axios from "axios";
+import PaymentSuppor from "./PaymentSupport";
+import PaymentSupport from "./PaymentSupport";
+// import PaymentSupport from "./PaymentSupport";
 
-const RegisteredStudent = () => {
-  const { getResisteredStudentAll, registeredStudent } =
+
+const PaymentDetails = () => {
+  const { GetFeesAll, allFeesObj } =
     useContext(DataContext);
-  const [isRegisteredDate, setIsRegisteredDate] = useState(true);
-  const [filteredRegisteredStudent, setFilteredRegisterStudent] = useState([]);
+  const [isFeesDate, setisFeesDate] = useState(true);
+  const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [paymentObj, setPaymentObj] = useState();
+
+
+  const token = localStorage.getItem("token");
+
+  useEffect(()=>{
+    axios.get(`http://localhost:8000/payments/`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((value)=>{
+        console.log(value.data);
+        setPaymentObj(value.data);
+      })
+  },[])
 
   const handleSelect = (date) => {
-    setIsRegisteredDate(false);
+    setisFeesDate(false);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
-    let filtered = registeredStudent?.filter((product) => {
-      let productDate = new Date(product?.ConvertedDateTime);
-
+    let filtered = paymentObj?.filter((product) => {
+      let productDate = new Date(product?.payment_date);
       if (date.selection.endDate == date.selection.startDate) {
         productDate.setHours(0, 0, 0, 0);
         return productDate.getTime() === date.selection.startDate.getTime();
@@ -35,7 +53,7 @@ const RegisteredStudent = () => {
         );
       }
     });
-    setFilteredRegisterStudent(filtered);
+    setFilteredAllFeesObj(filtered);
   };
 
   const selectionRange = {
@@ -45,13 +63,13 @@ const RegisteredStudent = () => {
   };
 
   useEffect(() => {
-    getResisteredStudentAll();
+    GetFeesAll();
   }, []);
 
   return (
     <>
       <div className="m-4">
-        <h1 className="text-center text-xl font-bold">Student Schedule</h1>
+        <h1 className="text-center text-xl font-bold">Payment Details {isFeesDate? "-- This Month": ""}</h1>
       </div>
 
       <div className="text-center">
@@ -63,7 +81,7 @@ const RegisteredStudent = () => {
         <button
           type="button"
           onClick={() => {
-            setIsRegisteredDate(true);
+            setisFeesDate(true);
           }}
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
@@ -82,16 +100,16 @@ const RegisteredStudent = () => {
             </tr>
           </thead>
           <tbody>
-            {isRegisteredDate ? registeredStudent?.map((student, index) => (
-                  <RegisteredSupport
-                    student={student}
+            {isFeesDate ? paymentObj?.map((payment, index) => (
+                  <PaymentSupport
+                    payment={payment}
                     index={index}
                     key={index}
                   />
                 ))
-              : filteredRegisteredStudent?.map((student, index) => (
-                  <RegisteredSupport
-                    student={student}
+              : filteredallFeesObj?.map((payment, index) => (
+                  <PaymentSupport
+                    payment={payment}
                     index={index}
                     key={index}
                   />
@@ -103,4 +121,4 @@ const RegisteredStudent = () => {
   );
 };
 
-export default RegisteredStudent;
+export default PaymentDetails;

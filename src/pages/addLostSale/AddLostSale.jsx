@@ -5,15 +5,88 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const AddLostSale = () => {
+
+  const [paymentObj, setPaymetObj] = useState([]);
+  const [data, setData] = useState()
+  const [feeReceived, setFeesRecived] = useState();
+  const [leadObj, setLeadObj] = useState();
+  const [feesObj, setFeesObj] = useState();
+  const [load, setLoad] = useState(false);
+  const [leadId, setLeadId] = useState();
+  const { id } = useParams()
     
- const { id } = useParams()
   const token = localStorage.getItem("token");
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
+
+
+  const convertedLeadGetFunc = () => {
+    axios.get(`http://localhost:8000/convertedlead/${id}/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then((values) => {
+      console.log("Converted Data",values.data);
+      setData(values?.data[0]);
+      setLeadId(values?.data[0]?.LeadID)
+    })
+  }
+
+  const feesTrackerFunc = ()=>{
+    axios.get(`http://localhost:8000/feetracer/${id}/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then((values) => {
+      console.log("Fees Data",values.data);
+      setFeesObj(values.data[0]);
+      const arrFees = values.data?.map((item,index)=>{
+        return parseInt(item?.fee_received,10)
+      })
+        const sum = arrFees.reduce((accumulator, currentValue) => {
+        return parseInt(accumulator, 10) +  parseInt(currentValue, 10);
+    },);
+    console.log("Sum:", sum); // This will also print the sum of the elements in the array
+    setFeesRecived(sum);
+})
+}
+
+  useEffect(()=>{
+    const paymentFunc = async()=>{
+      axios.get(`http://127.0.0.1:8000/paymentsbylead/${leadId}/`, config).then((res)=>{
+      console.log(res.data);
+      setPaymetObj(res.data);
+      setLoad(true);
+      }).catch((errr)=>{
+        console.log(errr);
+      });
+    }
+    
+    const leadFunc = ()=>{
+      setLoad(false)
+      axios.get(`http://localhost:8000/lead/${leadId}/`,config).then((values)=>{
+        console.log("Lead Data",values.data);
+        setLeadObj(values.data);
+        setLoad(true);
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    paymentFunc();
+    leadFunc();
+    convertedLeadGetFunc();  
+    feesTrackerFunc();
+  },[leadId])
+
+  useEffect(()=>{
+    feesTrackerFunc()
+  }, [feeReceived])
+
   
+    
       return (
       <div className="w-[100%] py-10 bg-blue-50">
         <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
@@ -42,7 +115,6 @@ const AddLostSale = () => {
                     }).catch((err)=>{
                         console.log(err)
                     })
-
                     console.log({LostSales: values?.payment_id,
                         LostSalesReason: values?.receipt_number,
                         LostSalesDate:  new Date().toISOString().substring(0,10)})
@@ -59,8 +131,7 @@ const AddLostSale = () => {
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                       >
                         <option value="">---- Select Student ----</option>
-                        <option>Student
-                        </option>
+                        <option>{`${id}-${leadObj?.LeadName}-${data?.TotalFee - feeReceived}`}</option>
                       </Field>
                       <ErrorMessage name="student" component="div" className="text-red-500 mt-1" />
                     </div>

@@ -14,7 +14,7 @@ const FeesSupport = (props) => {
 
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}`,{
+        axios.get(`http://localhost:8000/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
@@ -27,7 +27,7 @@ const FeesSupport = (props) => {
       }
 
       const getConvertedLead = ()=>{
-        axios.get(`http://localhost:8000/convertedlead/${id}`,{
+        axios.get(`http://localhost:8000/convertedlead/${id}/`,{
             headers: {
               'Authorization': `Bearer ${authToken}`
             }

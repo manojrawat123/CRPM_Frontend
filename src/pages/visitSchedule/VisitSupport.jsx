@@ -10,7 +10,7 @@ const VisitSupport = (props) => {
     const id = props.visit.LeadID
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}`,{
+        axios.get(`http://localhost:8000/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }

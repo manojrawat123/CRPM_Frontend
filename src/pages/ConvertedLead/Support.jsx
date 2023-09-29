@@ -120,9 +120,13 @@ const MySupport = (props) => {
                 </NavLink>
                   <br />
                   <br />
+
+                  <NavLink to={`/addlostsale/${props?.items?.ConvertedID}`}>
+
                   <button className="bg-red-500 hover:bg-red-600 w-[10rem] text-white font-semibold py-2 px-4 rounded focus:outline-none">
                     Add Lost Sale
                   </button>
+                  </NavLink>
                 </td>
               </tr>
     </>
