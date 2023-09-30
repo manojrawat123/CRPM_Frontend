@@ -121,15 +121,15 @@ if (load===false){
             // Handle form submission logic here
             
             const feeTracerData = {
-              lead: id, // Replace with the actual Lead ID
+              lead: leadId, // Replace with the actual Lead ID
               fee_received: values?.fees_paid, // Replace with the actual fee received amount  
               fee_created_datetime: feesObj?.fee_created_datetime, // Replace with the actual datetime
               fee_payment_datetime: feesObj?.fee_payment_datetime, // Replace with the actual datetime
               receipt_number: values?.receipt_number, // Replace with the actual receipt number
               student: feesObj?.student, // Replace with the actual Student ID
-              payment_mode: feesObj?.payment_mode, // Replace with the actual Payment Mode ID
+              payment_mode: feesObj?.payment_mode?.payment_mode_id, // Replace with the actual Payment Mode ID
               representative: feesObj?.representative, // Replace with the actual Representative ID
-              payment_type: feesObj?.payment_type, // Replace with the actual Payment Type ID
+              payment_type: feesObj?.payment_type?.payment_type_id, // Replace with the actual Payment Type ID
               customer_status: 'Active', // Replace with the actual customer status
               company: feesObj?.company, // Replace with the actual Company ID
               brand: feesObj?.brand, // Replace with the actual Brand ID
@@ -138,13 +138,13 @@ if (load===false){
               payment_id: values?.payment_id // Replace with the actual Payment ID
             };
             console.log(feeTracerData);
-            axios.post("http://127.0.0.1:8000/feetracer/", feeTracerData, {
+            axios.post("http://127.0.0.1:8000/feetracerpost/", feeTracerData, {
                         headers: {
                           'Authorization': `Bearer ${token}`
                         }
                       }).then((res)=>{
                         console.log("Final Response!!",res.data)
-                        alert("Data posted sucessfully")
+                        alert("Data posted sucessfully");
                       })
                     resetForm();
           }}

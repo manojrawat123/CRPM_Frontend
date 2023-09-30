@@ -11,7 +11,9 @@ const FeesSupport = (props) => {
 
     const authToken = localStorage.getItem('token');
     const id = props?.fees?.lead
-
+    
+    const convertedId = props?.fees?.converted_id
+    console.log(convertedId)
 
     const leadFunc = ()=>{
         axios.get(`http://localhost:8000/lead/${id}/`,{
@@ -20,19 +22,17 @@ const FeesSupport = (props) => {
           }
         }).then((value)=>{
           setLeadObj(value.data);
-          console.log(value.data);
         }).catch((err)=>{
             console.log(err)
         })
       }
 
       const getConvertedLead = ()=>{
-        axios.get(`http://localhost:8000/convertedlead/${id}/`,{
+        axios.get(`http://localhost:8000/convertedlead/${convertedId}/`,{
             headers: {
               'Authorization': `Bearer ${authToken}`
             }
           }).then((value)=>{
-            console.log(value.data[0]);
             setConvertedLeadObj(value.data[0])
             setIsConverted(true)
 

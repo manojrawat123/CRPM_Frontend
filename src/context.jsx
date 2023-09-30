@@ -47,8 +47,6 @@ export const DataProvider = ({ children }) => {
   }
   /// End Fees Details
 
-
-
   /// ///
   const getResisteredStudentAll = () => {
     axios.get(`http://localhost:8000/convertedlead/`, {
