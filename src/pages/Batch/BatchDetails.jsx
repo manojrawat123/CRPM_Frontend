@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import EditBatchButton from './EditButton';
 
 const BatchDetails = () => {
 
@@ -63,7 +64,7 @@ const BatchDetails = () => {
         </div>
         <div>
           <span className='font-bold text-black'>Active Status: </span>
-          {item?.status ? "Active": "Not Active"}
+          {item?.Status ? "Active": "Not Active"}
         </div>
         {/* <div>
           <span className='font-bold text-black'>Active Students: </span>
@@ -97,9 +98,31 @@ const BatchDetails = () => {
         </div>
       </td>
     <td>
-    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded whitespace-nowrap mr-4">
-  More Detail
-</button>
+
+      {/* Edit Button!!  */}
+     <EditBatchButton item={item} batchDetails={batchDetails}/>
+     <button
+  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded focus:outline-none focus:shadow-outline"
+  type="button"
+  onClick={()=>{
+    axios.put(`http://localhost:8000/batch/${item?.BatchID}/`,{
+      Status: item.Status == true ? false: true,
+    },{
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+      }).then((value)=>{
+        console.log(value);
+        batchDetails()
+      }).catch((err)=>{
+        console(err);
+      })
+      console.log("Button Clicked");
+  }}
+  >
+{item.Status? "Mark InActive": "Active"}
+  </button>
+      {/* Edit Button End!! */}
     </td>
     </tr>
   ))}

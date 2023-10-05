@@ -9,7 +9,7 @@ import { DataContext } from '../../context';
 
 const validationSchema = Yup.object().shape({
   batchname: Yup.string().required('Batch Name is required'),
-  batchbrand: Yup.string().required('Batch Brand Type is required'),
+//   batchbrand: Yup.string().required('Batch Brand Type is required'),
   batchmode: Yup.string().required('Batch Mode is required'),
   addtags: Yup.string().required('Add Tags is required'),
   teacher: Yup.string().required('Assign Teacher is required'),
@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 });
 
 
-function AddBatchForm() {
+function EditBatchForm(props) {
 
     const { profileFunc, username, service, userId} = useContext(DataContext)
     const token = localStorage.getItem('token')
@@ -34,21 +34,21 @@ function AddBatchForm() {
       <h2 className="text-2xl text-green-800 font-semibold mb-4 text-center underline">Create New Batch</h2>
       <Formik
         initialValues={{
-          batchname: '',
-          batchbrand: '',
-          batchmode: '',
-          addtags: '',
-          teacher: '',
-          assignstaff: '',
-          batchstartdate: '',
-          batchenddate: '',
-          batchstarttime: '',
-          batchendtime: '' 
+          batchname: props?.editd?.BatchName,
+        //   batchbrand: props?.ed,
+          batchmode:props?.editd.BatchMode,
+          addtags: props?.editd.BatchTags,
+          teacher: props?.editd.BatchTeacherName,
+          assignstaff: props?.editd.BatchStaffAssigned,
+          batchstartdate: props?.editd.BatchStartDate.substring(0, 10),
+          batchenddate: props?.editd.BatchEndDate.substring(0,10),
+          batchstarttime: props?.editd.BatchTime,
+          batchendtime: props?.editd.BatchEndTime
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           // Handle form submission here
-          console.log(values);
+            
           const batch = {
             BatchName: values?.batchname,
             BatchDescription: 'This is a dummy batch.',
@@ -61,16 +61,20 @@ function AddBatchForm() {
             BatchEndTime: values?.batchendtime, // Replace with the desired time
             BatchTeacherName:values?.teacher,
 BatchStaffAssigned:values?.assignstaff,
-};
-console.log(batch)
-          axios.post("http://localhost:8000/batch/",batch,{
+          };
+          axios.put(`http://localhost:8000/batch/${props.editd.BatchID}/`,batch,{
           headers: {
             "Authorization": `Bearer ${token}`
           }
           }).then((value)=>{
             console.log(value);
+            alert("Data Submitted Successfully!!");
+            props.batchDetails()
+            resetForm();
           }).catch((err)=>{
             console.log(err);
+            resetForm();
+
           })
         }}
       >
@@ -90,7 +94,8 @@ console.log(batch)
             </div>
             {/* End Batch Name */}
             {/* Batch Brand Type */}
-            <div className="mb-4">
+
+            {/* <div className="mb-4">
               <label htmlFor="batchbrand" className="block text-green-700 font-semibold">
                 Batch Brand Type
               </label>
@@ -107,7 +112,9 @@ console.log(batch)
                 <option>Batch Brand Type 4</option>
               </Field>
               <ErrorMessage name="batchbrand" component="div" className="text-red-600" />
-            </div>
+            </div> */}
+
+
             {/* End Batch Brand Type */}
             {/* Brand Mode */}
             <div className="mb-4">
@@ -247,4 +254,4 @@ console.log(batch)
   );
 }
 
-export default AddBatchForm;
+export default EditBatchForm;

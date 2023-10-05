@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PaymentForm from './component/Payment'
 import { Route, Routes } from 'react-router-dom'
 import Table from './component/Table'
@@ -27,13 +27,19 @@ import PaymentRedirectLink from './pages/PaymentLink/PaymentRedirectLink';
 import AddStaffForm from './pages/AddStaffForm/AddStaffForm';
 import Batch from './pages/Batch/Batch';
 import EditStaffDetail from './pages/AddStaffForm/EditStaffDetails';
+import AssignBatches from './pages/AssignBatches/AssignBatches';
+import { DataContext, DataProvider } from './context';
 
 function App() {
+  
+  const { showNavbar } = useContext(DataContext)
+  
+
 
   return (
 
     <>
-    {localStorage.getItem('token') && localStorage.getItem('brand')? <MyNavbar />: <></>}
+      {showNavbar && <MyNavbar />}
     
     <Routes>      
       <Route path='' Component={ProtectedRoutes}>
@@ -115,6 +121,9 @@ function App() {
       
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/batch' Component={Batch}/>
+      </Route>
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/assignbatch' Component={AssignBatches}/>
       </Route>
 
      <Route path='/login' Component={MyLogin} />

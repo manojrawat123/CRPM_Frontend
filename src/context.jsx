@@ -27,6 +27,7 @@ export const DataProvider = ({ children }) => {
   const [allFeesObj, setAllFeesObj] = useState();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const [showNavbar, setShowNavbar] = useState(false);
 
   useEffect(() => {
     serviceFunc()
@@ -139,8 +140,10 @@ export const DataProvider = ({ children }) => {
         setCompany(data.company);
         setUserId(data.id);
         setUsername(data.name);
+        setShowNavbar(true)
       })
       .catch((error) => {
+        setShowNavbar(false)
         console.error('Error:', error.message);
         localStorage.removeItem("token");
         navigate("/login");
@@ -166,9 +169,11 @@ export const DataProvider = ({ children }) => {
         localStorage.setItem("token", token.access);
         console.log(token.access)
         setAuth(true)
+        setShowNavbar(true);
         navigate("")
 
       } catch (error) {
+        setShowNavbar(false)
         if (error.response && error.response.status === 400) {
           setInvalidInfo(true);
           setAuth(false);
@@ -251,7 +256,7 @@ export const DataProvider = ({ children }) => {
       , isLoading, setIsLoading, loginFunc, invalidInfo, profileFunc, serviceFunc, getResisteredStudentAll,
       number, setNumber, code, setCode, country, setCountry, userId, addLeadFunc, service,
       setLead, setCourseName, visitSechudule, getLeadFollowUpAll, setService, getLeadFunc, leads, company, registeredStudent, GetFeesAll, allFeesObj,
-      registerSucessfully, setRegisterSucessfully
+      registerSucessfully, setRegisterSucessfully, showNavbar, setShowNavbar
     }}>
       {children}
     </DataContext.Provider>

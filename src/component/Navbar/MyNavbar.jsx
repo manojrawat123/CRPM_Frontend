@@ -1,13 +1,18 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { NavLink, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react'
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { DataContext, DataProvider } from '../../context';
 
 const MyNavbar = () => {
 
     const [navItem, setNavItem] = useState([]);
     const token = localStorage.getItem("token");
-    const [display1, setDisplay1] = useState('none');;
+    const [display1, setDisplay1] = useState('none');
+    const navigate = useNavigate()
 
+    const {showNavbar, setShowNavbar} = useContext(DataContext);
 
     useEffect(() => {
         axios.get('http://localhost:8000/navbar/', {
@@ -43,12 +48,28 @@ const MyNavbar = () => {
                                                 </NavLink>
                                                 </li>)
                                             })}
+                                           
                                             </ul>
                                     </li>
-                                
                             )
                         })}
+                                
                     </ul>
+                         <li className='ml-auto inline-block py-[.8rem] hover:underline hover:text-green-400 cursor-pointer'>
+                         <Button
+      variant="contained"
+      color="secondary"
+      startIcon={<PowerSettingsNewIcon />}
+      onClick={()=>{
+        localStorage.removeItem("token");
+        localStorage.removeItem("brand");
+        setShowNavbar(false);
+        navigate("/login")
+      }}
+    >
+      Logout
+    </Button>
+                         </li>
                 </div>
             </nav>
 
