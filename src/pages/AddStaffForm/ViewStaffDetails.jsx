@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ViewStaffSupport from './ViewStaffSupport'
 import axios from 'axios'
+import API_BASE_URL from "../../config";
+
 
 const ViewStaffDetails = () => {
 
@@ -9,7 +11,7 @@ const ViewStaffDetails = () => {
     const [staffDetailsObj, setStaffDetailsObj] = useState([]);
 
     const userGetFunc = ()=>{
-        axios.get("http://localhost:8000/register/",{
+        axios.get(`${API_BASE_URL}/register/`,{
             headers: {
                 "Authorization": `Bearer ${token}`
             }

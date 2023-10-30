@@ -3,6 +3,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react'
 import { useParams } from 'react-router-dom';
 import * as Yup from "yup"
+import API_BASE_URL from "../../config";
+
 
 const Form2 = () => {
   const { id } = useParams();
@@ -21,7 +23,7 @@ const Form2 = () => {
   }}
   onSubmit={(values) => {
     // Handle form submission
-    axios.put(`http://localhost:8000/customer/${id}`,{
+    axios.put(`${API_BASE_URL}/customer/${id}/`,{
       CustomerGender: values?.gender,
       CustomerDOB: values?.dateOfBirth,
       CustomerOccupation: values?.occupation

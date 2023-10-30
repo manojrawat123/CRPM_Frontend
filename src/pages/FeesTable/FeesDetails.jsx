@@ -9,8 +9,8 @@ import FeesSupport from "./FeesSupport";
 const FeesDetails = () => {
   const { GetFeesAll, allFeesObj } =
     useContext(DataContext);
+    const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
   const [isFeesDate, setisFeesDate] = useState(true);
-  const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -55,7 +55,7 @@ const FeesDetails = () => {
       </div>
 
       <div className="text-center">
-        <div className="border-black rounded">
+        <div className=" rounded">
           <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
         </div>
       </div>

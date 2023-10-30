@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import API_BASE_URL from "../../config";
+
 
 function EditForm(props) {
   const [receiptNumber, setReceiptNumber] = useState(props?.fees_data?.receipt_number);
@@ -12,7 +14,7 @@ function EditForm(props) {
     e.preventDefault(); // Prevent the default form submission behavior
     // Here, you can send the data to an API endpoint or handle it as needed
     console.log('Receipt Number submitted:', receiptNumber);
-    axios.put(`http://127.0.0.1:8000/feetracer/${props?.fees_data?.id}/`,{
+    axios.put(`${API_BASE_URL}/feetracer/${props?.fees_data?.id}/`,{
         receipt_number: receiptNumber
 
     }, {
@@ -23,7 +25,7 @@ function EditForm(props) {
         console.log(value);
       })
 
-      axios.put(`http://127.0.0.1:8000/convertedlead/${props?.fees_data?.converted_id}/`,{
+      axios.put(`${API_BASE_URL}/convertedlead/${props?.fees_data?.converted_id}/`,{
         TotalFee:  totalFees
       },{
         headers: {

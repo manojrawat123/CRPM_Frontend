@@ -29,6 +29,9 @@ import Batch from './pages/Batch/Batch';
 import EditStaffDetail from './pages/AddStaffForm/EditStaffDetails';
 import AssignBatches from './pages/AssignBatches/AssignBatches';
 import { DataContext, DataProvider } from './context';
+import LeadFollowUp from './pages/LeadFollowUp/LeadFollowUp';
+import EmailShedule from './pages/emailshedule/EmailShedule';
+import MessageShedule from './pages/MessageShedule/MessageShedule';
 
 function App() {
   
@@ -57,7 +60,12 @@ function App() {
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/table' Component={Table} />
       </Route>
+
       <Route path='' Component={ProtectedRoutes} >
+        <Route path='/leadfollowup' Component={LeadFollowUp} />
+      </Route>
+
+      <Route path='' Component={ProtectedRoutes}>
         <Route path='/convertlead/:id' Component={ConvertLead} />
       </Route>
       <Route path='' Component={ProtectedRoutes}>
@@ -126,6 +134,15 @@ function App() {
         <Route path='/assignbatch' Component={AssignBatches}/>
       </Route>
 
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/emailshedule' Component={EmailShedule}/>
+      </Route>
+      
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/message' Component={MessageShedule}/>
+      </Route>
+
+    
      <Route path='/login' Component={MyLogin} />
 
     </Routes>

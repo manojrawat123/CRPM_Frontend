@@ -3,6 +3,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
+import API_BASE_URL from "../../config";
+
 
 const Form3 = () => {
   
@@ -24,7 +26,7 @@ const Form3 = () => {
             }}
             onSubmit={(values) => {
               // Handle form submission
-              axios.put(`http://localhost:8000/customer/${id}`,{
+              axios.put(`${API_BASE_URL}/customer/${id}`,{
                 CustomerShippingAddress: values?.addressLine1,
                 CustomerBillingAddress: values?.addressLine2,
                 CustomerLocation: `${values?.townCity} ${values?.state} ${values?.pincode} ${values?.country}`

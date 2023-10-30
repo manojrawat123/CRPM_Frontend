@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import API_BASE_URL from "../../config";
+
 
 const VisitSupport = (props) => {
 
@@ -10,7 +12,7 @@ const VisitSupport = (props) => {
     const id = props.visit.LeadID
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}/`,{
+        axios.get(`${API_BASE_URL}/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }

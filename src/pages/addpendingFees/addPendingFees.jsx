@@ -3,6 +3,8 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from "../../config";
+
 
 const AddFeesDetails = () => {
 
@@ -28,7 +30,7 @@ const AddFeesDetails = () => {
 
 
   const convertedLeadGetFunc = () => {
-    axios.get(`http://localhost:8000/convertedlead/${id}/`, {
+    axios.get(`${API_BASE_URL}/convertedlead/${id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -40,7 +42,7 @@ const AddFeesDetails = () => {
   }
 
   const feesTrackerFunc = ()=>{
-    axios.get(`http://localhost:8000/feetracer/${id}/`, {
+    axios.get(`${API_BASE_URL}/feetracer/${id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -60,7 +62,7 @@ const AddFeesDetails = () => {
 
   useEffect(()=>{
     const paymentFunc = async()=>{
-      axios.get(`http://127.0.0.1:8000/paymentsbylead/${leadId}/`, config).then((res)=>{
+      axios.get(`${API_BASE_URL}/paymentsbylead/${leadId}/`, config).then((res)=>{
       console.log(res.data);
       setPaymetObj(res.data);
       setLoad(true);
@@ -71,7 +73,7 @@ const AddFeesDetails = () => {
     
     const leadFunc = ()=>{
       setLoad(false)
-      axios.get(`http://localhost:8000/lead/${leadId}/`,config).then((values)=>{
+      axios.get(`${API_BASE_URL}/lead/${leadId}/`,config).then((values)=>{
         console.log("Lead Data",values.data);
         setLeadObj(values.data);
         setLoad(true);
@@ -138,7 +140,7 @@ if (load===false){
               payment_id: values?.payment_id // Replace with the actual Payment ID
             };
             console.log(feeTracerData);
-            axios.post("http://127.0.0.1:8000/feetracerpost/", feeTracerData, {
+            axios.post("${API_BASE_URL}/feetracerpost/", feeTracerData, {
                         headers: {
                           'Authorization': `Bearer ${token}`
                         }

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import API_BASE_URL from "../../config";
+
 
 const RegisteredSupport = (props) => {
 
@@ -12,7 +14,7 @@ const RegisteredSupport = (props) => {
     const id = props?.student?.LeadID
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}/`,{
+        axios.get(`${API_BASE_URL}/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
@@ -23,7 +25,7 @@ const RegisteredSupport = (props) => {
       }
 
     const feesFunc = ()=>{
-        axios.get(`http://localhost:8000/feetracer/${id}/`,{
+        axios.get(`${API_BASE_URL}/feetracer/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
+import API_BASE_URL from "../../config";
+
 
 const MySupport = (props) => {
 
@@ -19,7 +21,7 @@ const MySupport = (props) => {
   console.log(props.items)
 
   const leadFunc = () => {
-    axios.get(`http://localhost:8000/lead/${id}/`, {
+    axios.get(`${API_BASE_URL}/lead/${id}/`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
       }
@@ -30,7 +32,7 @@ const MySupport = (props) => {
   }
 
   const brandFunc = ()=>{
-    axios.get(`http://localhost:8000/brand/${props.items.Brand}/`,{
+    axios.get(`${API_BASE_URL}/brand/${props.items.Brand}/`,{
       headers: {
         "Authorization": `Bearer ${authToken}`
       }
@@ -45,7 +47,7 @@ const MySupport = (props) => {
 
   // Batch Request 
   const batchFetchFunc = () => {
-    axios.get("http://localhost:8000/batch/", {
+    axios.get(`${API_BASE_URL}/batch/`, {
       headers: {
         "Authorization": `Bearer ${authToken}`
       }
@@ -58,7 +60,7 @@ const MySupport = (props) => {
   }
 
   const batchByConvertedId = ()=>{
-    axios.get(`http://localhost:8000/batchstudent/${convertedId}/`, {
+    axios.get(`${API_BASE_URL}/batchstudent/${convertedId}/`, {
       headers: {
         "Authorization": `Bearer ${authToken}`
       }
@@ -151,7 +153,7 @@ const MySupport = (props) => {
       className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
       type="button"
       onClick={()=>{
-        axios.delete(`http://localhost:8000/batchstudent/${convertedId}/`, {
+        axios.delete(`${API_BASE_URL}/batchstudent/${convertedId}/`, {
           headers:{
             "Authorization" : `Bearer ${authToken}`
           }
@@ -187,7 +189,7 @@ const MySupport = (props) => {
             className='bg-blue py-1 px-4 hover:bg-blue-600 bg-blue-500 rounded text-white font-bold'
             onClick={() => {
               if (batchId != null && batchId != undefined) {
-                axios.post('http://localhost:8000/batchstudent/', {
+                axios.post('${API_BASE_URL}/batchstudent/', {
                   BatchID: batchId,
                   CustomerID: props?.items?.StudentID,
                   ConvertedID: props?.items?.ConvertedID,

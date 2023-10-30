@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import ClipboardJS from 'clipboard';
+import API_BASE_URL from "../../config";
+
 
 function CopyButton(props) {
     
     const id = props.id 
-  const linkToCopy = `http://localhost:5173/customer_registration_form/${id}`; // Replace with your desired link
+  const linkToCopy = `${API_BASE_URL}/customer_registration_form/${id}`; // Replace with your desired link
 
   // State to track the copy button's status
   const [copied, setCopied] = useState(false);

@@ -2,12 +2,14 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import MySupport from './AssignBatchSupport';
+import API_BASE_URL from "../../config";
+
 
 const AssignBatch = () => {
   const [data, setData] = useState([]);  
   const authToken = localStorage.getItem('token')  
   const convertedLeadGetFunc = () => {
-    axios.get(`http://localhost:8000/convertedlead/`, {
+    axios.get(`${API_BASE_URL}/convertedlead/`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
       }

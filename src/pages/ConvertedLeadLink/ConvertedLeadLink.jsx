@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import ConvertLeadLinkSupport from './ConvertLeadLinkSupport';
+import API_BASE_URL from "../../config";
+
 
 const ConvertedLeadLink = () => {
 
@@ -10,7 +12,7 @@ const ConvertedLeadLink = () => {
   const [data, setData] = useState([]);  
   const authToken = localStorage.getItem('token')  
   const convertedLeadGetFunc = () => {
-    axios.get(`http://localhost:8000/convertedlead/`, {
+    axios.get(`${API_BASE_URL}/convertedlead/`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
       }

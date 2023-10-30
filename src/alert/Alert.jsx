@@ -8,11 +8,9 @@ const Alert = () => {
   const [alertClasses, setAlertClasses] = useState('');
   const [message, setMessage] = useState('');
   const [display, setDisplay] = useState('hidden');
-  
-
 
   useEffect(() => {
-    setRegisterSucessfully("")
+    setRegisterSucessfully("");
     if (registerSucessfully === 'success') {
       setAlertClasses('bg-green-500');
       setMessage('Lead successfully added');
@@ -28,7 +26,7 @@ const Alert = () => {
     }
   }, [registerSucessfully,display]);
   return (
-    <div className={`p-4 mb-4 rounded-lg text-white shadow-lg ${alertClasses} ${display} text-center w-[100%] fixed z-50`}>
+    <div className={`p-4 mb-4 rounded-lg text-white shadow-lg ${alertClasses} ${display} text-center md:mx-[10%] md:w-[80%] w-[100%] fixed z-50 top-0`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {/* {registerSucessfully === 'success' ? (

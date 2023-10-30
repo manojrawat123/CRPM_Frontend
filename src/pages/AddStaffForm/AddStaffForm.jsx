@@ -6,6 +6,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { DataContext } from '../../context';
 import ViewStaffDetails from './ViewStaffDetails';
+import API_BASE_URL from "../../config";
+
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
@@ -66,7 +68,7 @@ function AddStaffForm() {
                 user_location: "Dummy Location",
                 online_status: "Online"
             }
-            axios.post('http://localhost:8000/register/', post_data, {
+            axios.post(`${API_BASE_URL}/register/`, post_data, {
                 headers:{
                     "Authorization": `Bearer ${token}`
                 }

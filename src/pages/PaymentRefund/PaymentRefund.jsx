@@ -9,6 +9,8 @@ import * as Yup from "yup"
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { DataContext } from '../../context';
+import API_BASE_URL from "../../config";
+
 
 
 const validationSchema = Yup.object().shape({
@@ -57,7 +59,7 @@ const PaymentRefund = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get(`http://localhost:8000/convertedlead/${id}/`, {
+    axios.get(`${API_BASE_URL}/convertedlead/${id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -66,7 +68,7 @@ const PaymentRefund = () => {
       console.log(value.data[0]);
       const leadId = value.data[0]?.LeadID
       console.log(leadId);
-      axios.get(`http://localhost:8000/lead/${value?.data[0]?.LeadID}/`, {
+      axios.get(`${API_BASE_URL}/lead/${value?.data[0]?.LeadID}/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -83,14 +85,14 @@ const PaymentRefund = () => {
     profileFunc()
 
     if (brandID !== null) {
-      axios.get(`http://127.0.0.1:8000/paymentmode/${brandID}/`, config).then((response) => {
+      axios.get(`${API_BASE_URL}/paymentmode/${brandID}/`, config).then((response) => {
         setPaymentMode(response?.data);
         
       }).catch((error) => {
         console.log(error)
       });
   
-      axios.get(`http://127.0.0.1:8000/paymenttype/${brandID}/`, config).then((response) => {
+      axios.get(`${API_BASE_URL}/paymenttype/${brandID}/`, config).then((response) => {
         setPaymentType(response?.data[0]?.payment_type);
         setPaymentTypeID(response?.data[0]?.payment_type_id)
       }).catch((error) => {
@@ -153,7 +155,7 @@ const PaymentRefund = () => {
                 };
                 console.log("---post data---")
                 console.log(postData)
-                axios.post('http://localhost:8000/refundfees/', postData, {
+                axios.post(`${API_BASE_URL}/refundfees/`, postData, {
                   headers: {
                     Authorization: `Bearer ${token}`,
                   },

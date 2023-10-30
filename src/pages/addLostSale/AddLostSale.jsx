@@ -3,6 +3,9 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from "../../config";
+
+
 
 const AddLostSale = () => {
 
@@ -24,7 +27,7 @@ const AddLostSale = () => {
 
 
   const convertedLeadGetFunc = () => {
-    axios.get(`http://localhost:8000/convertedlead/${id}/`, {
+    axios.get(`${API_BASE_URL}/convertedlead/${id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -36,7 +39,7 @@ const AddLostSale = () => {
   }
 
   const feesTrackerFunc = ()=>{
-    axios.get(`http://localhost:8000/feetracer/${id}/`, {
+    axios.get(`${API_BASE_URL}/feetracer/${id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -56,7 +59,7 @@ const AddLostSale = () => {
 
   useEffect(()=>{
     const paymentFunc = async()=>{
-      axios.get(`http://127.0.0.1:8000/paymentsbylead/${leadId}/`, config).then((res)=>{
+      axios.get(`${API_BASE_URL}/paymentsbylead/${leadId}/`, config).then((res)=>{
       console.log(res.data);
       setPaymetObj(res.data);
       setLoad(true);
@@ -67,7 +70,7 @@ const AddLostSale = () => {
     
     const leadFunc = ()=>{
       setLoad(false)
-      axios.get(`http://localhost:8000/lead/${leadId}/`,config).then((values)=>{
+      axios.get(`${API_BASE_URL}/lead/${leadId}/`,config).then((values)=>{
         console.log("Lead Data",values.data);
         setLeadObj(values.data);
         setLoad(true);
@@ -105,7 +108,7 @@ const AddLostSale = () => {
               receipt_number: Yup.string().required('This Field is required'),
             })}
             onSubmit={(values)=>{
-                    axios.put(`http://localhost:8000/convertedlead/${id}/`,{
+                    axios.put(`${API_BASE_URL}/convertedlead/${id}/`,{
                         LostSales: values?.payment_id,
                         LostSalesReason: values?.receipt_number,
                         LostSalesDate:  new Date().toISOString().substring(0,10)

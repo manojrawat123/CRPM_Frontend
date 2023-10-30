@@ -5,6 +5,8 @@ import Form2 from './Form2';
 import Form3 from './Form3';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import API_BASE_URL from "../../config";
+
 
 const CustomerRegister = () => {
 
@@ -16,12 +18,9 @@ const CustomerRegister = () => {
       
       <div className="w-[100%] py-10 bg-blue-50">
     <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
-  
-
- 
         <form onSubmit={(e)=>{
           e.preventDefault()
-          axios.put(`http://localhost:8000/customer/${id}`,{
+          axios.put(`${API_BASE_URL}/customer/${id}/`,{
             CustomerPhoto: profilePhoto
           },{
             headers : {

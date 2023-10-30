@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from "../../config";
 import EditBatchButton from './EditButton';
 
 const BatchDetails = () => {
@@ -9,7 +10,7 @@ const BatchDetails = () => {
   const [batchObj, setBatchObj] = useState();
 
   const batchDetails = ()=>{
-    axios.get("http://localhost:8000/batch/",
+    axios.get(`${API_BASE_URL}/batch/`,
     {
       headers: {
         "Authorization": `Bearer ${token}`

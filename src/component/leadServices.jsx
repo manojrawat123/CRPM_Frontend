@@ -2,18 +2,23 @@ import React, { useContext, useEffect, useState } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
 import { DataContext } from '../context'
 import axios from 'axios';
+import Modal from 'react-modal';
+import AddCourseForm from './AddCourse/AddCourse';
+import API_BASE_URL from "../config";
+
 
 const LeadServices = () => {
     
     const { id } = useParams();
     const [myId, setMyId] = useState(id);
     const { brand ,service , setService} = useContext(DataContext);
+    const [addCourseModal, setAddCourseModal] = useState(false);
     
 
     const brandIds = localStorage.getItem("brand");
 
     useEffect(()=>{
-        const apiUrl = `http://localhost:8000/services/${brandIds}/`;
+        const apiUrl = `${API_BASE_URL}/services/${brandIds}/`;
         const token = localStorage.getItem("token");
 
         const config = {
@@ -58,6 +63,39 @@ const LeadServices = () => {
               Add Payment
         </button>
               </NavLink>
+
+              
+              <Modal
+              isOpen={addCourseModal}
+              onRequestClose={() => 
+                setAddCourseModal(false)
+            }
+            style={{
+              overlay: {
+                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              },
+              content: {
+                top: '50%',
+                left: '50%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+                width: '60%', // Adjust the width as needed
+      height: '60%', // Adjust the height as needed
+              },
+            }}>
+              <AddCourseForm />
+              </Modal>
+        <button
+        onClick={()=>{
+          setAddCourseModal(true);
+        }}
+              type="button"
+              className="bg-green-500 mx-2 text-white py-1 px-2 rounded hover:bg-green-600 transition duration-300 mt-4"
+              >
+              Add Course
+        </button>
 
     </div>
 

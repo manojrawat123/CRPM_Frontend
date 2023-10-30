@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { useEffect } from 'react';
 import { DataContext } from '../../context';
+import API_BASE_URL from "../../config";
+
 
 
 const validationSchema = Yup.object().shape({
@@ -62,7 +64,7 @@ function EditBatchForm(props) {
             BatchTeacherName:values?.teacher,
 BatchStaffAssigned:values?.assignstaff,
           };
-          axios.put(`http://localhost:8000/batch/${props.editd.BatchID}/`,batch,{
+          axios.put(`${API_BASE_URL}/batch/${props.editd.BatchID}/`,batch,{
           headers: {
             "Authorization": `Bearer ${token}`
           }

@@ -6,6 +6,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { DataContext } from '../../context';
 import { useParams } from 'react-router-dom';
+import API_BASE_URL from "../../config";
+
 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
@@ -34,7 +36,7 @@ function EditStaffDetail() {
     const { id } = useParams()
 
     const getStaffById = ()=>{
-      axios.get(`http://localhost:8000/register/${id}/`).then((values)=>{
+      axios.get(`${API_BASE_URL}/register/${id}/`).then((values)=>{
         console.log(values.data);
         setStaffObj(values.data)
       }).catch((err)=>{
@@ -99,7 +101,7 @@ function EditStaffDetail() {
                 online_status: "Online"
             }
 
-            axios.put(`http://localhost:8000/register/${id}/`, post_data, {
+            axios.put(`${API_BASE_URL}/register/${id}/`, post_data, {
                 headers:{
                     "Authorization": `Bearer ${token}`
                 }

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import API_BASE_URL from "../../config";
+
 
 const PaymentSupport = (props) => {
   const [leadObj, setLeadObj] = useState();
@@ -10,7 +12,7 @@ const PaymentSupport = (props) => {
   const id = props?.payment?.lead
 
   const getConvertedLead = () => {
-    axios.get(`http://localhost:8000/getfeesdetailspaymentid/${props.payment.payment_id}/`, {
+    axios.get(`${API_BASE_URL}/getfeesdetailspaymentid/${props.payment.payment_id}/`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
       }

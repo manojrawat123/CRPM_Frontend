@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import MyModal from './Modal';
+import API_BASE_URL from "../../config";
+
 
 const FeesSupport = (props) => {
 
@@ -16,7 +18,7 @@ const FeesSupport = (props) => {
     console.log(convertedId)
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}/`,{
+        axios.get(`${API_BASE_URL}/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
@@ -28,7 +30,7 @@ const FeesSupport = (props) => {
       }
 
       const getConvertedLead = ()=>{
-        axios.get(`http://localhost:8000/convertedlead/${convertedId}/`,{
+        axios.get(`${API_BASE_URL}/convertedlead/${convertedId}/`,{
             headers: {
               'Authorization': `Bearer ${authToken}`
             }

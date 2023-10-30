@@ -31,7 +31,7 @@ useEffect(()=>{
                       alt="logo"
                     />
                     <h4 className="mb-12 mt-1 pb-1 text-xl font-bold">
-                      Welcome to Coding Bytes
+                      Welcome to CRMHUT
                     </h4>
                   </div>
                 {invalidInfo?

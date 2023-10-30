@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { DataContext } from '../../context';
-
+import API_BASE_URL from "../../config";
 
 
 const ServiceForm = () => {
@@ -42,32 +42,39 @@ const ServiceForm = () => {
     const hours = Array.from({ length: 10 }, (_, index) => 9 + index);
 
     
-    const { username, profileFunc } = useContext(DataContext);
+    const { username, profileFunc,leadGetById, leadByIdObj, leadUpdateFunc } = useContext(DataContext);
 
     useEffect(()=>{
       profileFunc();
+      leadGetById();
     },[])
     const leadFollowUpFunc = ()=>{
-      const apiUrl = 'http://localhost:8000/leadfollowup/';
-      const apiUrl2 = 'http://localhost:8000/leadlastfollowup/';
+      const apiUrl = `${API_BASE_URL}/leadfollowup/`;
+      const apiUrl2 = `${API_BASE_URL}/leadlastfollowupbyid/${id}/`;
       const authToken = localStorage.getItem("token");
       
       // Data to be sent in the POST request
       if (yesNo === "block"){
       alert("Data will save")
       if (yesShow==="block"){
-      const requestData = {
-        "LeadID": id,
-          "Company": company,
-          "Brand": 1,
-          "LeadRep": userId,
-          "LeadPhonePicked":LeadPhonePicked,
-          "LeadStatus":leadStatus,
-          "LeadStatusDate": `${leadDate} ${leadTime}`,
-          "leadRepName": username
-      }
-      console.log(requestData)
-      axios.post(apiUrl, requestData, {
+        
+      const requestData = leadByIdObj?.LeadServiceInterested?.map((element, index)=>{
+        return {
+          "LeadID": id,
+            "Company": company,
+            "Brand": 1,
+            "LeadRep": userId,
+            "LeadPhonePicked":LeadPhonePicked,
+            "LeadStatus":leadStatus,
+            "LeadStatusDate": `${leadDate} ${leadTime}`,
+            "leadRepName": username,
+            "LeadServiceInterested": element
+        }
+      }) 
+      console.log(requestData);
+      
+    requestData.forEach(element => {
+      axios.post(apiUrl, element, {
         headers: {
           'Authorization': `Bearer ${authToken}`
         }
@@ -86,15 +93,40 @@ const ServiceForm = () => {
           console.error('An error occurred:', error.message);
         }
       });
+      });
+      
+      
 
       // Second Api Call
-      axios.post(apiUrl2, requestData, {
+      axios.post(apiUrl2, 
+        {"LeadID": id,
+      "Company": company,
+      "Brand": 1,
+      "LeadRep": userId,
+      "LeadPhonePicked":LeadPhonePicked,
+      "LeadStatus":leadStatus,
+      "LeadStatusDate": `${leadDate} ${leadTime}`,
+      "leadRepName": username,
+      "LeadServiceInterested": leadByIdObj?.LeadServiceInterested
+    }, {
         headers: {
           'Authorization': `Bearer ${authToken}`
         }
       })
       .then(response => {
-        console.log('Response:', response.data);
+        console.log('Response:', response.data); 
+        leadUpdateFunc(id, leadStatus)
+        axios.put(`${API_BASE_URL}/lead/${id}/`, {
+          LeadStatus: leadStatus
+        }, {
+          headers: {
+            "Authorization": `Bearer ${authToken}`
+          }
+        }).then((value)=>{
+          console.log(value);
+        }).catch((err)=>{
+          console.log(err);
+        })
       })
       .catch(err => {
         console.log('API Error:', err.response.data.non_field_errors[0]);
@@ -107,9 +139,6 @@ const ServiceForm = () => {
           console.error('An error occurred:', error.message);
         }
       });
-
-
-
       }
       if (noShow==="block"){
         console.log("Not intrested");

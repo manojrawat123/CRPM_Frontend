@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { useEffect } from 'react';
 import { DataContext } from '../../context';
+import API_BASE_URL from "../../config";
+
 
 
 const validationSchema = Yup.object().shape({
@@ -63,7 +65,7 @@ function AddBatchForm() {
 BatchStaffAssigned:values?.assignstaff,
 };
 console.log(batch)
-          axios.post("http://localhost:8000/batch/",batch,{
+          axios.post(`${API_BASE_URL}/batch/`,batch,{
           headers: {
             "Authorization": `Bearer ${token}`
           }

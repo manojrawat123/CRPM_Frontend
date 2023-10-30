@@ -4,9 +4,9 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DataContext } from "../../context";
 import axios from "axios";
-import PaymentSuppor from "./PaymentSupport";
+import API_BASE_URL from "../../config";
 import PaymentSupport from "./PaymentSupport";
-// import PaymentSupport from "./PaymentSupport";
+
 
 
 const PaymentDetails = () => {
@@ -22,7 +22,7 @@ const PaymentDetails = () => {
   const token = localStorage.getItem("token");
 
   useEffect(()=>{
-    axios.get(`http://localhost:8000/payments/`,{
+    axios.get(`${API_BASE_URL}/payments/`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },

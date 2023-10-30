@@ -76,7 +76,7 @@ const Lead = () => {
   return (
     <>
       <div className="text-center mt-8">
-        <div className="sm:w-full md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto border-2 rounded border-gray-800">
+        <div className="sm:w-full md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto rounded">
           <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
         </div>
       </div>
@@ -113,6 +113,7 @@ const Lead = () => {
           </tbody>
         </table>
       </div>
+      <br /> <br />
     </>
   );
 };

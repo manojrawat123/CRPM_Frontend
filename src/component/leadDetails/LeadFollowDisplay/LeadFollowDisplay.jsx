@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { DataContext } from '../../../context';
 import { useParams } from 'react-router-dom';
+import API_BASE_URL from "../../../config";
+
 
 const LeadFollowDisplay = () => {
   const { profileFunc } = useContext(DataContext)
@@ -12,7 +14,7 @@ const LeadFollowDisplay = () => {
 
     useEffect(()=>{
       profileFunc()
-        const apiUrl = `http://localhost:8000/leadfollowup/${id}/`;
+        const apiUrl = `${API_BASE_URL}/leadfollowup/${id}/`;
 const authToken = localStorage.getItem("token");
 
 // Define a function to make the GET request
@@ -36,7 +38,7 @@ const fetchData = async () => {
 // Call the fetchData function to make the GET request
 fetchData();
 
-axios.get(`http://localhost:8000/lead/${id}/`, {
+axios.get(`${API_BASE_URL}/lead/${id}/`, {
   headers: {
     Authorization: `Bearer ${authToken}`,
   },

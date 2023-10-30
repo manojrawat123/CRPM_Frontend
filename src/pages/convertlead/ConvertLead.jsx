@@ -8,6 +8,8 @@ import { DataContext } from '../../context';
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik';
 import * as Yup from "yup";
+import API_BASE_URL from "../../config";
+
 
 
 
@@ -49,7 +51,7 @@ const ConvertLead = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    axios.get(`http://127.0.0.1:8000/payments/${id}/`, config).then((res)=>{
+    axios.get(`${API_BASE_URL}/payments/${id}/`, config).then((res)=>{
     console.log(res.data);
     setPaymetObj(res.data);
     }).catch((errr)=>{
@@ -116,7 +118,7 @@ const ConvertLead = () => {
             "CustomerPhone": customerPhone,  // Other additional fields
           }
           console.log(requestData);
-            axios.post("http://127.0.0.1:8000/customer/", requestData, {
+            axios.post(`${API_BASE_URL}/customer/`, requestData, {
               headers: {
                 'Authorization': `Bearer ${authToken}`
               }
@@ -144,7 +146,7 @@ const ConvertLead = () => {
                       SecureKey: null
                     };
                     console.log("HEllo",convertLeadData)
-                  axios.post("http://127.0.0.1:8000/convertedlead/",convertLeadData, {
+                  axios.post(`${API_BASE_URL}/convertedlead/`,convertLeadData, {
                     headers: {
                       'Authorization': `Bearer ${authToken}`
                     }
@@ -169,7 +171,7 @@ const ConvertLead = () => {
                         payment_id: values?.paymentId // Replace with the actual Payment ID
                       };
                       console.log("Final Posting data....",feeTracerData);
-                      axios.post("http://127.0.0.1:8000/feetracer/", feeTracerData, {
+                      axios.post("${API_BASE_URL}/feetracer/", feeTracerData, {
                         headers: {
                           'Authorization': `Bearer ${authToken}`
                         }

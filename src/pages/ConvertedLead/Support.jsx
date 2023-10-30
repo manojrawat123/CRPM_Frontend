@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom';
+import API_BASE_URL from "../../config";
+
 
 const MySupport = (props) => {
 
@@ -19,7 +21,7 @@ const MySupport = (props) => {
   const authToken = localStorage.getItem('token');  
 
     const leadFunc = ()=>{
-        axios.get(`http://localhost:8000/lead/${id}/`,{
+        axios.get(`${API_BASE_URL}/lead/${id}/`,{
           headers: {
             'Authorization': `Bearer ${authToken}`
           }
@@ -31,7 +33,7 @@ const MySupport = (props) => {
 
 
     const feesTrackerFunc = ()=>{
-        axios.get(`http://localhost:8000/feetracer/${feeId}/`, {
+        axios.get(`${API_BASE_URL}/feetracer/${feeId}/`, {
           headers: {
             'Authorization': `Bearer ${authToken}`
           }

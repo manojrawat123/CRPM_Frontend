@@ -3,13 +3,15 @@ import axios from 'axios';
 import PaymentLinkSupport from './PaymentLinkSupport';
 import { useState } from 'react';
 import PaymentModal from './PaymentModal';
+import API_BASE_URL from "../../config";
+
 
 const PaymentLink = () => {
 
   const [data, setPaymentLink] = useState()
   const authToken = localStorage.getItem("token");
   const getPaymentLink = ()=>{
-    axios.get("http://localhost:8000/paymentlink/",{
+    axios.get(`${API_BASE_URL}/paymentlink/`,{
     headers: {
       'Authorization': `Bearer ${authToken}`
     }

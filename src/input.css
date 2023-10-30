@@ -2,3 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+.green-theme {
+    color: green;
+  }
+  
+  .green-theme input,
+  .green-theme select,
+  .green-theme button {
+    border-color: green;
+  }
+  
+  .green-theme button {
+    background-color: green;
+  }
+
+  .progress-container {
+    width: 100%;
+    position: relative;
+  }
+  
+  .progress-bar {
+    width: 0;
+    height: 4px;
+    background: red;
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    transition: width 5s;
+  }
+  
+  .animate-progress {
+    animation: progress 10s linear infinite;
+  }
+  
+  @keyframes progress {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  
+  

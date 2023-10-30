@@ -4,6 +4,8 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { DataContext, DataProvider } from '../../context';
+import API_BASE_URL from "../../config";
+
 
 const MyNavbar = () => {
 
@@ -15,7 +17,7 @@ const MyNavbar = () => {
     const {showNavbar, setShowNavbar} = useContext(DataContext);
 
     useEffect(() => {
-        axios.get('http://localhost:8000/navbar/', {
+        axios.get(`${API_BASE_URL}/navbar/`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

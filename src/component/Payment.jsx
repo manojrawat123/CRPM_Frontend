@@ -5,6 +5,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { DataContext } from '../context';
 import axios from 'axios';
+import API_BASE_URL from "../config";
+
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -30,7 +32,7 @@ const PaymentForm = () => {
   const getLeadByIdFunc = async(id)=>{
     
   const token = localStorage.getItem("token");
-    const value = await axios.get(`http://localhost:8000/lead/${id}/`, {
+    const value = await axios.get(`${API_BASE_URL}/lead/${id}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -55,13 +57,13 @@ const PaymentForm = () => {
     };
 
     if (selectedBrand !== null) {
-      axios.get(`http://127.0.0.1:8000/paymentmode/${selectedBrand}/`, config).then((response) => {
+      axios.get(`${API_BASE_URL}/paymentmode/${selectedBrand}/`, config).then((response) => {
         setPaymentMode(response?.data);
       }).catch((error) => {
         console.log(error)
       });
 
-      axios.get(`http://127.0.0.1:8000/paymenttype/${selectedBrand}/`, config).then((response) => {
+      axios.get(`${API_BASE_URL}/paymenttype/${selectedBrand}/`, config).then((response) => {
         setPaymentType(response?.data[0]?.payment_type);
         setPaymentTypeID(response?.data[0]?.payment_type_id)
       }).catch((error) => {
@@ -145,7 +147,7 @@ const PaymentForm = () => {
                 "payment_mode_id": payment_mode_obj?.payment_mode_id || '',
               }
               console.log(requestData);
-              axios.post("http://127.0.0.1:8000/payments/", requestData, {
+              axios.post(`${API_BASE_URL}/payments/`, requestData, {
                 headers: {
                   'Authorization': `Bearer ${authToken}`
                 }

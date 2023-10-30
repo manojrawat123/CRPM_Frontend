@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useContext } from 'react';
 import { useEffect } from 'react';
 import { DataContext } from '../../context';
+import API_BASE_URL from "../../config";
+
 
 const validationSchema = Yup.object().shape({
   representative: Yup.string().required('Representative is required'),
@@ -32,7 +34,7 @@ function PaymentLinkForm() {
         validationSchema={validationSchema}
         onSubmit={(values) => {
           // Handle form submission here
-          axios.post("http://localhost:8000/paymentlink/", {         
+          axios.post(`${API_BASE_URL}/paymentlink/`, {         
             Package :values.package,
             Amount :values.amount,
             RepID :userId,

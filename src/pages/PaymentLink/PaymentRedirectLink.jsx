@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import API_BASE_URL from "../../config";
+
 
 const PaymentRedirectLink = () => {
     
@@ -11,7 +13,7 @@ const PaymentRedirectLink = () => {
 
 
         const currentURL = window.location.href;
-        axios.get(`http://localhost:8000/paymentlinkurl/?url=${currentURL}`, {
+        axios.get(`${API_BASE_URL}/paymentlinkurl/?url=${currentURL}`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import axios from "axios";
 import CopyButton from './CopyLink';
+import API_BASE_URL from "../../config";
+
 
 
 const ConvertLeadLinkSupport = (props) => {
@@ -22,7 +24,7 @@ const [feeReceived, setFeesRecived] = useState();
 const authToken = localStorage.getItem('token');  
 
   const leadFunc = ()=>{
-      axios.get(`http://localhost:8000/lead/${id}/`,{
+      axios.get(`${API_BASE_URL}/lead/${id}/`,{
         headers: {
           'Authorization': `Bearer ${authToken}`
         }
@@ -34,7 +36,7 @@ const authToken = localStorage.getItem('token');
 
 
   const feesTrackerFunc = ()=>{
-      axios.get(`http://localhost:8000/feetracer/${feeId}/`, {
+      axios.get(`${API_BASE_URL}/feetracer/${feeId}/`, {
         headers: {
           'Authorization': `Bearer ${authToken}`
         }
