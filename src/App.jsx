@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PaymentForm from './component/Payment'
 import { Route, Routes } from 'react-router-dom'
-import Table from './component/Table'
+// import Table from './component/Table'
 import MyProcess from './component/MyProcess';
 import MyLogin from './login/MyLogin';
 import ProtectedRoutes from './protectedRoutes/ProtectedRoutes';
 import MyDashboard from './component/MyDashboard';
 import LeadStatus from './component/leadDetails/LeadStatus';
-import MyFooter from './component/Fotter';
-import MyBrand from './pages/Brand';
+import MyFooter from './component/Fotter'; 
+import MyBrand from './pages/Brand'; 
 import ConvertLead from './pages/convertlead/ConvertLead';
 import ConvertedLeadGet from './pages/ConvertedLead/ConvertedLeadGet';
 import AddFeesDetails from './pages/addpendingFees/addPendingFees';
@@ -32,6 +32,8 @@ import { DataContext, DataProvider } from './context';
 import LeadFollowUp from './pages/LeadFollowUp/LeadFollowUp';
 import EmailShedule from './pages/emailshedule/EmailShedule';
 import MessageShedule from './pages/MessageShedule/MessageShedule';
+import SearchPage from './component/Search';
+import ServiceForm from './component/serviceForm/ServiceForm';
 
 function App() {
   
@@ -57,8 +59,13 @@ function App() {
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/payment/:id' Component={PaymentForm} />
       </Route>
-      <Route path='' Component={ProtectedRoutes} >
+
+      {/* <Route path='' Component={ProtectedRoutes} >
         <Route path='/table' Component={Table} />
+      </Route> */}
+
+      <Route path='' Component={ProtectedRoutes} >
+        <Route path='/search' Component={SearchPage} /> 
       </Route>
 
       <Route path='' Component={ProtectedRoutes} >

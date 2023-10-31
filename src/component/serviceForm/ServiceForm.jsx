@@ -6,42 +6,40 @@ import API_BASE_URL from "../../config";
 
 
 const ServiceForm = () => {
-    const [display1, setDisplay1] = useState("bg-gray-100")
-    const [display2, setDisplay2] = useState("bg-gray-100")
-    const [display3, setDisplay3] = useState("bg-gray-100")
-    const [display4, setDisplay4] = useState("bg-gray-100")
-    const [display5, setDisplay5] = useState("bg-gray-100")
-    const [nodisplay1, setNoDisplay1] = useState("bg-gray-100")
-    const [nodisplay2, setNoDisplay2] = useState("bg-gray-100")
-    const [nodisplay3, setNoDisplay3] = useState("bg-gray-100")
-    const [nodisplay4, setNoDisplay4] = useState("bg-gray-100")
-    const [nodisplay5, setNoDisplay5] = useState("bg-gray-100")
-    const [nodisplay6, setNoDisplay6] = useState("bg-gray-100")
-    const [nodisplay7, setNoDisplay7] = useState("bg-gray-100")
-    const [nodisplay8, setNoDisplay8] = useState("bg-gray-100")
-    const [nodisplay9, setNoDisplay9] = useState("bg-gray-100")
-    const [nodisplay10, setNoDisplay10] = useState("bg-gray-100")
-    const [updateDisplay1, setUpdateDisplay1] = useState("bg-gray-100")
-    const [updateDisplay2, setUpdateDisplay2] = useState("bg-gray-100")
-    const [leadEvent, setLeadEvent] = useState(null)
-    const [yesNo, setYesNo] = useState("hidden")
-    const [yesShow, setYesShow] = useState("hidden")
-    const [update, setUpdate] = useState("hidden")
-    const [noShow, setnoShow] = useState("hidden")
-    const [error, setError] = useState()
-    const [leadStatus, setLeadStatus] = useState(null)
-    const [leadTime, setLeadTime] = useState()
-    const [leadDate, setLeadDate] = useState(null)
-    const [leadDate2, setLeadDate2] = useState(null)
-    const [leadEventTakenBy , setLeadEventTakenBy] = useState(null)
-    const [leadNotInterstedReason, setLeadNotIntresteadReason] = useState(null)
-    const [fees, setFees] = useState(0)
-    const { id } = useParams()
-    const [LeadPhonePicked, setLeadPhonePicked]= useState(null) 
-    const {company, userId} = useContext(DataContext)
+    const [display1, setDisplay1] = useState("bg-gray-100");
+    const [display2, setDisplay2] = useState("bg-gray-100");
+    const [display3, setDisplay3] = useState("bg-gray-100");
+    const [display4, setDisplay4] = useState("bg-gray-100");
+    const [display5, setDisplay5] = useState("bg-gray-100");
+    const [nodisplay1, setNoDisplay1] = useState("bg-gray-100");
+    const [nodisplay2, setNoDisplay2] = useState("bg-gray-100");
+    const [nodisplay3, setNoDisplay3] = useState("bg-gray-100");
+    const [nodisplay4, setNoDisplay4] = useState("bg-gray-100");
+    const [nodisplay5, setNoDisplay5] = useState("bg-gray-100");
+    const [nodisplay6, setNoDisplay6] = useState("bg-gray-100");
+    const [nodisplay7, setNoDisplay7] = useState("bg-gray-100");
+    const [nodisplay8, setNoDisplay8] = useState("bg-gray-100");
+    const [nodisplay9, setNoDisplay9] = useState("bg-gray-100");
+    const [nodisplay10, setNoDisplay10] = useState("bg-gray-100");
+    const [updateDisplay1, setUpdateDisplay1] = useState("bg-gray-100");
+    const [updateDisplay2, setUpdateDisplay2] = useState("bg-gray-100");
+    const [leadEvent, setLeadEvent] = useState(null);
+    const [yesNo, setYesNo] = useState("hidden");
+    const [yesShow, setYesShow] = useState("hidden");
+    const [update, setUpdate] = useState("hidden");
+    const [noShow, setnoShow] = useState("hidden");
+    const [error, setError] = useState();
+    const [leadStatus, setLeadStatus] = useState(null);
+    const [leadTime, setLeadTime] = useState();
+    const [leadDate, setLeadDate] = useState(null);
+    const [leadDate2, setLeadDate2] = useState(null);
+    const [leadEventTakenBy , setLeadEventTakenBy] = useState(null);
+    const [leadNotInterstedReason, setLeadNotIntresteadReason] = useState(null);
+    const [fees, setFees] = useState(0);
+    const { id } = useParams();
+    const [LeadPhonePicked, setLeadPhonePicked]= useState(null); 
+    const {company, userId} = useContext(DataContext);
     const hours = Array.from({ length: 10 }, (_, index) => 9 + index);
-
-    
     const { username, profileFunc,leadGetById, leadByIdObj, leadUpdateFunc } = useContext(DataContext);
 
     useEffect(()=>{
@@ -55,12 +53,11 @@ const ServiceForm = () => {
       
       // Data to be sent in the POST request
       if (yesNo === "block"){
-      alert("Data will save")
+      alert("Data will save");
       if (yesShow==="block"){
-        
       const requestData = leadByIdObj?.LeadServiceInterested?.map((element, index)=>{
         return {
-          "LeadID": id,
+            "LeadID": id,
             "Company": company,
             "Brand": 1,
             "LeadRep": userId,
@@ -83,14 +80,20 @@ const ServiceForm = () => {
         console.log('Response:', response.data);
       })
       .catch(err => {
-        console.log('API Error:', err.response.data.non_field_errors[0]);
         if (err.response.data.non_field_errors[0] !== undefined){
           setError(err.response.data.non_field_errors[0])
         }
         if (error.response && error.response.data && error.response.data.event_datetime) {
-          console.error('Datetime format error:', error.response.data.event_datetime[0]);
         } else {
           console.error('An error occurred:', error.message);
+        }
+        if (error.response && error.response.status === 500) {
+          // Handle the 500 error here
+          // You can log the error, display a message to the user, or perform other tasks
+          alert("Internal Server Error");
+        }
+        else{
+          alert("Please Fill Proper Details")
         }
       });
       });
@@ -129,15 +132,15 @@ const ServiceForm = () => {
         })
       })
       .catch(err => {
-        console.log('API Error:', err.response.data.non_field_errors[0]);
-        if (err.response.data.non_field_errors[0] !== undefined){
-          setError(err.response.data.non_field_errors[0])
-        }
-        if (error.response && error.response.data && error.response.data.event_datetime) {
-          console.error('Datetime format error:', error.response.data.event_datetime[0]);
-        } else {
-          console.error('An error occurred:', error.message);
-        }
+      //   console.log('API Error:', err.response.data.non_field_errors[0]);
+      //   if (err.response.data.non_field_errors[0] !== undefined){
+      //     setError(err.response.data.non_field_errors[0])
+      //   }
+      //   if (error.response && error.response.data && error.response.data.event_datetime) {
+      //     console.error('Datetime format error:', error.response.data.event_datetime[0]);
+      //   } else {
+      //     console.error('An error occurred:', error.message);
+      //   }
       });
       }
       if (noShow==="block"){
@@ -150,7 +153,6 @@ const ServiceForm = () => {
             "LeadPhonePicked":LeadPhonePicked,
             "LeadReasonPhoneNotPicked":leadNotInterstedReason,
             "leadRepName": username,
-            
             ...(leadDate !== null
       ? { "LeadStatusDate": `${leadDate} 00:00` }
       : {})
@@ -174,6 +176,14 @@ const ServiceForm = () => {
           } else {
             console.error('An error occurred:', error.message);
           }
+          if (error.response && error.response.status === 500) {
+            // Handle the 500 error here
+            // You can log the error, display a message to the user, or perform other tasks
+            alert("Internal Server Error");
+          }
+          else{
+            alert("Please Fill Proper Details")
+          }
         });
 
 
@@ -196,6 +206,14 @@ const ServiceForm = () => {
             console.error('Datetime format error:', error.response.data.event_datetime[0]);
           } else {
             console.error('An error occurred:', error.message);
+          }
+          if (error.response && error.response.status === 500) {
+            // Handle the 500 error here
+            // You can log the error, display a message to the user, or perform other tasks
+            alert("Internal Server Error");
+          }
+          else{
+            alert("Please Fill Proper Details")
           }
         });
       }}
@@ -249,6 +267,14 @@ const ServiceForm = () => {
           } else {
             console.error('An error occurred:', error.message);
           }
+          if (error.response && error.response.status === 500) {
+            // Handle the 500 error here
+            // You can log the error, display a message to the user, or perform other tasks
+            alert("Internal Server Error");
+          }
+          else{
+            alert("Please Fill Proper Details")
+          }
         });
 
         // Second Url Api
@@ -281,23 +307,26 @@ const ServiceForm = () => {
           } else {
             console.error('An error occurred:', error.message);
           }
+          if (error.response && error.response.status === 500) {
+            // Handle the 500 error here
+            // You can log the error, display a message to the user, or perform other tasks
+            alert("Internal Server Error");
+          }
+          else{
+            alert("Please Fill Proper Details")
+          }
         });
-
-
-
       }
       // Axios POST request with authentication token in headers     
-      }
-      
-
+      } 
 
   return (
-
     <>
     {error? 
     <div className='text-red-500 mx-4'>{error}</div>:<></>}
     <div className='mx-4 pt-3 rounded'>     
-      <button onClick={()=>{
+    <div className='mx-4 pt-3 rounded'>   
+    <button onClick={()=>{
         if (yesNo === "hidden"){
           setYesNo("block");
           setUpdate("hidden");
@@ -305,8 +334,24 @@ const ServiceForm = () => {
         else{
           setYesNo("hidden");
         }
-      }} className={`bg-gray-300 rounded py-2 px-4 w-[80%]`}>Did You talk to Customer</button>
-      {/* Did You talk to custome yes no start div */}
+      }} className={`bg-gray-300 rounded py-2 px-4 w-[49%] mx-[.5%]  ${yesNo=="hidden"? "bg-gray-300": "bg-gray-500"}`}>Did You talk to Customer</button>
+      
+      {/* Update Status Button */}
+      <button className={`my-4  rounded py-2 px-4 w-[49%] mx-[.5%] ${update=="hidden"? "bg-gray-300": "bg-gray-500"}`} onClick={()=>{
+          if(update=== "hidden"){
+            setUpdate("block")
+            setYesNo("hidden")
+          
+          }
+          else{
+            setUpdate("hidden")
+          }
+        }}>
+        Update Visit & Demo Happened
+        </button>
+      </div>
+
+
 <div className={`${yesNo} mx-3`}>
 <div className="mx-4 my-6 text-center">
 
@@ -320,7 +365,7 @@ const ServiceForm = () => {
   }}
 />
       </div>
-      <button className={`px-4 py-2 rounded-lg text-white bg-green-500 hover:bg-green-600 mx-auto w-[4rem] mt-5 `} onClick={()=>{
+      <button className={`px-4 py-2 rounded-lg text-white bg-green-500 hover:bg-green-600 mx-auto w-[4rem] mt-5 ml-10 `} onClick={()=>{
         if(yesShow=== "hidden"){
             setYesShow("block");
             setnoShow("hidden");
@@ -332,6 +377,22 @@ const ServiceForm = () => {
         }
       }}>
         Yes
+      </button>
+
+     &nbsp;&nbsp;&nbsp;&nbsp; <button className='px-4 py-2 rounded-lg text-white bg-red-500 hover:bg-red-600 mx-auto w-[4rem] ' onClick={
+        ()=>{
+            if (noShow=== "hidden"){
+                setnoShow("block")
+                setYesShow("hidden")
+                setLeadPhonePicked("No")
+            }
+            else{
+                setnoShow("hidden")
+                setLeadPhonePicked("Yes")
+            }
+        }
+      }>
+        No
       </button>
 <div>
 <div className={yesShow}>
@@ -356,12 +417,12 @@ const ServiceForm = () => {
         <div className='my-4'>
 
         <div className=' text-left mx-5'>Enrolment Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
         
         <div className='text-left mx-5'>Enrolment Time:</div>
-            <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+            <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadTime(e.target.value)
             }}>
             <option>Please Select</option>
@@ -398,12 +459,12 @@ const ServiceForm = () => {
         {display2 === "bg-gray-400"?
         <div className='my-4'>
         <div className=' text-left mx-5'>Visit Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
         
           <div className=' text-left mx-5'>Visit Time:</div>
-             <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+             <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadTime(e.target.value)
             }}>
             <option>Please Select</option>
@@ -436,12 +497,12 @@ const ServiceForm = () => {
         {display3 === "bg-gray-400"?
         <div className='my-4'>
         <div className=' text-left mx-5'>Demo Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
         
           <div className=' text-left mx-5'>Demo Time:</div>
-             <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+             <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadTime(e.target.value)
             }}>
             <option>Please Select</option>
@@ -473,7 +534,7 @@ const ServiceForm = () => {
         </button>
 
         {display4 === "bg-gray-400"?
-        <div className="w-[90%] my-2">
+        <div className="w-[96%] my-2">
         <div className="block text-left mx-4">Interest Level:</div>
         <div className="mt-1 text-left mx-7">
           <label className=" items-left block">
@@ -493,10 +554,10 @@ const ServiceForm = () => {
           {leadStatus === 'Highly Intersted' && (
         <div className='ml-4'>
           <div className=' text-left '>Follow Up Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
-          <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+          <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadTime(e.target.value)
             }}>
             <option>Please Select</option>
@@ -525,10 +586,10 @@ const ServiceForm = () => {
           {leadStatus === 'Least Intersted' && (
         <div className='ml-4'>
           <div className=' text-left '>Follow Up Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
-          <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+          <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadTime(e.target.value)
             }}>
             <option>Please Select</option>
@@ -567,7 +628,7 @@ const ServiceForm = () => {
 
         {display5 === "bg-gray-400"?
         
-        <div className="w-[90%] my-2">
+        <div className="w-[96%] my-2">
       <label className="block text-left mx-4">Reason:</label>
       <div className="mt-1 text-left mx-7">
         <label className="block ">
@@ -684,22 +745,8 @@ const ServiceForm = () => {
       </div>
       </div>
       <br />
-      <div>
-      <button className='px-4 py-2 rounded-lg text-white bg-red-500 hover:bg-red-600 mx-auto w-[4rem]' onClick={
-        ()=>{
-            if (noShow=== "hidden"){
-                setnoShow("block")
-                setYesShow("hidden")
-                setLeadPhonePicked("No")
-            }
-            else{
-                setnoShow("hidden")
-                setLeadPhonePicked("Yes")
-            }
-        }
-      }>
-        No
-      </button>
+     
+      <div className=''>
 
       <div className={noShow}>
       <div className={`mx-4 my-6 text-center `}>
@@ -871,7 +918,7 @@ const ServiceForm = () => {
         {nodisplay7 === "bg-gray-400"?
         <div className='my-4'>
         <div className=' text-left mx-5'>Next Call Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
         
@@ -949,7 +996,7 @@ const ServiceForm = () => {
         
       </div>
       <div className=''>
-        <textarea name="" id="" cols="30" rows="10" className=' p-4 w-[90%] rounded focus:border-green-500 focus:border focus:outline focus:outline-green-500 mx-4 border border-gray-700 border-solid' placeholder='Remarks'></textarea>
+        <textarea name="" id="" cols="30" rows="10" className=' p-4 w-[96%] rounded focus:border-green-500 focus:border focus:outline focus:outline-green-500 mx-4 border border-gray-700 border-solid' placeholder='Remarks'></textarea>
       </div>
       </div>
       </div>
@@ -957,7 +1004,7 @@ const ServiceForm = () => {
         {/* Yes No Div End Here */}
         <br />
         {/* Visit Update Demo Div */}
-        <button className='my-4 bg-gray-300 rounded py-2 px-4 w-[80%]' onClick={()=>{
+        {/* <button className='my-4 bg-gray-300 rounded py-2 px-4 w-[80%]' onClick={()=>{
           if(update=== "hidden"){
             setUpdate("block")
             setYesNo("hidden")
@@ -968,7 +1015,7 @@ const ServiceForm = () => {
           }
         }}>
         Update Visit & Demo Happened
-        </button>
+        </button> */}
 
         <div className={`${update}`}>
         <div className={`mx-4 my-6 text-center `}>
@@ -989,11 +1036,11 @@ const ServiceForm = () => {
         <div className='my-4'>
 
         <div className=' text-left mx-5'>Visit Happned Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate2(e.target.value)
           }}/> <br />
               <div className=' text-left mx-5'>Visit Happned Time:</div>
-        <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+        <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadTime(e.target.value)
             }}>
             <option>Please Select</option>
@@ -1005,12 +1052,12 @@ const ServiceForm = () => {
           </select>
 
             <div className=' text-left mx-5'>Next Followup Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />
               
           <div className='text-left mx-5'>Visit Attended By:</div>
-            <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+            <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadEventTakenBy(e.target.value)
             }}>
               <option value=''>Plese Select</option>
@@ -1044,13 +1091,14 @@ const ServiceForm = () => {
         <div className='my-4'>
 
         <div className=' text-left mx-5'>Demo Happned Date:</div>
-        <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
-            setLeadDate2(e.target.value)
-          }}/> <br />
+        <input type="date" className='w-[100%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+            setLeadDate2(e.target.value);
+          }}/> 
+          <br />
               
         <div className='text-left mx-5'>Demo Happened Time:</div>
-        <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
-              setLeadTime(e.target.value)
+        <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+              setLeadTime(e.target.value);
             }}>
             <option>Please Select</option>
       {hours.map((hour) => (
@@ -1060,11 +1108,11 @@ const ServiceForm = () => {
       ))}
           </select>
             <div className=' text-left mx-5'>Next Followup Date:</div>
-          <input type="date" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
+          <input type="date" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 p-2 rounded' onChange={(e)=>{
             setLeadDate(e.target.value)
           }}/> <br />              
           <div className='text-left mx-5'>Demo Given By:</div>
-          <select id="selectOption" className='w-[90%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
+          <select id="selectOption" className='w-[96%] h-[2.5rem] my-2 border border-gray-700 focus:border-green-500 focus:border-2 p-2 rounded' onChange={(e)=>{
               setLeadEventTakenBy(e.target.value)
             }}>
               <option value=''>Plese Select</option>

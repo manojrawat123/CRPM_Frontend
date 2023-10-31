@@ -32,6 +32,7 @@ export const DataProvider = ({ children }) => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [leadSubmitButton, setLeadSubmitButton] = useState(false);
   const [leadScource, setLeadScource] = useState();
+  
 
   useEffect(() => {
     serviceFunc();
@@ -58,7 +59,7 @@ export const DataProvider = ({ children }) => {
   /// ///
   const getResisteredStudentAll = () => {
     axios
-      .get(`http://localhost:8000/convertedlead/`, {
+      .get(`${API_BASE_URL}/convertedlead/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +76,7 @@ export const DataProvider = ({ children }) => {
   /// /// GetLeadVisitSechudle start
   const getLeadFollowUpAll = () => {
     axios
-      .get(`http://localhost:8000/leadfollowup/`, {
+      .get(`${API_BASE_URL}/leadfollowup/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -96,7 +97,7 @@ export const DataProvider = ({ children }) => {
   /// Get Lead Visit Schedule data End
   const getLeadFunc = () => {
     axios
-      .get("http://localhost:8000/lead/", {
+      .get(`${API_BASE_URL}/lead/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -111,7 +112,7 @@ export const DataProvider = ({ children }) => {
 
   const serviceFunc = () => {
     const brandID = localStorage.getItem("brand");
-    const apiUrl = `http://localhost:8000/services/${brandID}/`;
+    const apiUrl = `${API_BASE_URL}/services/${brandID}/`;
 
     const config = {
       headers: {
@@ -132,7 +133,7 @@ export const DataProvider = ({ children }) => {
   };
 
   const profileFunc = async () => {
-    const apiUrl = "http://localhost:8000/profile/";
+    const apiUrl = `${API_BASE_URL}/profile/`;
     const token = localStorage.getItem("token");
 
     const config = {
