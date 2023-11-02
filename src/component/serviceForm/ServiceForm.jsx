@@ -132,15 +132,7 @@ const ServiceForm = () => {
         })
       })
       .catch(err => {
-      //   console.log('API Error:', err.response.data.non_field_errors[0]);
-      //   if (err.response.data.non_field_errors[0] !== undefined){
-      //     setError(err.response.data.non_field_errors[0])
-      //   }
-      //   if (error.response && error.response.data && error.response.data.event_datetime) {
-      //     console.error('Datetime format error:', error.response.data.event_datetime[0]);
-      //   } else {
-      //     console.error('An error occurred:', error.message);
-      //   }
+        console.log(err);
       });
       }
       if (noShow==="block"){
@@ -313,7 +305,7 @@ const ServiceForm = () => {
             alert("Internal Server Error");
           }
           else{
-            alert("Please Fill Proper Details")
+            alert("Please Fill Proper Details");
           }
         });
       }
@@ -325,7 +317,13 @@ const ServiceForm = () => {
     {error? 
     <div className='text-red-500 mx-4'>{error}</div>:<></>}
     <div className='mx-4 pt-3 rounded'>     
-    <div className='mx-4 pt-3 rounded'>   
+    <div className='mx-4 pt-3 rounded'> 
+
+    <div>
+      Selected Service: <select >
+          {}
+        </select>  
+    </div>  
     <button onClick={()=>{
         if (yesNo === "hidden"){
           setYesNo("block");
@@ -1003,19 +1001,6 @@ const ServiceForm = () => {
       </div>
         {/* Yes No Div End Here */}
         <br />
-        {/* Visit Update Demo Div */}
-        {/* <button className='my-4 bg-gray-300 rounded py-2 px-4 w-[80%]' onClick={()=>{
-          if(update=== "hidden"){
-            setUpdate("block")
-            setYesNo("hidden")
-          
-          }
-          else{
-            setUpdate("hidden")
-          }
-        }}>
-        Update Visit & Demo Happened
-        </button> */}
 
         <div className={`${update}`}>
         <div className={`mx-4 my-6 text-center `}>

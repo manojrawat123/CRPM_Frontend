@@ -41,7 +41,7 @@ export const DataProvider = ({ children }) => {
   /// Fees Details
   const GetFeesAll = () => {
     axios
-      .get(`${API_BASE_URL}sfeetracer/`, {
+      .get(`${API_BASE_URL}/feetracer/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -253,9 +253,6 @@ export const DataProvider = ({ children }) => {
       })
       .then((response) => {
         console.log("Lead data submitted successfully:", response.data);
-        // const mydate = new Date();
-        // const leadDate = mydate.toISOString().slice(0, 10);
-        // const leadTime = mydate.toTimeString().slice(0, 5);
 
         const leadFollowUpPromise = values?.course?.map(
           (folupelement, index) => {
@@ -280,8 +277,31 @@ export const DataProvider = ({ children }) => {
               )
               .then((response2) => {
                 console.log(response2.data);
-                // setRegisterSucessfully("success");
-                resetForm();
+                axios
+                .post(`${API_BASE_URL}/leadlastfollowup/`,  {
+                  LeadID: response?.data?.id,
+                  Company: company,
+                  Brand: 1,
+                  LeadRep: userId,
+                  LeadStatus: "Fresh",
+                  LeadStatusDate: `${values.leadDate}T${values.leadTime}:00Z`,
+                  leadRepName: username,
+                  LeadServiceInterested: folupelement?.value,
+                }, {
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                })
+                .then((response3) => {
+                  setRegisterSucessfully("success");
+                  setLeadSubmitButton(false);
+                  resetForm();
+                })
+                .catch((err) => {
+                  console.error("Error submitting FollowUp data:", err);
+                  setRegisterSucessfully("error");
+                  setLeadSubmitButton(false);
+                });
               })
               .catch((err) => {
                 console.error("Error submitting FollowUp data:", err);
@@ -289,52 +309,9 @@ export const DataProvider = ({ children }) => {
                 setLeadSubmitButton(false);
               });
           }
-        );
-
-        const requestData2 = {
-          LeadID: response.data?.id,
-          Company: company,
-          Brand: 1,
-          LeadRep: userId,
-          LeadStatus: "Fresh",
-          LeadStatusDate: `${values.leadDate}T${values.leadTime}:00Z`,
-          leadRepName: username,
-          LeadServiceInterested: values.course?.map((servelement, index) => {
-            return servelement.value;
-          }),
-        };
-        //         requestData?.forEach(follupPostData => {
-
-        // })
-        Promise.all(leadFollowUpPromise)
-          .then((promelement, index) => {
-            console.log("Lead Follow Up Updated Sucessfully!!");
-            axios
-              .post(`${API_BASE_URL}/leadlastfollowup/`, requestData2, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              })
-              .then((response3) => {
-                setRegisterSucessfully("success");
-                setLeadSubmitButton(false);
-                resetForm();
-              })
-              .catch((err) => {
-                console.error("Error submitting FollowUp data:", err);
-                setRegisterSucessfully("error");
-                setLeadSubmitButton(false);
-              });
-          })
-          .catch((error) => {
-            setRegisterSucessfully("error");
-            setLeadSubmitButton(false);
-          });
+        );         
       })
-      .catch((err) => {
-        setRegisterSucessfully("error");
-        setLeadSubmitButton(false);
-      });
+      
   };
 
   const leadGetById = (myLeadId) => {

@@ -24,12 +24,12 @@ const LeadStatus = () => {
           // templateSubject: templateSubject,
           // modalExcludedList: modalExcludedList
         }}/>
-    <div className='grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 m-8 gap-5'>
+    <div className='grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 m-8 gap-5'>
       <LeadDetails className="col-span-1" setModalIsOpen={setModalIsOpen}/>
 <div className='col-span-1'>
     <LeadServices />
 </div>
-<div className='xl:col-span-3 md:col-span-2 col-span-1 border-2 rounded border-solid border-black'>
+<div className='col-span-3 border-2 rounded border-solid border-black'>
   <ServiceRequirment />
 </div>
 

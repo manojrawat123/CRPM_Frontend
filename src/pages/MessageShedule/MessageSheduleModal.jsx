@@ -37,7 +37,7 @@ const MessageSheduleModal = (props) => {
     })
     console.log("customer_id",customer_id)
 
-axios.post(`${API_BASE_URL}messageshedule/`, {
+axios.post(`${API_BASE_URL}/messageshedule/`, {
               template_id: props.myProps.templateId,
               phone: phone_lis,
               body: props.myProps.templateMessage,
