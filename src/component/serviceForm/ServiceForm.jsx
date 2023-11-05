@@ -98,8 +98,6 @@ const ServiceForm = () => {
       });
       });
       
-      
-
       // Second Api Call
       axios.post(apiUrl2, 
         {"LeadID": id,

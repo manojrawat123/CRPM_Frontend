@@ -5,13 +5,15 @@ import LeadSupport from "./LeadSupport";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker } from "react-date-range";
+import { useParams } from "react-router-dom";
 
 const Lead = () => {
-  const { getLeadFunc, leads } = useContext(DataContext);
+  const { getLeadFunc, leads, leadGetById} = useContext(DataContext);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isDate, setIsDate] = useState(true);
   const [filteredLead, setFilteredLead] = useState([]);
+  const { id } = useParams();
 
   /// /// Inside your useEffect, set isLoading to false when the data is fetched
 
@@ -24,6 +26,7 @@ const Lead = () => {
       }
     };
     fetchData();
+    leadGetById(id)
   }, []);
 
   useEffect(() => {

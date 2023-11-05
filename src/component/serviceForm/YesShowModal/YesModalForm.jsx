@@ -7,10 +7,9 @@ import API_BASE_URL from "../../../config";
 import { useParams } from "react-router-dom";
 import { DataContext } from "../../../context";
 
-const YesModalForm = () => {
+const YesModalForm = (props) => {
     const [selectedButton, setSelectedButton] = useState(null);
     const [selectedButtonObj, setSelectedButtonObj] = useState();
-    const [optionId, setOptionId] = useState();
     const [leadStatusDate, setLeadStatusDate] = useState();
     const [leadStatusTime, setLeadStatusTime] = useState();
     const [leadStatus, setLeadStatus] = useState();
@@ -19,6 +18,7 @@ const YesModalForm = () => {
     const { id } = useParams();
     const brand = localStorage.getItem("brand");
     const { serviceFunc,profileFunc,company, userId } = useContext(DataContext);
+    const token = localStorage.getItem('token')
 
     useEffect(()=>{
         serviceFunc();
@@ -27,12 +27,19 @@ const YesModalForm = () => {
     },[])
 
     useEffect(() => {
-        setLeadStatusDate('');
-        setLeadStatusTime('');
-    }, [optionId]);
+        if (selectedButton == 5){
+            setLeadStatusDate(null);
+            setLeadStatusTime(null);
+        }
+        else{
+            setLeadStatusDate('');
+            setLeadStatusTime('');
+        }
+        
+    }, [selectedButton]);
 
     useEffect(() => {
-        handleButtonClick(optionId, selectedButtonObj);
+        handleButtonClick(selectedButton, selectedButtonObj);
     }, [leadStatus])
 
 
@@ -47,23 +54,22 @@ const YesModalForm = () => {
 
     const handleSubmit = ()=>{
         setButton(true)
-        setTimeout(() => {
-            setButton(false)
-        }, 2000);
+        
         if (leadStatus == undefined || leadStatus =="" || leadStatus == null){
             setCustomAlert({
                 status: "error",
                 message: "Please Select Lead Status"
             });
-            // setButton(false)
+            setButton(false)
             return
         }
-        else if (optionId == 1 || optionId == 2 || optionId ==3 || optionId ==4){
+        else if (selectedButton == 1 || selectedButton == 2 || selectedButton ==3 || selectedButton ==4){
             if (leadStatusDate == undefined || leadStatusDate == "" || leadStatusDate == null){
                 setCustomAlert({
                     status: "error",
                     message: "Please Select Date"
                 });
+                setButton(false)
                 return
             }
             else if(leadStatusTime == undefined || leadStatusTime == "" || leadStatusTime == null){
@@ -71,10 +77,10 @@ const YesModalForm = () => {
                     status: "error",
                     message: "Please Select Time Field"
                 });
+                setButton(false)
                 return
             }
             else{
-                console.log(leadStatusTime);
                 setCustomAlert(false);
             }
         }
@@ -83,21 +89,55 @@ const YesModalForm = () => {
         }
 
         // api Request
-        axios.post(`${API_BASE_URL}/leadfollowup/`, {
+        if (leadStatusDate == undefined || leadStatusDate == "" || leadStatusDate == null){
+            setLeadStatusDate(null)
+        }
+
+        const requestData = {
             
-                "LeadID": id,
-                "Company": company,
-                "Brand": 1,
-                "LeadRep": userId,
-                "LeadPhonePicked":"Yes",
-                "LeadStatus":leadStatus,
-                "LeadStatusDate": `${leadStatusDate} ${leadStatusTime}`,
-                "LeadServiceInterested": "",   
-        }, {
+            "LeadID": id,
+            "Company": company,
+            "Brand": brand,
+            "LeadRep": userId,
+            "LeadPhonePicked":"Yes",
+            "LeadStatus":leadStatus,
+            "LeadStatusDate": leadStatusDate ? `${leadStatusDate} ${leadStatusTime}` : null,
+            "LeadServiceInterested": props?.leadFollowUpServiceId,   
+    }
+        axios.post(`${API_BASE_URL}/leadfollowup/`, requestData, {
             headers: {
             "Authorization": `Bearer ${token}`
             }
+        }).then((val)=>{
+
+            axios.post(`${API_BASE_URL}//leadlastfollowupbyid/${id}/`, requestData, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            }).then((values1)=>{
+                setCustomAlert({
+                    status: "success",
+                    message: "Data Submitted Sucessfully!!"
+                });  
+                setButton(false)
+             }).catch((err)=>{
+                setCustomAlert({
+                    status: "error",
+                    message: "Could Not update in lead Last Followup"
+                });   
+                setButton(false)
+             })
+            
+             setButton(false)
+            }).catch((err)=>{
+                console.log(err)
+                setCustomAlert({
+                    status: "error",
+                    message: "Some Error Occured"
+                })
+                setButton(false)
         })
+        setButton(false)
     }
     
     const buttons = [
@@ -109,21 +149,27 @@ const YesModalForm = () => {
     ];
 
     return (
-        <>
-        {custAlert? <Alert severity={custAlert.status}>{custAlert.message}</Alert>: ""}
+        <>{custAlert ? (
+            <Alert
+              severity={custAlert.status}
+              className="fixed top-12 w-3/4" // Apply the classes directly
+            >
+              {custAlert.message}
+            </Alert>
+          ) : null}
    
-            <div className="mx-4 grid grid-cols-2">
+            <div className="mx-4 grid sm:grid-cols-2 grid-cols-1">
                 {buttons.map((button, index) => {
-                    return <div key={index} className={`my-4 inline-block w-[98%] mx-1 ${button.id == optionId ? 'bg-gray-100' : 'bg-white'}`}>
+                    return <div key={index} className={`my-4 inline-block w-[98%] mx-1 ${button.id == selectedButton ? 'bg-gray-200':'bg-white'} rounded`}>
                         <button
                             key={button.id}
                             className={`${selectedButton === button.id
-                                ? "bg-blue-500 text-white"
+                                ? "bg-green-500 text-white"
                                 : "bg-gray-200 text-black"
                                 } px-4 py-2 rounded w-full`}
                             onClick={() => {
                                 handleButtonClick(button.id, button);
-                                setOptionId(button.id);
+                                setSelectedButton(button.id)
                                 setSelectedButtonObj(button);
                                 if (button.id == 1 || button.id == 2 || button.id == 2){
                                     setLeadStatus(button.label);
@@ -136,28 +182,28 @@ const YesModalForm = () => {
                             {button.label}
                         </button>
                         {/* Input Fields Code of Id 1 2 3*/}
-                        {optionId === 1 || optionId == 2 || optionId == 3 ?
-                            <div className={`my-4 ${optionId === button.id ? 'block' : 'hidden'}`}>
+                        {selectedButton === 1 || selectedButton == 2 || selectedButton == 3 ?
+                            <div className={`my-4 ${selectedButton === button.id ? 'block' : 'hidden'}`}>
                                 <DateAndTimeInput leadStatusDate={leadStatusDate} setLeadStatusDate={setLeadStatusDate} leadStatusTime={leadStatusTime} setLeadStatusTime={setLeadStatusTime} selectedButtonObj={selectedButtonObj} />
                             </div> : ""}
                         {/* Code of 1, 2, 3 End */}
                         {/* Code of 4 */}
-                        {optionId === 4 ? <>
-                            <div className={`${button.id == optionId ? 'block' : "hidden"} my-4`}>
-                                <button className={`mx-[3%] w-[40%] rounded px-4 py-2  ${leadStatus == "Highly Intrested" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                                    onClick={() => {
-                                        setLeadStatus('Highly Intrested');
+                        {selectedButton === 4 ? <>
+                            <div className={`${button.id == selectedButton ? 'block' : "hidden"} my-4`}>
+                                <button className={`mx-[3%] w-[40%] rounded px-4 py-2  ${leadStatus == "Highly Intersted" ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                                    onClick={() => {   
+                                        setLeadStatus('Highly Intersted');
                                     }}
                                 >
                                     Highly Intrested</button>
-                                <button className={`mx-[3%] w-[40%] rounded px-4 py-2 ${leadStatus == "Least Intrested" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-                                    onClick={() => {
-                                        setLeadStatus('Least Intrested');
+                                <button className={`mx-[3%] w-[40%] rounded px-4 py-2 ${leadStatus == "Least Intersted" ? "bg-blue-500 text-white" : "bg-gray-300"}`}
+                                    onClick={() => {   
+                                        setLeadStatus('Least Intersted');
                                     }}
                                     
                                 >Least Intersted</button>
                                 
-                                {leadStatus == "Least Intrested" || leadStatus == "Highly Intrested" ?
+                                {leadStatus == "Least Intersted" || leadStatus == "Highly Intersted" ?
                                     <DateAndTimeInput leadStatusDate={leadStatusDate} setLeadStatusDate={setLeadStatusDate} leadStatusTime={leadStatusTime} setLeadStatusTime={setLeadStatusTime} selectedButtonObj={selectedButtonObj} />
                                     : ""} 
                             </div>
@@ -165,7 +211,7 @@ const YesModalForm = () => {
 
                         {/* Code of 4 End*/}
                         {/* Lead Status Not Intrestead */}
-                        {optionId === 5 ?<><div className={`${optionId === button.id ? 'block': 'hidden'}`}>
+                        {selectedButton === 5 ?<><div className={`${selectedButton === button.id ? 'block': 'hidden'}`}>
                             <div className="text-xl text-center font-bold underline">Tell Us Why </div> <br />
                        <CustomRadioButton leadStatus={leadStatus} setLeadStatus={setLeadStatus}/></div>
                        </> :""}                        

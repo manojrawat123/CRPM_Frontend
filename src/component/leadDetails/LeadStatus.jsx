@@ -17,19 +17,13 @@ const LeadStatus = () => {
         modalIsOpen: modalIsOpen, 
         setModalIsOpen: setModalIsOpen,
         leadId: id
-          //  modalFilterData:modalFilterData,
-          // templateId: templateId,
-          // myResetForm: myResetForm,
-          // templateMessage: templateMessage,
-          // templateSubject: templateSubject,
-          // modalExcludedList: modalExcludedList
         }}/>
-    <div className='grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 m-8 gap-5'>
+    <div className='grid md:grid-cols-2 grid-cols-1 m-8 gap-5'>
       <LeadDetails className="col-span-1" setModalIsOpen={setModalIsOpen}/>
 <div className='col-span-1'>
     <LeadServices />
 </div>
-<div className='col-span-3 border-2 rounded border-solid border-black'>
+<div className='md:col-span-2 col-span-1 border-2 rounded border-solid border-black'>
   <ServiceRequirment />
 </div>
 

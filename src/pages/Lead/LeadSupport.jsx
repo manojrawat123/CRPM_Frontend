@@ -2,15 +2,56 @@ import React, { useContext, useEffect, useState } from 'react';
 import { DataContext } from '../../context';
 import { NavLink } from 'react-router-dom';
 import { format } from "date-fns";
+import axios from 'axios';
+import API_BASE_URL from '../../config';
 
 const LeadSupport = (props) => {
-  const { getLeadFunc } = useContext(DataContext);
+  const { 
+    getLeadFunc, 
+    // leadGetById
+    // getServiceNamesForArray ,
+    // getSerciceNameById, serviceName 
+    
+    userObj,
+    leadRepresentative
+    // ,setServiceName
+  } = useContext(DataContext);
+
+  
 
   const [myDate, setMyDate] = useState("");
   const [leadDate, setLeadDate] = useState("");
+  const [courseName, setCourseName] = useState();
+  const [serviceName, setServiceName] = useState([]);
+
+  const token = localStorage.getItem('token');
+
+const name = serviceName
+  const getSerciceNameById = (serviceID)=>{
+    setServiceName([])
+    serviceID?.forEach(element => {
+      axios.get(`${API_BASE_URL}/servicesbyid/${element}/`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }).then((value)=>{
+        name?.push(value.data.ServiceName)
+        setServiceName(name)
+        // setServiceName(value.data.ServiceName);
+        
+      }).catch((err)=>{
+        alert("Some Error Occured");
+      })
+    });
+  }
+
+  useEffect(()=>{
+    getSerciceNameById(props?.lead?.LeadServiceInterested);
+    userObj(props.lead?.LeadRepresentativePrimary);
+    console.log(leadRepresentative);
+  },[])
 
   useEffect(() => {
-    console.log(props.lead);
     getLeadFunc();
     const formattedDate2 = new Date(props.lead.LeadDateTime);
     const dateEx2 = format(formattedDate2, "dd-MMM-yyyy hh:mm a");
@@ -19,6 +60,9 @@ const LeadSupport = (props) => {
   useEffect(() => {
     getLeadFunc();
   }, [leadDate])
+
+
+  
 
   return (
     <>
@@ -40,12 +84,14 @@ const LeadSupport = (props) => {
             <br />
             Lead Representative:
           </span>
-          {props.lead.LeadRepresentativePrimary}
+          {leadRepresentative?.name}
           <br />
           <span className="font-bold">
-            Course Name:
+            Course Name: 
           </span>
-          {props.lead.CourseName}
+            {serviceName?.map((value, index)=>{
+              return <span>{index == 0? null: <>,</>} {value}</span>
+            })}
         </td>
         <td className="border border-black px-4 py-2">
           <span className="font-bold">Lead Added:</span>

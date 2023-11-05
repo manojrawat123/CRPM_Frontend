@@ -34,13 +34,13 @@ const formattedDate = new Date(dateString).toLocaleString('en-US', {
       <div className="w-full overflow-x-auto">
       <table className=" w-full border-collapse rounded rounded-corners">
   <tbody >
-    <tr className="bg-gray-100 text-gray-900">
-      <th className=" text-xl border border-green-600 border-r-0 rounded font-bold p-2 text-left">{leadByIdObj?.LeadName}</th>
-      <td className=" border border-green-600 border-l-0 rounded p-2">
-        <span className='bg-white border border-green-600 '>
+    <tr className="bg-gray-100 text-gray-900 border border-solid border-black rounded-xl ">
+      <th className=" text-xl font-bold p-2 text-left">{leadByIdObj?.LeadName}</th>
+      <td className=" p-2">
+        <span className='bg-white '>
           +91 
         </span>&nbsp; 
-        <span className='bg-white border border-green-600 '>
+        <span className='bg-white '>
           {leadByIdObj?.LeadPhone}&nbsp;
         </span>
       </td>

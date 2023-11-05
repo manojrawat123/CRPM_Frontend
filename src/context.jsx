@@ -32,6 +32,9 @@ export const DataProvider = ({ children }) => {
   const [showNavbar, setShowNavbar] = useState(false);
   const [leadSubmitButton, setLeadSubmitButton] = useState(false);
   const [leadScource, setLeadScource] = useState();
+  const [serviceName, setServiceName] = useState([]);
+  const [serviceObj, setServiceObj] = useState();
+  const [leadRepresentative , setLeadRepresentative] = useState();
   
 
   useEffect(() => {
@@ -379,6 +382,41 @@ export const DataProvider = ({ children }) => {
         console.log("An Error Occured!!");
       });
   };
+
+  
+  const getServiceNameById = (serviceID)=>{
+    if(serviceID == null || undefined){
+      return
+    }
+      axios.get(`${API_BASE_URL}/servicesbyid/${serviceID}/`, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }).then((value)=>{
+        setServiceName(value.data.ServiceName);
+        setServiceObj(value.data);
+        console.log(value.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+      
+  }
+
+  const userObj = (userid)=>{
+    axios.get(`${API_BASE_URL}/user/${userid}/`,{
+      headers:
+      {
+        "Authorization": `Bearer ${token}`
+      }
+    }).then((value)=>{
+      setLeadRepresentative(value.data);
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
+
+
+  
   // End OF lead Function
   return (
     <DataContext.Provider
@@ -429,6 +467,13 @@ export const DataProvider = ({ children }) => {
         leadByIdObj,
         leadSubmitButton,
         setLeadSubmitButton,
+        getServiceNameById,
+        serviceName,
+        setServiceName,
+        userObj,
+        leadRepresentative
+        // getServiceNamesForArray 
+     
       }}
     >
       {children}

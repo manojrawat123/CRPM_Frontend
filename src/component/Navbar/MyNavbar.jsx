@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { DataContext, DataProvider } from '../../context';
 import API_BASE_URL from "../../config";
+import MobileNavbar from './DummyNavbar';
 
 
 const MyNavbar = () => {
@@ -29,7 +30,7 @@ const MyNavbar = () => {
 
     return (
         <>
-            <nav className="shadow-2xl w-[100%]">
+            <nav className="text-white w-[100%] justify-center items-center col-span-12 h-[4rem] bg-gradient-to-r from-blue-700 via-pink-300 to-red-700 pr-8 md:block hidden">
                 <div className="container  flex justify-between items-center mx-8">
                     <ul className="space-x-6 ">
                         {navItem.filter((item) => item.Level === 0).map((element, index) => {
@@ -50,7 +51,6 @@ const MyNavbar = () => {
                                                 </NavLink>
                                                 </li>)
                                             })}
-                                           
                                             </ul>
                                     </li>
                             )
@@ -74,7 +74,7 @@ const MyNavbar = () => {
                          </li>
                 </div>
             </nav>
-
+<MobileNavbar />
         </>
     )
 }

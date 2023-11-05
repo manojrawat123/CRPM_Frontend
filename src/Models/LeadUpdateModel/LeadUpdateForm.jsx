@@ -73,15 +73,16 @@ const LeadUpdateForm = (props) => {
     X
   </button>
 </div>
-    <div className="w-full max-w-sm mx-auto">
-        <h1 className='text-2xl font-bold text-center text-green-500'>Update Detail  </h1>
+    <div className="w-full">
+        <h1 className='text-2xl font-bold text-center text-green-500 underline my-4 '>Update Detail  </h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        
       >
         {({values, handleSubmit, resetForm, setFieldValue, handleBlur }) => (
-          <Form className="bg-green-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <Form className="bg-green-100 2xl:w-[90vw] xl:[w-80vw] md:[w-70vw]  shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                 Name:
