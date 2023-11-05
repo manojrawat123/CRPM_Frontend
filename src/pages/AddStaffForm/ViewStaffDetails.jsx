@@ -28,6 +28,11 @@ const ViewStaffDetails = () => {
     },[])
 
   return (
+
+    <>
+    <div className='text-center'>
+      <h1 className='font-bold text-3xl underline  my-4'>Staff Details</h1>
+    </div>
     <div className="container mx-auto mt-8">
   <table className="min-w-full table-auto border">
     <thead>
@@ -44,7 +49,7 @@ const ViewStaffDetails = () => {
     </tbody>
   </table>
 </div>
-
+</>
 
   )
 }

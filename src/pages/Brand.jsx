@@ -38,7 +38,7 @@ const MyBrand = () => {
   }}
   onClick={() => {
     localStorage.setItem("brand", value?.id);
-    navigate("/process");
+    navigate("/dashboard");
   }}
 >
   {value.BrandName}

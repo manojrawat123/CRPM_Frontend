@@ -34,6 +34,7 @@ import EmailShedule from './pages/emailshedule/EmailShedule';
 import MessageShedule from './pages/MessageShedule/MessageShedule';
 import SearchPage from './component/Search';
 import ServiceForm from './component/serviceForm/ServiceForm';
+import ViewStaffDetails from './pages/AddStaffForm/ViewStaffDetails';
 
 function App() {
   
@@ -147,6 +148,9 @@ function App() {
       
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/message' Component={MessageShedule}/>
+      </Route>
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/staffdetails' Component={ViewStaffDetails}/>
       </Route>
 
     

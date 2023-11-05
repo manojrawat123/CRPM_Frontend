@@ -4,7 +4,7 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { DataContext, DataProvider } from '../../context';
-import API_BASE_URL from "../../config";
+import API_BASE_URL, { API_ROUTE_URL } from "../../config";
 import MobileNavbar from './DummyNavbar';
 
 
@@ -46,7 +46,7 @@ const MyNavbar = () => {
                                         map((myitem, myindex) => {
                                             return (<li key={myindex}
                                                 className={`text-black hover:text-green-500 relative px-4 py-1 ${myindex==0 ? "pt-4 ": ""} ${display1 === myitem?.ParentID? 'block': "hidden"}` }>
-                                                <NavLink to={myitem?.MenuLink}>
+                                                <NavLink to={`${API_ROUTE_URL}/${myitem?.EndPoint}`}>
                                                 {myitem?.MenuItemDescription}
                                                 </NavLink>
                                                 </li>)
