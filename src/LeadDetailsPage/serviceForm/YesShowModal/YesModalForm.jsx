@@ -110,23 +110,24 @@ const YesModalForm = (props) => {
             }
         }).then((val)=>{
 
-            axios.post(`${API_BASE_URL}//leadlastfollowupbyid/${id}/`, requestData, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }).then((values1)=>{
                 setCustomAlert({
                     status: "success",
                     message: "Data Submitted Sucessfully!!"
                 });  
-                setButton(false)
-             }).catch((err)=>{
-                setCustomAlert({
-                    status: "error",
-                    message: "Could Not update in lead Last Followup"
-                });   
-                setButton(false)
-             })
+            // axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
+            //     headers: {
+            //         "Authorization": `Bearer ${token}`
+            //     }
+            // }).then((values1)=>{
+            //     setButton(false)
+            //  }).catch((err)=>{
+            //     console.log(err)
+            //     setCustomAlert({
+            //         status: "error",
+            //         message: "Could Not update in lead Last Followup"
+            //     });   
+            //     setButton(false)
+            //  })
             
              setButton(false)
             }).catch((err)=>{
@@ -137,7 +138,7 @@ const YesModalForm = (props) => {
                 })
                 setButton(false)
         })
-        setButton(false)
+        // setButton(false)
     }
     
     const buttons = [

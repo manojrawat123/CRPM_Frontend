@@ -78,7 +78,7 @@ const formattedDate = new Date(dateString).toLocaleString('en-US', {
     </tr>
     <tr className=" text-gray-700">
       <td className=" border border-green-600 p-2 text-left  text-green-600 font-semibold">Representative Name</td>
-      <td className=" border border-green-600 p-2">{leadByIdObj?.LeadRepresentativePrimary}</td>
+      <td className=" border border-green-600 p-2">{leadByIdObj?.LeadRepresentativePrimary?.name}</td>
     </tr>
     <tr className=" text-gray-700">
       <td className=" border border-green-600 p-2 text-left  text-green-600 font-semibold">Location</td>

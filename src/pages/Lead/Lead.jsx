@@ -96,15 +96,15 @@ const Lead = () => {
           </button>
         </div>
         <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-200 border border-black">
-              <th className="px-4 py-2 border border-black">S.No</th>
-              <th className="px-4 py-2 border border-black">Name</th>
-              <th className="px-4 py-2 border border-black">
+          <thead  className='bg-purple-500 text-white'>
+            <tr className=" border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">S.No</th>
+              <th className="px-4 py-2 border border-gray-300">Name</th>
+              <th className="px-4 py-2 border border-gray-300">
                 Lead Details
               </th>
-              <th className="px-4 py-2 border border-black">Lead Date & Time</th>
-              <th className="px-4 py-2 border border-black">Actions</th>
+              <th className="px-4 py-2 border border-gray-300">Lead Date & Time</th>
+              <th className="px-4 py-2 border border-gray-300">Actions</th>
             </tr>
           </thead>
           <tbody>

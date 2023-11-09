@@ -6,7 +6,6 @@ import MyProcess from './component/MyProcess';
 import MyLogin from './login/MyLogin';
 import ProtectedRoutes from './protectedRoutes/ProtectedRoutes';
 import MyDashboard from './component/MyDashboard';
-import LeadStatus from './component/leadDetails/LeadStatus';
 import MyFooter from './component/Fotter'; 
 import MyBrand from './pages/Brand'; 
 import ConvertLead from './pages/convertlead/ConvertLead';
@@ -32,9 +31,9 @@ import { DataContext, DataProvider } from './context';
 import LeadFollowUp from './pages/LeadFollowUp/LeadFollowUp';
 import EmailShedule from './pages/emailshedule/EmailShedule';
 import MessageShedule from './pages/MessageShedule/MessageShedule';
-import SearchPage from './component/Search';
-import ServiceForm from './component/serviceForm/ServiceForm';
+import SearchPage from './component/Search/Search';
 import ViewStaffDetails from './pages/AddStaffForm/ViewStaffDetails';
+import LeadStatus from './LeadDetailsPage/leadDetails/LeadStatus';
 
 function App() {
   

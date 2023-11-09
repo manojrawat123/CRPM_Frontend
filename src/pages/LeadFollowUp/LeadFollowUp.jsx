@@ -84,23 +84,23 @@ const LeadFollowUp = () => {
           }}>Show All Data</button>
       </div>
       <br />
-      <div className="overflow-x-auto">
-        <table className="table-auto min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
+      <div className="mx-4">
+        <table className="table-auto min-w-full divide-y divide-gray-200 ">
+          <thead className='bg-purple-500 text-white'>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium border border-gray-300  uppercase tracking-wider">
                 S. No.
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+              </th> */}
+              <th className="px-6 py-3 text-left text-xs font-medium border border-gray-300  uppercase tracking-wider">
                 Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium border border-gray-300  uppercase tracking-wider">
                 Details
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium border border-gray-300  uppercase tracking-wider">
                 Other Details
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium border border-gray-300  uppercase tracking-wider">
                 Links
               </th>
             </tr>

@@ -6,11 +6,19 @@ import MailIcon from '@mui/icons-material/Mail';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import { countryList } from '../data';
+import { countryList } from '../../data';
 import axios from 'axios';
-import API_BASE_URL from '../config';
+import API_BASE_URL from '../../config';
+import { useState } from 'react';
+import SearchModal from './SearchModal/SearchModal';
+import { Alert } from '@mui/material';
 
 const SearchPage = () => {
+
+  const [filterLead, setFilterLead] = useState();
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [custAlert, setCustomAlert] = useState(false);
+
   const initialValues = {
     countryCode: '',
     name: '',
@@ -32,7 +40,16 @@ const SearchPage = () => {
   });
 
 
-  return (
+  return (<>
+  {custAlert ? (
+            <Alert
+              severity={custAlert.status}
+              className="fixed top-15 w-3/4 z-[1000]" // Apply the classes directly
+            >
+              {custAlert.message}
+            </Alert>
+          ) : null}
+  <SearchModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} filterLead={filterLead} />
     <div className="h-screen bg-gray">
       <div className="mx-auto px-6 bg-gray-200 rounded-lg shadow-md xl:w-[65vw] pt-4 sm:mt-4">
         <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">
@@ -45,6 +62,13 @@ const SearchPage = () => {
           onSubmit={(values) => {
             // Perform your search logic using the form values
             console.log("Button Clicked");
+            if ( values.name == "" && values.phone== "" && values.email== "" && values.leadId== "" && values.brandLeadId== ""){
+              setCustomAlert({
+                status: "error",
+                message: "Please Select One field to filter"
+              })
+              return
+            }
             axios
             .get(`${API_BASE_URL}/leadfilter/`, {
                 params: {
@@ -62,6 +86,9 @@ const SearchPage = () => {
                 console.log("button Clicked")
                 // setData("Filtered Lead Data",response.data);
                 console.log("Filter Data:",response.data);
+                setFilterLead(response.data);
+                setModalIsOpen(true)
+                setCustomAlert(false);
                 // setLoading(false);
               })
               .catch((error) => {
@@ -170,6 +197,7 @@ const SearchPage = () => {
         </Formik>
       </div>
     </div>
+    </>
   );
 };
 

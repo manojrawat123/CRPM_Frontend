@@ -24,6 +24,7 @@ const MyNavbar = () => {
             }
         }).then((value) => {
             setNavItem(value.data);
+            console.log(value.data)
         })
     }, [])
 
@@ -31,12 +32,12 @@ const MyNavbar = () => {
     return (
         <>
             <nav className="text-white w-[100%] justify-center items-center col-span-12 h-[4rem] bg-gradient-to-r from-blue-700 via-pink-300 to-red-700 pr-8 md:block hidden">
-                <div className="container  flex justify-between items-center mx-8">
+                <div className="container flex justify-between items-center mx-8">
                     <ul className="space-x-6 ">
                         {navItem.filter((item) => item.Level === 0).map((element, index) => {
                             return (
                                     <li key={index}
-                                        className="inline-block py-[.8rem] {{home}} hover:underline hover:text-green-400 "
+                                        className="inline-block py-[.8rem] hover:underline hover:text-green-400 "
                                         onMouseEnter={()=>{setDisplay1(element.ID)}}
                                         onMouseLeave={()=>{setDisplay1('')}}
                                     ><a href="#" className="">{element?.MenuItemDescription}</a>

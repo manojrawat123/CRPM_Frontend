@@ -11,34 +11,12 @@ const LeadServices = () => {
     
     const { id } = useParams();
     const [myId, setMyId] = useState(id);
-    const { brand ,service , setService} = useContext(DataContext);
+    const { brand ,leadGetById, leadByIdObj} = useContext(DataContext);
     const [addCourseModal, setAddCourseModal] = useState(false);
-    
-
-    const brandIds = localStorage.getItem("brand");
 
     useEffect(()=>{
-        const apiUrl = `${API_BASE_URL}/services/${brandIds}/`;
-        const token = localStorage.getItem("token");
-
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-
-        axios.get(apiUrl, config)
-      .then((response) => {
-        console.log('Response data:', response.data);
-        const data = response.data    
-        setService(response.data)    
-      })
-      .catch((error) => {
-        console.error('Error:', error.message);
-        localStorage.removeItem("token");
-        navigate("/login")
-      });
-
+        
+      leadGetById(id);
       
     },[])
 
@@ -108,13 +86,10 @@ const LeadServices = () => {
         <td className="p-2"></td>
       </tr>
 
-      {service?.map((element, index)=>{
+      {leadByIdObj?.LeadServiceInterested?.map((element, index)=>{
         return (
-          
           <tr key={index}>
-
-          <td className='mr-8 w-[13rem]  border border-solid py-2 border-green-500 px-2'>{element?.ServiceName}</td>
-          
+          <td className='mr-8 w-[13rem]  border border-solid py-2 border-green-500 px-2'>{element?.ServiceName}</td>          
           <td className='ml-8  border border-solid py-2 border-green-500 px-2'>{element.serviceMode}</td> 
           </tr>          
           )

@@ -1,15 +1,14 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { DataContext } from '../../../context';
 import { useParams } from 'react-router-dom';
-import API_BASE_URL from "../../../config";
 import LeadFollowupSupport from './LeadFollowupSupport';
+import API_BASE_URL from '../../config';
+import { DataContext } from '../../context';
+import Skeleton from 'react-loading-skeleton';
 
 
 const LeadFollowDisplay = () => {
   const { profileFunc,
-    getServiceNameById,
-    serviceName,
   } = useContext(DataContext)
   const { id } = useParams()
     
@@ -47,26 +46,33 @@ fetchData();
     <>
     <div className='m-8'>
   <div className="overflow-x-auto">
-  <table className="min-w-full table-auto border border-gray-300">
-    <thead>
+  <table className="min-w-full table-auto border border-gray-300 ">
+    <thead className='bg-purple-500 text-white'>
       <tr>
         <th className="border border-gray-300 p-2">Date & Time</th>
         <th className="border border-gray-300 p-2">Follow Up Details</th>
         <th className="border border-gray-300 p-2">More Details</th> 
       </tr>
     </thead>
-    <tbody>
-      
     {leadfollowUpObj? <>
+      <tbody>
      { leadfollowUpObj?.map((element, index)=>{
     return <LeadFollowupSupport leadfollowUpObjEl={element} key={index}/>
-  })} </>: <>Loading</>}
+  })} 
+  </tbody>
+  </>:<Skeleton count={5} height={20}/>}   
   
-    </tbody>
   </table>
+
 </div>
 
   </div>
+<Skeleton count={5} />
+<Skeleton count={5} />
+<Skeleton count={5} />
+<Skeleton count={5} />
+<Skeleton count={5} />
+<Skeleton count={5} />
     </>
   )
 }

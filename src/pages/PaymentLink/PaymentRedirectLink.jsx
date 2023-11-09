@@ -38,7 +38,7 @@ const PaymentRedirectLink = () => {
   
     return (
       <div>
-        <p>Current URL: </p>
+        <p>Redirecting...: </p>
       </div>
     );
 }

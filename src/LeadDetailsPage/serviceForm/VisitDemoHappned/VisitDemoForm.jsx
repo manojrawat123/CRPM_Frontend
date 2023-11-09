@@ -82,6 +82,7 @@ const VisitDemoForm = (props) => {
                   "Brand": brand,
                   "LeadRep": userId,
                   "LeadEvent": leadEvent,
+                  "LeadStatus": leadEvent,
                   "LeadStatusDate":`${nextFollowupDate} 00:00`,
                   "LeadEventDate":`${visitHappenedDate} ${visitHappenedTime}`,
                   "LeadEventTakenBy": visitAttendedBy,
@@ -94,16 +95,16 @@ const VisitDemoForm = (props) => {
                     }
                 }).then((value)=>{
 
-                    axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
-                        headers: {
-                            "Authorization": `Bearer ${token}`
-                        }
-                    }).then((values1)=>{
                         setCustomAlert({
                             status: "success",
                             message: "Data Submitted Sucessfully!!"
                         });
-                     })
+                    // axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
+                    //     headers: {
+                    //         "Authorization": `Bearer ${token}`
+                    //     }
+                    // }).then((values1)=>{
+                    //  })
                 }).catch((err)=>{
                     console.log(err)
                     setCustomAlert({
@@ -119,8 +120,8 @@ const VisitDemoForm = (props) => {
 }
 
     const buttons = [
-        { id: 1, label: "Visit happened" },
-        { id: 2, label: "Demo happened" },
+        { id: 1, label: "Visit scheduled" },
+        { id: 2, label: "Demo scheduled" },
     ];
 
     const handleButtonClick = (buttonId, button) => {

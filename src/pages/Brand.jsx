@@ -6,17 +6,18 @@ import lotus from "../img/lotus.webp";
 
 
 const MyBrand = () => {
-    const { brandarr } = useContext(DataContext);
+    const { brandarr,profileFunc } = useContext(DataContext);
     const navigate = useNavigate()
     
     useEffect(()=>{
       if (localStorage.getItem("brand")){
        navigate("/dashboard")
       }
+      profileFunc();
     },[])
     
   return (
-    <section className="gradient-form h-[100vh] bg-neutral-200  dark:bg-neutral-700">
+    <section className="gradient-form  bg-neutral-200  dark:bg-neutral-700">
       <div className=" h-full p-10">
         <div className="flex h-full flex-wrap items-center justify-center text-neutral-800 dark:text-neutral-200 md:w-[55%] mx-auto">
           <div className="w-full">
@@ -30,6 +31,7 @@ const MyBrand = () => {
           {brandarr?.map((value, index)=>{
             return (
                 <div key={index}>
+              
            <button
   className="w-[80%] bg-gradient-to-r from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-600 text-white border border-solid border-gray-900 font-bold py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mx-10 transition duration-300"
   type="button"

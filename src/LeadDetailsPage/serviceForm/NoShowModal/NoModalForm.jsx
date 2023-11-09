@@ -53,7 +53,6 @@ const NoModalForm = (props) => {
                 setButton(false);
                 return
             }
-
         }
         const requestData ={
             "LeadID": id,
@@ -62,6 +61,7 @@ const NoModalForm = (props) => {
               "LeadRep": userId,
               "LeadPhonePicked":"No",
               "LeadReasonPhoneNotPicked":leadNotInterstedReason,
+              "LeadStatus": "Try Next Time",
               "LeadServiceInterested":props?.leadFollowUpServiceId,
               ...(leadStatusDate !== null
         ? { "LeadStatusDate": `${leadStatusDate} 00:00` }
@@ -73,22 +73,21 @@ const NoModalForm = (props) => {
                 "Authorization": `Bearer ${token}`
             }
         }).then((value)=>{
-
-             axios.post(`${API_BASE_URL}//leadlastfollowupbyid/${id}/`, requestData, {
-                        headers: {
-                            "Authorization": `Bearer ${token}`
-                        }
-                    }).then((values1)=>{
                         setCustomAlert({
                             status: "success",
                             message: "Data Submitted Sucessfully!!"
                         });  
-                     }).catch((err)=>{
-                        setCustomAlert({
-                            status: "error",
-                            message: "Could Not update in lead Last Followup"
-                        });   
-                     })
+            //  axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
+            //             headers: {
+            //                 "Authorization": `Bearer ${token}`
+            //             }
+            //         }).then((values1)=>{
+            //          }).catch((err)=>{
+            //             setCustomAlert({
+            //                 status: "error",
+            //                 message: "Could Not update in lead Last Followup"
+            //             });   
+            //          })
            
         }).catch((err)=>{
             console.log(err)

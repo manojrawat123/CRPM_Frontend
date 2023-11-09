@@ -72,7 +72,9 @@ const MyDashboard = () => {
     serviceFunc();
     leadScourceFunc();
     console.log("Profile Function run");
-  }, [])
+  }, []);
+
+
   return (
     <>
       <Alert />

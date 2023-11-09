@@ -35,6 +35,7 @@ export const DataProvider = ({ children }) => {
   const [serviceName, setServiceName] = useState([]);
   const [serviceObj, setServiceObj] = useState();
   const [leadRepresentative , setLeadRepresentative] = useState();
+  const [serviceArrById, setServiceArrById] = useState()
   
 
   useEffect(() => {
@@ -208,15 +209,6 @@ export const DataProvider = ({ children }) => {
 
   const addLeadFunc = async (values, { resetForm }) => {
     setLeadSubmitButton(true);
-
-    const stringValue = values?.course;
-    const selectedId = parseInt(stringValue, 10);
-    const selectedCourseName =
-      service.find((element) => element.id === selectedId)?.ServiceName || "";
-
-    setCourseName(selectedCourseName);
-
-    console.log(courseName);
     const leadServFilter = leadScource?.filter((element, index) => {
       return (element.LeadSource = values.leadSource);
     });
@@ -256,66 +248,19 @@ export const DataProvider = ({ children }) => {
       })
       .then((response) => {
         console.log("Lead data submitted successfully:", response.data);
-
-        const leadFollowUpPromise = values?.course?.map(
-          (folupelement, index) => {
-            return axios
-              .post(
-                `${API_BASE_URL}/leadfollowup/`,
-                {
-                  LeadID: response?.data?.id,
-                  Company: company,
-                  Brand: 1,
-                  LeadRep: userId,
-                  LeadStatus: "Fresh",
-                  LeadStatusDate: `${values.leadDate}T${values.leadTime}:00Z`,
-                  leadRepName: username,
-                  LeadServiceInterested: folupelement?.value,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              )
-              .then((response2) => {
-                console.log(response2.data);
-                axios
-                .post(`${API_BASE_URL}/leadlastfollowup/`,  {
-                  LeadID: response?.data?.id,
-                  Company: company,
-                  Brand: 1,
-                  LeadRep: userId,
-                  LeadStatus: "Fresh",
-                  LeadStatusDate: `${values.leadDate}T${values.leadTime}:00Z`,
-                  leadRepName: username,
-                  LeadServiceInterested: folupelement?.value,
-                }, {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                })
-                .then((response3) => {
-                  setRegisterSucessfully("success");
-                  setLeadSubmitButton(false);
-                  resetForm();
-                })
-                .catch((err) => {
-                  console.error("Error submitting FollowUp data:", err);
-                  setRegisterSucessfully("error");
-                  setLeadSubmitButton(false);
-                });
-              })
-              .catch((err) => {
-                console.error("Error submitting FollowUp data:", err);
-                setRegisterSucessfully("error");
-                setLeadSubmitButton(false);
-              });
-          }
-        );         
+        console.log(values?.course);
+        setRegisterSucessfully("success");
+        setLeadSubmitButton(false);  
+          leadScourceFunc();
+        resetForm();     
+      }).catch((err)=>{
+        console.log(err)
+        setRegisterSucessfully("error");
+        setLeadSubmitButton(false);
       })
       
   };
+
 
   const leadGetById = (myLeadId) => {
     if (myLeadId != undefined) {
@@ -395,11 +340,28 @@ export const DataProvider = ({ children }) => {
       }).then((value)=>{
         setServiceName(value.data.ServiceName);
         setServiceObj(value.data);
-        console.log(value.data)
+        console.log(value.data);
+        return value.data.ServiceName
       }).catch((err)=>{
         console.log(err)
       })
       
+  }
+
+
+  const getServiceObjectByIds = async (arrOfId)=>{
+    const idsString = ids.join(',');
+    try {
+      const response = await axios.get(`/servicesarrbyId/?ids=${idsString}`, {
+          params: {
+              ids: arrOfId
+          }
+      });
+      setServiceArrById(response.data);
+  } catch (error) {
+      console.error('Error fetching service details:', error);
+  }
+
   }
 
   const userObj = (userid)=>{
@@ -471,8 +433,10 @@ export const DataProvider = ({ children }) => {
         serviceName,
         setServiceName,
         userObj,
-        leadRepresentative
-        // getServiceNamesForArray 
+        leadRepresentative,
+        getServiceObjectByIds,
+        serviceArrById
+         
      
       }}
     >

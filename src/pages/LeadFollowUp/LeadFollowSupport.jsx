@@ -38,12 +38,12 @@ useEffect(()=>{
 
   return (
     <>
-    <tr>
-      <td className="px-6 py-4 whitespace-nowrap">{props?.index + 1}</td>
-      <td className="px-6 py-4 whitespace-nowrap">{leadObj?.LeadName}</td>
+    <tr className=' border border-gray-300'>
+      {/* <td className="px-6 py-4 whitespace-nowrap border border-gray-300">{props?.index + 1} </td> */}
+      <td className="px-6 py-4 whitespace-nowrap border border-gray-300">{leadObj?.LeadName}</td>
 
                 
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap border border-gray-300">
                 <span className='font-bold mr-4'> 
                 Lead Source:
                     </span>  {leadObj?.LeadSource}
@@ -100,7 +100,7 @@ useEffect(()=>{
                     {props?.items?.LeadStatus}
                   <br />   
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">   
+                <td className="px-6 py-4 whitespace-nowrap  border border-gray-300">   
             <NavLink to={`/leaddetails/${leadObj.id}`}>
               <button className="bg-blue-500 hover:bg-blue-600 w-[10rem] text-white font-semibold py-2 px-4 rounded focus:outline-none">
                 Details
