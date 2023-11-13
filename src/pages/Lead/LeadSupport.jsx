@@ -46,8 +46,8 @@ const LeadSupport = (props) => {
 
   return (
     <>
+    <tbody>
       <tr key={props.lead.id}>
-        <td className="border border-gray-300 px-4 py-2">{props.index + 1}</td>
         <td className="border border-gray-300 px-4 py-2">{props.lead.LeadName}</td>
         <td className="border border-gray-300 px-4 py-2">
           <span className='font-bold'>
@@ -90,6 +90,7 @@ const LeadSupport = (props) => {
           </NavLink>
         </td>
       </tr>
+      </tbody>
     </>
   )
 }

@@ -20,7 +20,7 @@ export const DataProvider = ({ children }) => {
   const [userId, setUserId] = useState();
   const [username, setUsername] = useState();
   const [brandarr, setBrandarr] = useState();
-  const [registerSucessfully, setRegisterSucessfully] = useState(false);
+  const [leadCustomAlert, setLeadCustomAlert] = useState(false);
   const [courseName, setCourseName] = useState();
   const [leads, setLead] = useState();
   const [leadByIdObj, setLeadIdByObj] = useState();
@@ -35,7 +35,8 @@ export const DataProvider = ({ children }) => {
   const [serviceName, setServiceName] = useState([]);
   const [serviceObj, setServiceObj] = useState();
   const [leadRepresentative , setLeadRepresentative] = useState();
-  const [serviceArrById, setServiceArrById] = useState()
+  const [serviceArrById, setServiceArrById] = useState();
+  const [leadAnalyticsObj, setLeadAnyticsObj] = useState();
   
 
   useEffect(() => {
@@ -108,6 +109,27 @@ export const DataProvider = ({ children }) => {
       })
       .then((values) => {
         setLead(values.data);
+        
+
+        // Lead Analitics
+        const filter_data = [];
+    
+        values.data?.forEach((lead, index) => {
+          const leadDate = lead?.LeadDateTime.substring(0, 10);
+          const existing_date_object = filter_data?.find(
+            (ele) => ele.date === leadDate
+          );
+    
+          if (existing_date_object) {
+            existing_date_object.leadObject.push(lead);
+          } else {
+            filter_data.push({ date: leadDate, leadObject: [lead] });
+          }
+        });
+
+        setLeadAnyticsObj(filter_data)
+
+
       })
       .catch((err) => {
         console.log(err);
@@ -249,13 +271,19 @@ export const DataProvider = ({ children }) => {
       .then((response) => {
         console.log("Lead data submitted successfully:", response.data);
         console.log(values?.course);
-        setRegisterSucessfully("success");
+        setLeadCustomAlert({
+          status: "success",
+          message: "Lead Added Sucessfully!!"
+        })
         setLeadSubmitButton(false);  
           leadScourceFunc();
-        resetForm();     
+        // resetForm();     
       }).catch((err)=>{
         console.log(err)
-        setRegisterSucessfully("error");
+        setLeadCustomAlert({
+          status: "error",
+          message: "Bad Request!!"
+        })
         setLeadSubmitButton(false);
       })
       
@@ -417,8 +445,8 @@ export const DataProvider = ({ children }) => {
         registeredStudent,
         GetFeesAll,
         allFeesObj,
-        registerSucessfully,
-        setRegisterSucessfully,
+        leadCustomAlert,
+        setLeadCustomAlert,
         showNavbar,
         setShowNavbar,
         leadScourceFunc,
@@ -435,9 +463,8 @@ export const DataProvider = ({ children }) => {
         userObj,
         leadRepresentative,
         getServiceObjectByIds,
-        serviceArrById
-         
-     
+        serviceArrById,
+        leadAnalyticsObj, 
       }}
     >
       {children}

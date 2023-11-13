@@ -24,6 +24,7 @@ const VisitDemoForm = (props) => {
     const [nextFollowupDate, setNextFollowupDate] = useState('');
     const [visitAttendedBy, setVisitAttendedBy] = useState('');
     const [leadEvent, setLeadEvent] = useState();
+    const [leadStatus, setLeadStatus]= useState();
 
     useEffect(() => {
         serviceFunc();
@@ -82,7 +83,7 @@ const VisitDemoForm = (props) => {
                   "Brand": brand,
                   "LeadRep": userId,
                   "LeadEvent": leadEvent,
-                  "LeadStatus": leadEvent,
+                  "LeadStatus": leadStatus,
                   "LeadStatusDate":`${nextFollowupDate} 00:00`,
                   "LeadEventDate":`${visitHappenedDate} ${visitHappenedTime}`,
                   "LeadEventTakenBy": visitAttendedBy,
@@ -99,12 +100,7 @@ const VisitDemoForm = (props) => {
                             status: "success",
                             message: "Data Submitted Sucessfully!!"
                         });
-                    // axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
-                    //     headers: {
-                    //         "Authorization": `Bearer ${token}`
-                    //     }
-                    // }).then((values1)=>{
-                    //  })
+                    
                 }).catch((err)=>{
                     console.log(err)
                     setCustomAlert({
@@ -119,15 +115,16 @@ const VisitDemoForm = (props) => {
             return 
 }
 
-    const buttons = [
-        { id: 1, label: "Visit scheduled" },
-        { id: 2, label: "Demo scheduled" },
+    const buttons = [    
+        { id: 1, label: "Visit happened", status: "Visit scheduled" },
+        { id: 2, label: "Demo happened" , status: "Demo scheduled"},
     ];
 
     const handleButtonClick = (buttonId, button) => {
         setSelectedButton(buttonId);
         setSelectedButtonObj(button);
         setLeadEvent(button.label);
+        setLeadStatus(button.status)
         setVisitHappenedDate('')
 setVisitHappenedTime('')
 setNextFollowupDate('')

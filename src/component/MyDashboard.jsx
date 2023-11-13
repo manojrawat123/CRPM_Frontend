@@ -8,10 +8,11 @@ import { countryList } from '../data';
 import { DataContext } from '../context';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import Alert from '../alert/Alert';
 import axios from 'axios';
 import Select from 'react-select';
-import { CircularProgress } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const validationSchema = Yup.object().shape({
@@ -45,7 +46,8 @@ const formattedTime = today.toTimeString().slice(0, 5);
 
 const MyDashboard = () => {
 
-  const { number, leadSubmitButton, setLeadSubmitButton, code, leadScource, leadScourceFunc, addLeadFunc, profileFunc, service, username, serviceFunc } = useContext(DataContext);
+  const { number, leadSubmitButton, setLeadSubmitButton, code, leadScource, leadScourceFunc, addLeadFunc, profileFunc, service, username, serviceFunc,leadCustomAlert, setLeadCustomAlert } = useContext(DataContext);
+  
   const ctCode = code
   const ctnumber = number
 
@@ -77,10 +79,22 @@ const MyDashboard = () => {
 
   return (
     <>
-      <Alert />
-      <div className="w-[100%] py-10 bg-blue-50">
+    {leadCustomAlert? 
+    <><Alert severity={leadCustomAlert.status} className="fixed top-0 w-[100%] z-[100] " >
+      {leadCustomAlert.message}
+      
 
-        <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
+    </Alert> 
+    <div className='z-[300] fixed top-1 right-1'>
+    <CloseIcon fontSize="medium" className='absolute top-0 right-0' onClick={()=>{
+        setLeadCustomAlert(false)
+        
+      }}/>
+    </div>
+    </>:null}
+      <div className="w-[100%] py-10 bg-blue-50">
+      
+        <div className="sm:w-[80%] w-[90%]  mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
           <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">Add New Lead</h2>
           <Formik
             initialValues={initialValues}
@@ -151,8 +165,7 @@ const MyDashboard = () => {
                   </div>
 
                   {/* ... (remaining fields) ... */}
-
-
+                  
                   {/* ... (remaining fields) ... */}
                   <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>

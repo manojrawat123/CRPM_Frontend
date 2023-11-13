@@ -6,9 +6,10 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker } from "react-date-range";
 import { useParams } from "react-router-dom";
+import LeadLoaderTabel from "./LeadLoader";
 
 const Lead = () => {
-  const { getLeadFunc, leads, leadGetById} = useContext(DataContext);
+  const { getLeadFunc, leads, leadGetById } = useContext(DataContext);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isDate, setIsDate] = useState(true);
@@ -26,16 +27,15 @@ const Lead = () => {
       }
     };
     fetchData();
-    leadGetById(id)
+    leadGetById(id);
   }, []);
 
   useEffect(() => {
     console.log("This is filteredLead", filteredLead);
   }, [JSON.stringify(startDate), JSON.stringify(endDate)]);
 
-  
   const handleSelect = (date) => {
-    setIsDate(false)
+    setIsDate(false);
     console.log(date);
     console.log(date.selection.endDate == date.selection.startDate);
     setStartDate(date.selection.startDate);
@@ -51,30 +51,27 @@ const Lead = () => {
         );
         console.log("Product Date", productDate);
         console.log("Date Selection Date", date.selection.startDate);
-        return (
-          productDate.getTime() === date.selection.startDate.getTime()
-        );
-      }
-      else if (date.selection.startDate && date.selection.endDate) {
+        return productDate.getTime() === date.selection.startDate.getTime();
+      } else if (date.selection.startDate && date.selection.endDate) {
         return (
           productDate <= date.selection.endDate &&
           productDate >= date.selection.startDate
-        )
-      }
-      else if (date.selection.endDate != date.selection.startDate) {
+        );
+      } else if (date.selection.endDate != date.selection.startDate) {
         return (
           productDate >= date.selection.startDate &&
-          productDate <= date.selection.endDate)
+          productDate <= date.selection.endDate
+        );
       }
-    })
+    });
     setFilteredLead(filtered);
-  }
+  };
 
   const selectionRange = {
     startDate: startDate,
     endDate: endDate,
     key: "selection",
-  }
+  };
 
   return (
     <>
@@ -96,24 +93,37 @@ const Lead = () => {
           </button>
         </div>
         <table className="min-w-full">
-          <thead  className='bg-purple-500 text-white'>
+          <thead className="bg-purple-500 text-white">
             <tr className=" border border-gray-300">
-              <th className="px-4 py-2 border border-gray-300">S.No</th>
               <th className="px-4 py-2 border border-gray-300">Name</th>
+              <th className="px-4 py-2 border border-gray-300">Lead Details</th>
               <th className="px-4 py-2 border border-gray-300">
-                Lead Details
+                Lead Date & Time
               </th>
-              <th className="px-4 py-2 border border-gray-300">Lead Date & Time</th>
               <th className="px-4 py-2 border border-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {isDate ? leads?.map((lead, index) => (
-              <LeadSupport lead={lead} index={index} key={index} />
-            )) : filteredLead?.map((lead, index) => (
-              <LeadSupport lead={lead} index={index} key={index} />
-            ))}
-          </tbody>
+
+          {leads ? (
+            <>
+              {isDate
+                ? leads?.map((lead, index) => {
+                    return (
+                      <LeadSupport lead={lead} index={index} key={index} />
+                    );
+                  })
+                : filteredLead?.map((lead, index) => {
+                    return (
+                      <LeadSupport lead={lead} index={index} key={index} />
+                    );
+                  })}
+            </>
+          ) : (
+            <>
+              {" "}
+              <LeadLoaderTabel />
+            </>
+          )}
         </table>
       </div>
       <br /> <br />

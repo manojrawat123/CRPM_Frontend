@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { DataContext } from '../context';
 
 const Alert = () => {
-    const { registerSucessfully, setRegisterSucessfully } = useContext(DataContext);
 
 
   const [alertClasses, setAlertClasses] = useState('');

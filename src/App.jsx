@@ -34,6 +34,7 @@ import MessageShedule from './pages/MessageShedule/MessageShedule';
 import SearchPage from './component/Search/Search';
 import ViewStaffDetails from './pages/AddStaffForm/ViewStaffDetails';
 import LeadStatus from './LeadDetailsPage/leadDetails/LeadStatus';
+import LeadAnalytics from './pages/LeadAnalytics/LeadAnalytics';
 
 function App() {
   
@@ -151,8 +152,9 @@ function App() {
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/staffdetails' Component={ViewStaffDetails}/>
       </Route>
-
-    
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/leadanalytics' Component={LeadAnalytics}/>
+      </Route>    
      <Route path='/login' Component={MyLogin} />
 
     </Routes>

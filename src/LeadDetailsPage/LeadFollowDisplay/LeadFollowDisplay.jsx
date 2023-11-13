@@ -4,13 +4,13 @@ import { useParams } from 'react-router-dom';
 import LeadFollowupSupport from './LeadFollowupSupport';
 import API_BASE_URL from '../../config';
 import { DataContext } from '../../context';
-import Skeleton from 'react-loading-skeleton';
+import LoadingTabel from '../../LoadingTabel/LoadingTabel';
 
 
 const LeadFollowDisplay = () => {
   const { profileFunc,
   } = useContext(DataContext)
-  const { id } = useParams()
+  const { id } = useParams() 
     
   const [leadfollowUpObj, setLeadFollowUpObj] = useState();
   
@@ -54,25 +54,23 @@ fetchData();
         <th className="border border-gray-300 p-2">More Details</th> 
       </tr>
     </thead>
+
+    
     {leadfollowUpObj? <>
       <tbody>
      { leadfollowUpObj?.map((element, index)=>{
     return <LeadFollowupSupport leadfollowUpObjEl={element} key={index}/>
   })} 
   </tbody>
-  </>:<Skeleton count={5} height={20}/>}   
+  </>: <LoadingTabel />
+  }   
   
   </table>
 
 </div>
 
   </div>
-<Skeleton count={5} />
-<Skeleton count={5} />
-<Skeleton count={5} />
-<Skeleton count={5} />
-<Skeleton count={5} />
-<Skeleton count={5} />
+  
     </>
   )
 }

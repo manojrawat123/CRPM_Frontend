@@ -174,10 +174,9 @@ const EmailShedule = () => {
             });
             const myLeadScource = values?.leadscource?.map((element, index)=>{return element.value })
             console.log(myLeadScource);
-            
+            console.log(filteredData);
             const filteredDataLeadStatus = filteredData.filter(lead => { return myleadStatus.includes(lead.LeadStatus) });
-            console.log(filteredDataLeadStatus)
-            const filteredDataLeadStatusCourse = filteredDataLeadStatus.filter(lead => {return myleadCourse.includes(lead.CourseName)})
+            const filteredDataLeadStatusCourse = filteredDataLeadStatus.filter(lead => {return myleadCourse.includes(lead?.LeadServiceInterested[0]?.ServiceName)})
             console.log(filteredDataLeadStatusCourse)
             const filterdeDataLeadStatusCourseSource = filteredDataLeadStatusCourse.filter(lead =>{return myLeadScource.includes(lead.LeadSource)})
             const endData = filterdeDataLeadStatusCourseSource?.filter(lead =>{return !list.includes(lead?.LeadPhone)})

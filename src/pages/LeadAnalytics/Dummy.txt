@@ -1,0 +1,114 @@
+import React, { useContext, useState } from "react";
+import { DataContext } from "../../context";
+import { useEffect } from "react";
+
+const LeadAnalytics = () => {
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("All Brands");
+  const [dateFilterData, setDateFilterData] = useState();
+  const { getLeadFunc, leads } = useContext(DataContext);
+
+  //     console.log(leads);
+  // 
+  //   console.log("leads come");
+  //   console.log(leads);
+  //   console.log(filter_data);
+const filter_func = ()=>{
+    
+       
+    
+    console.log(filter_data);  
+    setDateFilterData(filter_data);
+
+}
+
+
+  useEffect(() => {
+    getLeadFunc();
+    filter_func();
+  }, []);
+
+  
+if (!leads){
+    return <>Loading...</>
+}
+  return (
+    <div className="container mx-auto p-8">
+      <h1 className="text-2xl font-semibold mb-4">Lead Analytics</h1>
+
+      {/* Date fields and Brand option */}
+      <div className="flex mb-4 space-x-4">
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="border p-2"
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="border p-2"
+        />
+        <select
+          // value={selectedBrand}
+          // onChange={handleBrandChange}
+          className="border p-2"
+        >
+          <option value="All Brands">All Brands</option>
+          {/* Add other brand options here */}
+        </select>
+      </div>
+
+      {/* Lead analytics grid */}
+      {console.log(dateFilterData)}
+      {console.log(leads)}
+
+    {dateFilterData?.map((element,index)=>{
+        return <>Hii</>
+    })}
+
+      <div className="grid grid-cols-2 gap-4">
+        {[1, 2, 3].map((ele, index) => {
+          return (
+            <div className="p-4 border rounded-2xl shadow-2xl">
+              <h1 className="text-xl font-bold my-2 text-center">
+                Date - "_____"
+              </h1>
+              <h2 className="text-lg font-semibold mb-2 inline-block">
+                Total Leads -:
+              </h2>
+              {/* <p className="inline-block mx-4">{leadAnalyticsData?.totalLeads}</p> */}
+
+              <br />
+              <h2 className="text-lg font-semibold mb-2 inline-block">
+                Visit Schedule
+              </h2>
+              {/* <p className="inline-block mx-4">{leadAnalyticsData?.visitSchedule}</p> */}
+              <br />
+              <h2 className="text-lg font-semibold mb-2 inline-block">
+                Demo Schedule
+              </h2>
+              {/* <p className="inline-block mx-4">{leadAnalyticsData?.demoSchedule}</p> */}
+              <br />
+
+              <h2 className="text-lg font-semibold mb-2 inline-block">
+                Follow Up
+              </h2>
+              {/* <p className="inline-block mx-4">{leadAnalyticsData?.followUp}</p> */}
+              <br />
+
+              <h2 className="text-lg font-semibold mb-2 inline-block">
+                Call Made
+              </h2>
+              {/* <p className="inline-block mx-4">{leadAnalyticsData?.callMade}</p> */}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default LeadAnalytics;

@@ -42,7 +42,6 @@ const SearchModal = (props) => {
           <table className="min-w-full my-10">
           <thead  className='bg-purple-500 text-white'>
             <tr className=" border border-gray-300">
-              <th className="px-4 py-2 border border-gray-300">S.No</th>
               <th className="px-4 py-2 border border-gray-300">Name</th>
               <th className="px-4 py-2 border border-gray-300">
                 Lead Details
@@ -51,12 +50,10 @@ const SearchModal = (props) => {
               <th className="px-4 py-2 border border-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody>
             {props.filterLead?.map((lead, index)=>{
                 return <LeadSupport lead={lead} index={index} key={index} />
             })}
-           
-          </tbody>
+          
         </table>
         </Modal>
     </>

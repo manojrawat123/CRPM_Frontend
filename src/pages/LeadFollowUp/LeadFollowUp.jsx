@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import LeadFollowUpSupport from './LeadFollowSupport'
 import { DateRangePicker } from 'react-date-range'
 import API_BASE_URL from "../../config";
+import LoadingTabel from '../Lead/LeadLoader';
 
 
 const LeadFollowUp = () => {
@@ -105,6 +106,7 @@ const LeadFollowUp = () => {
               </th>
             </tr>
           </thead>
+          {data?
           <tbody className="bg-white divide-y divide-gray-200">
             {isFeesDate ? <>{data?.map((item, index) => (
               <LeadFollowUpSupport items={item} key={index} index={index} />
@@ -114,7 +116,8 @@ const LeadFollowUp = () => {
                   <LeadFollowUpSupport items={item} key={index} index={index} />
                 ))}</>
             }
-          </tbody>
+          </tbody>: <LoadingTabel />
+          }
         </table>
       </div>
     </div>
