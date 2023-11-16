@@ -51,7 +51,7 @@ const FeesDetails = () => {
   return (
     <>
       <div className="m-4">
-        <h1 className="text-center text-xl font-bold">fees Schedule</h1>
+        <h1 className="text-center text-xl font-bold">Fees Schedule</h1>
       </div>
 
       <div className="text-center">

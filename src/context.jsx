@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "./config";
+import { toast } from "react-toastify";
 
 export const DataContext = createContext();
 
@@ -37,6 +38,8 @@ export const DataProvider = ({ children }) => {
   const [leadRepresentative , setLeadRepresentative] = useState();
   const [serviceArrById, setServiceArrById] = useState();
   const [leadAnalyticsObj, setLeadAnyticsObj] = useState();
+  const [paymentmode, setPaymentMode] = useState([]); 
+  const [paymentType, setPaymentType] = useState([]);
   
 
   useEffect(() => {
@@ -93,6 +96,25 @@ export const DataProvider = ({ children }) => {
           return element.LeadEvent !== null;
         });
         setVisitSechudule(filteredData);
+         // Lead Analitics
+         const filter_data = [];
+    
+         values.data?.forEach((lead, index) => {
+           const leadDate = lead?.LeadStatusDate
+           const existing_date_object = filter_data?.find(
+             (ele) => ele.date.substring(0,10) == leadDate.substring(0,10)
+           );
+
+
+     
+           if (existing_date_object) {
+             existing_date_object.leadObject.push(lead);
+           } else {
+             filter_data.push({ date: leadDate, leadObject: [lead]  });
+           }
+         });
+         console.log(filter_data);
+         setLeadAnyticsObj(filter_data);
       })
       .catch((err) => {
         console.log(err);
@@ -109,27 +131,6 @@ export const DataProvider = ({ children }) => {
       })
       .then((values) => {
         setLead(values.data);
-        
-
-        // Lead Analitics
-        const filter_data = [];
-    
-        values.data?.forEach((lead, index) => {
-          const leadDate = lead?.LeadDateTime.substring(0, 10);
-          const existing_date_object = filter_data?.find(
-            (ele) => ele.date === leadDate
-          );
-    
-          if (existing_date_object) {
-            existing_date_object.leadObject.push(lead);
-          } else {
-            filter_data.push({ date: leadDate, leadObject: [lead] });
-          }
-        });
-
-        setLeadAnyticsObj(filter_data)
-
-
       })
       .catch((err) => {
         console.log(err);
@@ -271,19 +272,19 @@ export const DataProvider = ({ children }) => {
       .then((response) => {
         console.log("Lead data submitted successfully:", response.data);
         console.log(values?.course);
-        setLeadCustomAlert({
-          status: "success",
-          message: "Lead Added Sucessfully!!"
-        })
-        setLeadSubmitButton(false);  
+        toast.success('Data submitted successfully', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        
           leadScourceFunc();
-        // resetForm();     
+        resetForm();     
       }).catch((err)=>{
         console.log(err)
-        setLeadCustomAlert({
-          status: "error",
-          message: "Bad Request!!"
-        })
+        toast.error('Data submission failed', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        
+      }).finally(()=>{
         setLeadSubmitButton(false);
       })
       
@@ -406,6 +407,29 @@ export const DataProvider = ({ children }) => {
   }
 
 
+  const paymentTypeModeFunc = ()=>{
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios.get(`${API_BASE_URL}/paymentmode/${brandId}/`, config).then((response) => {
+      setPaymentMode(response?.data);
+      console.log(response.data);
+    }).catch((error) => {
+      console.log(error)
+    });
+
+    axios.get(`${API_BASE_URL}/paymenttype/${brandId}/`, config).then((response) => {
+      setPaymentType(response?.data[0]);
+      console.log(response?.data);
+      // setPaymentTypeID(response?.data[0]?.payment_type_id);
+    }).catch((error) => {
+      console.log(error)
+    })
+  }
+
   
   // End OF lead Function
   return (
@@ -465,6 +489,9 @@ export const DataProvider = ({ children }) => {
         getServiceObjectByIds,
         serviceArrById,
         leadAnalyticsObj, 
+        paymentTypeModeFunc,
+        paymentType,
+        paymentmode,
       }}
     >
       {children}

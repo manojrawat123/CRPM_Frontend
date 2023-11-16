@@ -120,7 +120,7 @@ const FeesSupport = (props) => {
             {leadObj?.CourseName}
             <br />
             <span className='font-bold'>Representative:</span>
-            {leadObj?.LeadRepresentativePrimary}
+            {/* {leadObj?.LeadRepresentativePrimary} */}
             <br />
             <span className='font-bold'>Payment Type:</span>
             {props?.fees?.payment_type?.payment_type_display}

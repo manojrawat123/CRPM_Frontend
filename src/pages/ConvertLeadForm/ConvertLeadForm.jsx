@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import API_BASE_URL from "../../config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CircularProgress } from "@mui/material";
 
 const ConvertLeadForm = () => {
   const { id } = useParams();
@@ -84,35 +85,33 @@ const ConvertLeadForm = () => {
   return (
     <>
       <ToastContainer />
-      <h1 className="text-center text-3xl font-bold my-4 text-green-500 underline">
-        Convert Lead
-      </h1>
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-3 my-4 px-16">
+      
+      
+      <div className="w-[100%] py-4 bg-blue-50">
+
+      <div className="grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-3 my-4 px-16 md:w-[50%] md:mx-auto">
         <div>
-          <span className="text-xl font-semibold  mb-2">Name -:</span>
+          <span className=" font-semibold  mb-2">Name -:</span>
           &nbsp;<span>{leadByIdObj?.LeadName}</span>
         </div>
 
         <div>
-          <span className="text-xl font-semibold  mb-2">Phone -:</span>
+          <span className=" font-semibold  mb-2">Phone -:</span>
           &nbsp;<span>{leadByIdObj?.LeadPhone}</span>
         </div>
 
         <div>
-          <span className="text-xl font-semibold  mb-2">Lead Id -:</span>
+          <span className=" font-semibold  mb-2">Lead Id -:</span>
           &nbsp;<span>{id}</span>
         </div>
 
         <div>
-          <span className="text-xl font-semibold  mb-2">Brand Lead ID -:</span>
+          <span className=" font-semibold  mb-2">Brand Lead ID -:</span>
           &nbsp;<span>{localStorage.getItem("brand")}</span>
         </div>
       </div>
-      <div className="w-[100%] py-10 bg-blue-50">
-        <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
-          <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">
-            Course Details
-          </h2>
+        <div className="md:w-[80%] w-[95%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
+          
           <Formik
             initialValues={{
               package: "",
@@ -144,27 +143,31 @@ const ConvertLeadForm = () => {
                 UpdateBY: username,
                 payment_mode:selectedPaymentObject?.payment_mode_id,
                 payment_type:selectedPaymentObject?.payment_type_id,
+                fee_created_datetime: values.fee_payment_datetime
               };
               console.log(requestData);
-              // axios
-              //   .post(`${API_BASE_URL}/convertedlead/`, requestData, {
-              //     headers: {
-              //       Authorization: `Bearer ${authToken}`,
-              //     },
-              //   })
-              //   .then((res) => {
-              //     toast.success("Lead Converted Successfully", {
-              //       position: toast.POSITION.TOP_CENTER,
-              //     });
-              //   })
-              //   .catch((err) => {
-              //     console.log(err);
-              //     toast.error("Some Error Occured", {
-              //       position: toast.POSITION.TOP_CENTER,
-              //     });
-              //   });
+              axios
+                .post(`${API_BASE_URL}/convertedlead/`, requestData, {
+                  headers: {
+                    Authorization: `Bearer ${authToken}`,
+                  },
+                })
+                .then((res) => {
+                  toast.success(`Lead Converted Sucessfully and Payment Of ${values.fee_received} Added`, {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                  resetForm();
+                })
+                .catch((err) => {
+                  console.log(err);
+                  toast.error("Some Error Occured", {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                }).finally(()=>{
+                  setLoadingButton(false);
+                });
               
-              setLoadingButton(false);
+              
             }}
           >
             {({ handleChange, values, setFieldValue }) => (

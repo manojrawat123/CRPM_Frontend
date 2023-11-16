@@ -1,9 +1,9 @@
 import React from 'react'
 import Modal from 'react-modal';
-import LeadSupport from '../../../pages/Lead/LeadSupport';
+import LeadSupport from '../../pages/Lead/LeadSupport';
 
 
-const SearchModal = (props) => {
+const LeadAnalyticsModal = (props) => {
   return (
     <>
         <Modal
@@ -52,4 +52,4 @@ const SearchModal = (props) => {
   )
 }
 
-export default SearchModal
+export default LeadAnalyticsModal

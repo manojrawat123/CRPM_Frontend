@@ -1,25 +1,29 @@
 import React, { useContext, useState } from "react";
 import { DataContext } from "../../context";
 import { useEffect } from "react";
+import LeadAnalyticsModal from "./LeadAnalyticsModel";
 
 const LeadAnalytics = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("All Brands");
-  const [dateFilterData, setDateFilterData] = useState();
-  const { getLeadFunc, leads,leadAnalyticsObj } = useContext(DataContext);
+  const [filterLead, setFilterLead] = useState();
+  const [modalIsOpen,setModalIsOpen] = useState();
+  
+  
+  const { getLeadFollowUpAll,leadAnalyticsObj } = useContext(DataContext);
 
 
   useEffect(()=>{
-    getLeadFunc()
+    getLeadFollowUpAll()
 
   },[])
  
-if (!leads){
-    return <>Loading...</>
-}
   return (
     <div className="mx-8 my-4">
+      
+      
+  <LeadAnalyticsModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} filterLead={filterLead} />
       <h1 className="text-2xl font-semibold mb-4">Lead Analytics</h1>
 
       {/* Date fields and Brand option */}
@@ -47,11 +51,12 @@ if (!leads){
       </div>
 
       {/* Lead analytics grid */}
-      <div className="grid grid-cols-3 gap-10">
+      <div className={`grid grid-cols-3 gap-10 cursor-pointer` }  >
       {leadAnalyticsObj?.map((element,index)=>{
-        console.log(leadAnalyticsObj)
+        console.log(element)
         let demoSchedule = 0;
         let visitSchedule = 0;
+        let callMade = 0;
         element.leadObject.forEach((element, index)=>{
             if (element.LeadStatus === "Visit scheduled"){
                 visitSchedule++;
@@ -59,11 +64,16 @@ if (!leads){
             else if (element.LeadStatus === "Demo scheduled"){
                 demoSchedule++;
             }
+            
         })
 
-        return <div className="p-4 border rounded-2xl shadow-2xl" key={index}>
+        return <div className="p-4 border rounded-2xl shadow-2xl" key={index}
+        onClick={()=>{
+          setModalIsOpen(true);
+          setFilterLead(element.leadObject)
+        }}>
         <h1 className="text-xl font-bold my-2 text-center">
-          Date - {element.date}
+          Date -: <span className="text-base font-semibold">{element.date.substring(0, 10)}</span>
         </h1>
         <h2 className="font-bold mb-2 inline-block">
           Total Leads -: {element.leadObject?.length}
@@ -89,7 +99,7 @@ if (!leads){
         <br />
 
         <h2 className="font-bold mb-2 inline-block">
-          Call Made
+          Call Made {element.leadObject?.length}
         </h2>
         {/* <p className="inline-block mx-4">{leadAnalyticsData?.callMade}</p> */}
       </div>

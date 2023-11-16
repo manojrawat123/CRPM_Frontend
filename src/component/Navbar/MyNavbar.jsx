@@ -24,7 +24,6 @@ const MyNavbar = () => {
             }
         }).then((value) => {
             setNavItem(value.data);
-            console.log(value.data)
         })
     }, [])
 

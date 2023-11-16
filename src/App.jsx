@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import PaymentForm from './component/Payment'
+import PaymentForm from './component/PaymentForm/Payment'
 import { Route, Routes } from 'react-router-dom'
 // import Table from './component/Table'
 import MyProcess from './component/MyProcess';
@@ -8,7 +8,6 @@ import ProtectedRoutes from './protectedRoutes/ProtectedRoutes';
 import MyDashboard from './component/MyDashboard';
 import MyFooter from './component/Fotter'; 
 import MyBrand from './pages/Brand'; 
-import ConvertLead from './pages/convertlead/ConvertLead';
 import ConvertedLeadGet from './pages/ConvertedLead/ConvertedLeadGet';
 import AddFeesDetails from './pages/addpendingFees/addPendingFees';
 import Lead from './pages/Lead/Lead';
@@ -35,6 +34,7 @@ import SearchPage from './component/Search/Search';
 import ViewStaffDetails from './pages/AddStaffForm/ViewStaffDetails';
 import LeadStatus from './LeadDetailsPage/leadDetails/LeadStatus';
 import LeadAnalytics from './pages/LeadAnalytics/LeadAnalytics';
+import ConvertLeadForm from './pages/ConvertLeadForm/ConvertLeadForm';
 
 function App() {
   
@@ -51,12 +51,15 @@ function App() {
       <Route path='' Component={ProtectedRoutes}>
         <Route index path='' Component={MyBrand} />
       </Route>
-    <Route path='' Component={ProtectedRoutes} >
+
+      <Route path='' Component={ProtectedRoutes} >
         <Route path='/process' Component={MyProcess} />
       </Route>
+
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/dashboard' Component={MyDashboard} />
       </Route>
+
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/payment/:id' Component={PaymentForm} />
       </Route>
@@ -67,14 +70,14 @@ function App() {
 
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/search' Component={SearchPage} /> 
-      </Route>
+      s</Route>
 
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/leadfollowup' Component={LeadFollowUp} />
       </Route>
 
       <Route path='' Component={ProtectedRoutes}>
-        <Route path='/convertlead/:id' Component={ConvertLead} />
+        <Route path='/convertlead/:id' Component={ConvertLeadForm} />
       </Route>
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/leaddetails/:id' Component={LeadStatus}/>

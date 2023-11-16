@@ -13,7 +13,8 @@ import Select from 'react-select';
 import { Alert, CircularProgress } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = Yup.object().shape({
   leadDate: Yup.date()
@@ -92,6 +93,8 @@ const MyDashboard = () => {
       }}/>
     </div>
     </>:null}
+    
+    <ToastContainer />
       <div className="w-[100%] py-10 bg-blue-50">
       
         <div className="sm:w-[80%] w-[90%]  mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
@@ -343,11 +346,7 @@ const MyDashboard = () => {
                   <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <h4 className="text-green-600 mb-2">Course</h4>
-                      {/* <Field
-                        as="select"
-                        name="course"
-                        className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                      > */}
+                     
 
               <Select
                   name="course"
@@ -391,7 +390,7 @@ const MyDashboard = () => {
                       
                       className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300"
                     >
-                      {leadSubmitButton?<> &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={40}/></>: <><span className='text-2xl font-bold'>Submit</span></>}
+                      {leadSubmitButton?<> &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19}/></>: <>Submit</>}
                     </button>
                   </div>
                 </div>
