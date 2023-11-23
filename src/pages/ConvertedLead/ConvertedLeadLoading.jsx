@@ -2,15 +2,20 @@ import React from 'react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-const LoadingTabel = () => {
+const ConvertedLeadLoading = () => {
     return (
         <>
         
             {[1, 2, 3].map((element, index) => {
                 return (<tr key={index} className='hidden md:table-row-group'>
                     <td className="border border-gray-300 p-2">
-                        <div className='grid grid-cols-3 gap-10'>
-                            <div className='col-span-3 mx-4'><Skeleton count={1} height={30} /></div>
+                    <div className='grid grid-cols-5 gap-10'>
+                            <div className='col-span-2'><Skeleton count={1} height={30} /></div>
+                            <div className='col-span-3'><Skeleton count={1} height={30} /></div>
+                        </div>
+                    <div className='grid grid-cols-5 gap-10'>
+                            <div className='col-span-2'><Skeleton count={1} height={30} /></div>
+                            <div className='col-span-3'><Skeleton count={1} height={30} /></div>
                         </div>
                     </td>
                     <td className="border border-gray-300 p-2">
@@ -18,14 +23,8 @@ const LoadingTabel = () => {
                             <div className='col-span-2'><Skeleton count={2} height={30} /></div>
                             <div className='col-span-3'><Skeleton count={2} height={30} /></div>
                         </div>
-                        <div className='grid grid-cols-5 gap-10'>
-                            <div className='col-span-2'><Skeleton count={2} height={30} /></div>
-                            <div className='col-span-3'><Skeleton count={2} height={30} /></div>
-                        </div>
-                        <div className='grid grid-cols-5 gap-10'>
-                            <div className='col-span-2'><Skeleton count={2} height={30} /></div>
-                            <div className='col-span-3'><Skeleton count={2} height={30} /></div>
-                        </div>
+                        
+                      
                     </td>
                     <td className="border border-gray-300 p-2">
                         <div className='grid grid-cols-5 gap-10'>
@@ -36,17 +35,27 @@ const LoadingTabel = () => {
                             <div className='col-span-2'><Skeleton count={2} height={30} /></div>
                             <div className='col-span-3'><Skeleton count={2} height={30} /></div>
                         </div>
-                        <div className='grid grid-cols-5 gap-10'>
-                            <div className='col-span-2'><Skeleton count={2} height={30} /></div>
-                            <div className='col-span-3'><Skeleton count={2} height={30} /></div>
-                        </div>
-                        <div className='grid grid-cols-5 gap-10'>
-                            <div className='col-span-2'><Skeleton count={1} height={30} /></div>
-                            <div className='col-span-3'><Skeleton count={1} height={30} /></div>
-                        </div>
+                        
+                        
                     </td>
                     <td className="border border-gray-300 p-2"><div className='col-span-2 mx-5'><Skeleton count={1} height={30} />
                         </div>
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                        <div className='grid grid-cols-5 gap-10'>
+                            <div className='col-span-2'><Skeleton count={2} height={30} /></div>
+                            <div className='col-span-3'><Skeleton count={2} height={30} /></div>
+                        </div>
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                        <div className='grid grid-cols-5 gap-10'>
+                            <div className='col-span-2'><Skeleton count={2} height={30} /></div>
+                            <div className='col-span-3'><Skeleton count={2} height={30} /></div>
+                        </div>
+                    </td>
+                    <td className="border border-gray-300 p-2">
+                        <div className='col-span-2 mx-5'><Skeleton count={1} height={30} /> </div>
+                        <div className='col-span-2 mx-5'><Skeleton count={1} height={30} /> </div>
                     </td>
                     
                 </tr>)
@@ -66,6 +75,8 @@ const LoadingTabel = () => {
                         
                         <div className='flex items-center justify-center'>
                             <Skeleton count={1} height={40} width={200} className=' mx-auto' />
+                            <br />
+                            <Skeleton count={1} height={40} width={200} className=' mx-auto' />
                         </div>
                        
 
@@ -77,4 +88,4 @@ const LoadingTabel = () => {
     )
 }
 
-export default LoadingTabel
+export default ConvertedLeadLoading

@@ -175,10 +175,13 @@ const MessageShedule = () => {
                         console.log(myLeadScource);
 
                         const filteredDataLeadStatus = filteredData.filter(lead => { return myleadStatus.includes(lead.LeadStatus) });
-                        console.log(filteredDataLeadStatus)
-                        const filteredDataLeadStatusCourse = filteredDataLeadStatus.filter(lead => { return myleadCourse.includes(lead.CourseName) })
-                        console.log(filteredDataLeadStatusCourse)
-                        const filterdeDataLeadStatusCourseSource = filteredDataLeadStatusCourse.filter(lead => { return myLeadScource.includes(lead.LeadSource) })
+                        console.log(filteredDataLeadStatus);
+
+
+
+                        const filteredDataLeadStatusCourse = filteredDataLeadStatus.filter(lead => lead.LeadServiceInterested.some(service => myleadCourse.includes(service.ServiceName)))
+                        console.log(filteredDataLeadStatusCourse);
+                        const filterdeDataLeadStatusCourseSource = filteredDataLeadStatusCourse.filter(lead => { return myLeadScource.includes(lead.LeadSource) });
                         const endData = filterdeDataLeadStatusCourseSource?.filter(lead => { return !list.includes(lead?.LeadPhone) })
                         const excludedList = filterdeDataLeadStatusCourseSource?.filter(lead => { return list.includes(lead?.LeadPhone) })
                         console.log(list);

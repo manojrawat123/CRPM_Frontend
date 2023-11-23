@@ -83,17 +83,14 @@ const SearchPage = () => {
                 },
               })
               .then((response) => {
-                console.log("button Clicked")
-                // setData("Filtered Lead Data",response.data);
+                console.log("button Clicked");
                 console.log("Filter Data:",response.data);
                 setFilterLead(response.data);
-                setModalIsOpen(true)
+                setModalIsOpen(true);
                 setCustomAlert(false);
-                // setLoading(false);
               })
               .catch((error) => {
                 console.error('Error:', error);
-                // setLoading(false);
               });
           }}
         >
@@ -140,7 +137,6 @@ const SearchPage = () => {
                   <LocalPhoneIcon className="absolute top-2 peer-focus:text-green-600 border-r-2 left-2" />
                 </div>
                 <ErrorMessage name="phone" component="div" className="text-red-600" />
-              
               </div>
               <div>
                 <h4 className="text-green-600 mb-2">Email</h4>
@@ -154,7 +150,6 @@ const SearchPage = () => {
                   <MailIcon className="absolute top-2 peer-focus:text-green-600 border-r-2 left-2" />
                 </div>
                 <ErrorMessage name="email" component="div" className="text-red-600" />
-              
               </div>
               <div>
                 <h4 className="text-green-600 mb-2">Lead Id</h4>
@@ -168,7 +163,6 @@ const SearchPage = () => {
                   <PersonSearchIcon className="absolute top-2 peer-focus:text-green-600 border-r-2 left-2" />
                 </div>
                 <ErrorMessage name="leadId" component="div" className="text-red-600" />
-              
               </div>
               <div>
                 <h4 className="text-green-600 mb-2">Brand Lead Id</h4>

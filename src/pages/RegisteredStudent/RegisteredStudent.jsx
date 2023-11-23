@@ -4,6 +4,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DataContext } from "../../context";
 import RegisteredSupport from "./RegisteredSupport";
+import RegisterStudentLoading from "./RegisterStudentLoading";
 
 const RegisteredStudent = () => {
   const { getResisteredStudentAll, registeredStudent } =
@@ -54,9 +55,13 @@ const RegisteredStudent = () => {
         <h1 className="text-center text-xl font-bold">Student Schedule</h1>
       </div>
 
-      <div className="text-center">
-        <div className="border-black rounded">
-          <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
+      <div className="text-center mt-8 overflow-x-auto">
+        <div className="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto rounded">
+          <DateRangePicker
+            ranges={[selectionRange]}
+            onChange={handleSelect}
+            className="w-full max-w-full"
+          />
         </div>
       </div>
       <div className="text-center my-4">
@@ -72,31 +77,35 @@ const RegisteredStudent = () => {
       </div>
 
       <div className="m-8">
-        <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-200 border border-black">
-              <th className="px-4 py-2 border border-black">S.No</th>
-              <th className="px-4 py-2 border border-black">Details</th>
-              <th className="px-4 py-2 border border-black">More Details</th>
-              <th className="px-4 py-2 border border-black">Actions</th>
+      <table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Converted Details</th>
+              <th className="px-4 py-2 border border-gray-300">Lead Details</th>
+              <th className="px-4 py-2 border border-gray-300">Dates & Time</th>
+              <th className="px-4 py-2 border border-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {isRegisteredDate ? registeredStudent?.map((student, index) => (
-                  <RegisteredSupport
-                    student={student}
-                    index={index}
-                    key={index}
-                  />
-                ))
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Registered Student Details</th>
+            </tr>
+          </thead>
+            {registeredStudent ? isRegisteredDate ? registeredStudent?.map((student, index) => (
+              <RegisteredSupport
+                student={student}
+                index={index}
+                key={index}
+              />
+            ))
               : filteredRegisteredStudent?.map((student, index) => (
-                  <RegisteredSupport
-                    student={student}
-                    index={index}
-                    key={index}
-                  />
-                ))}
-          </tbody>
+                <RegisteredSupport
+                  student={student}
+                  index={index}
+                  key={index}
+                />
+              )): <RegisterStudentLoading />}
         </table>
       </div>
     </>

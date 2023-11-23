@@ -28,8 +28,8 @@ const LeadStatus = () => {
           <ServiceRequirment />
         </div>
       </div>
-      <div className="text-center flex items-center justify-center space-x-5 border-b border-solid border-black ">
-        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mb-4">
+      <div className="text-center flex items-center justify-center space-x-5 border-b border-solid border-black pb-4">
+        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
           Close Lead
         </button>
 

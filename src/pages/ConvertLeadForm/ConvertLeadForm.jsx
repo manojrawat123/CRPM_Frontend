@@ -71,7 +71,13 @@ const ConvertLeadForm = () => {
       .get(`${API_BASE_URL}/payments/${id}/`, config)
       .then((res) => {
         console.log(res.data);
-        setPaymetObj(res.data);
+        setPaymetObj(res.data.payment_detail);
+        if (res.data?.payment_detail.length === 0) {
+          toast.error("Please Add Payment For This User !!", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 20000
+          });
+        }
       })
       .catch((errr) => {
         console.log(errr);
@@ -85,36 +91,36 @@ const ConvertLeadForm = () => {
   return (
     <>
       <ToastContainer />
-      
-      
+
+
       <div className="w-[100%] py-4 bg-blue-50">
 
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-3 my-4 px-16 md:w-[50%] md:mx-auto">
-        <div>
-          <span className=" font-semibold  mb-2">Name -:</span>
-          &nbsp;<span>{leadByIdObj?.LeadName}</span>
-        </div>
+        <div className="grid sm:grid-cols-2 grid-cols-1 gap-x-10 gap-y-3 my-4 px-16 md:w-[50%] md:mx-auto">
+          <div>
+            <span className=" font-semibold  mb-2">Name -:</span>
+            &nbsp;<span>{leadByIdObj?.LeadName}</span>
+          </div>
 
-        <div>
-          <span className=" font-semibold  mb-2">Phone -:</span>
-          &nbsp;<span>{leadByIdObj?.LeadPhone}</span>
-        </div>
+          <div>
+            <span className=" font-semibold  mb-2">Phone -:</span>
+            &nbsp;<span>{leadByIdObj?.LeadPhone}</span>
+          </div>
 
-        <div>
-          <span className=" font-semibold  mb-2">Lead Id -:</span>
-          &nbsp;<span>{id}</span>
-        </div>
+          <div>
+            <span className=" font-semibold  mb-2">Lead Id -:</span>
+            &nbsp;<span>{id}</span>
+          </div>
 
-        <div>
-          <span className=" font-semibold  mb-2">Brand Lead ID -:</span>
-          &nbsp;<span>{localStorage.getItem("brand")}</span>
+          <div>
+            <span className=" font-semibold  mb-2">Brand Lead ID -:</span>
+            &nbsp;<span>{localStorage.getItem("brand")}</span>
+          </div>
         </div>
-      </div>
         <div className="md:w-[80%] w-[95%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
-          
+
           <Formik
             initialValues={{
-              package: "",
+              CourseID: "",
               classMode: "",
               courseStartDate: "",
               courseEndDate: "",
@@ -129,23 +135,32 @@ const ConvertLeadForm = () => {
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm }) => {
               setLoadingButton(true);
-              console.log(values);
+              console.log(values.package)
+              // console.log(values.package.ServiceName)
               const authToken = localStorage.getItem("token");
               const brandID = localStorage.getItem("brand");
+              console.log(values.package.length);
+              const packageSelected = leadByIdObj?.LeadServiceInterested.find((element)=> {
+                return element.id == values.package
+              })
+              
               const requestData = {
                 ...values,
                 Company: company,
                 Brand: brandID,
                 LeadID: id,
+                CourseName: packageSelected.ServiceName,
+                CourseID: values.package,
                 CustomerName: customerName,
                 CustomerEmail: customerEmail,
                 CustomerPhone: customerPhone,
                 UpdateBY: username,
-                payment_mode:selectedPaymentObject?.payment_mode_id,
-                payment_type:selectedPaymentObject?.payment_type_id,
+                payment_mode: selectedPaymentObject?.payment_mode_id,
+                payment_type: selectedPaymentObject?.payment_type_id,
                 fee_created_datetime: values.fee_payment_datetime
               };
               console.log(requestData);
+
               axios
                 .post(`${API_BASE_URL}/convertedlead/`, requestData, {
                   headers: {
@@ -163,11 +178,11 @@ const ConvertLeadForm = () => {
                   toast.error("Some Error Occured", {
                     position: toast.POSITION.TOP_CENTER,
                   });
-                }).finally(()=>{
+                }).finally(() => {
                   setLoadingButton(false);
                 });
-              
-              
+
+
             }}
           >
             {({ handleChange, values, setFieldValue }) => (
@@ -185,14 +200,13 @@ const ConvertLeadForm = () => {
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                       >
                         <option value="">Please Select</option>
-                        {leadByIdObj?.LeadServiceInterested?.map(
-                          (element, index) => (
-                            <option key={index} value={element.id}>
-                              {element.ServiceName}
-                            </option>
-                          )
-                        )}
+                        {leadByIdObj?.LeadServiceInterested?.map((element, index) => {
+                         return <option key={index} value={element.id}>
+                            {element.ServiceName}
+                          </option>
+                        })}
                       </Field>
+
                       <ErrorMessage
                         name="package"
                         component="div"
@@ -274,45 +288,57 @@ const ConvertLeadForm = () => {
                   <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <h4 className="text-green-600 mb-2">Payment Id</h4>
-                      <Field
-                        as="select"
-                        name="payment_id"
-                        className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        value={values.payment_id}
-                        onChange={async (event) => {
-                          handleChange(event); // Update Formik form state
-                          const id_payment = event.target.value;
+                      {console.log(paymentObj)}
+                      <div
+                        onClick={() => {
+                          if (paymentObj.length === 0) {
+                            toast.error("Please Add Payment For This User !!", {
+                              position: toast.POSITION.TOP_CENTER,
+                              autoClose: 10000
+                            });
 
-                          const selected_payment_obj = paymentObj.find(
-                            (element) => element.payment_id == id_payment
-                          );
-                          setSelectedPaymentObject(selected_payment_obj);
-                          setFieldValue(
-                            "totalFee",
-                            selected_payment_obj?.payment_amount
-                          );
-                          setFieldValue(
-                            "receipt_number",
-                            selected_payment_obj?.payment_confirmation_id
-                          );
-                          setCustomerName(selected_payment_obj?.name);
-                          setCustomerEmail(selected_payment_obj?.email);
-                          setCustomerPhone(selected_payment_obj?.phone);
-                        }}
-                      >
-                        <option value="">----Select-----</option>
-                        {paymentObj?.map((element, index) => (
-                          <option key={index} value={element.payment_id}>
-                            {element.payment_id}-{element.name}-
-                            {element.payment_amount}
-                          </option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="payment_id"
-                        component="div"
-                        className="text-red-500 mt-1"
-                      />
+                          }
+                        }}>
+                        <Field
+                          as="select"
+                          name="payment_id"
+                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                          value={values.payment_id}
+                          onChange={async (event) => {
+                            handleChange(event); // Update Formik form state
+                            const id_payment = event.target.value;
+
+                            const selected_payment_obj = paymentObj.find(
+                              (element) => element.payment_id == id_payment
+                            );
+                            setSelectedPaymentObject(selected_payment_obj);
+                            setFieldValue(
+                              "totalFee",
+                              selected_payment_obj?.payment_amount
+                            );
+                            setFieldValue(
+                              "receipt_number",
+                              selected_payment_obj?.payment_confirmation_id
+                            );
+                            setCustomerName(selected_payment_obj?.name);
+                            setCustomerEmail(selected_payment_obj?.email);
+                            setCustomerPhone(selected_payment_obj?.phone);
+                          }}
+                        >
+                          <option value="">----Select-----</option>
+                          {paymentObj?.map((element, index) => (
+                            <option key={index} value={element.payment_id}>
+                              {element.payment_id}-{element.name}-
+                              {element.payment_amount}
+                            </option>
+                          ))}
+                        </Field>
+                        <ErrorMessage
+                          name="payment_id"
+                          component="div"
+                          className="text-red-500 mt-1"
+                        />
+                      </div>
                     </div>
                     <div>
                       <h4 className="text-green-600 mb-2">Total Fee</h4>

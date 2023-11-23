@@ -9,7 +9,7 @@ import FeesSupport from "./FeesSupport";
 const FeesDetails = () => {
   const { GetFeesAll, allFeesObj } =
     useContext(DataContext);
-    const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
+  const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
   const [isFeesDate, setisFeesDate] = useState(true);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -54,9 +54,13 @@ const FeesDetails = () => {
         <h1 className="text-center text-xl font-bold">Fees Schedule</h1>
       </div>
 
-      <div className="text-center">
-        <div className=" rounded">
-          <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
+      <div className="text-center mt-8 overflow-x-auto">
+        <div className="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto rounded">
+          <DateRangePicker
+            ranges={[selectionRange]}
+            onChange={handleSelect}
+            className="w-full max-w-full"
+          />
         </div>
       </div>
       <div className="text-center my-4">
@@ -72,31 +76,37 @@ const FeesDetails = () => {
       </div>
 
       <div className="m-8">
-        <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-200 border border-black">
-              <th className="px-4 py-2 border border-black">S.No</th>
-              <th className="px-4 py-2 border border-black">Details</th>
-              <th className="px-4 py-2 border border-black">More Details</th>
-              <th className="px-4 py-2 border border-black">Actions</th>
+      <table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">IDs</th>
+              <th className="px-4 py-2 border border-gray-300">Fees Details</th>
+              <th className="px-4 py-2 border border-gray-300">Lead Details</th>
+              <th className="px-4 py-2 border border-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody>
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Fees Details</th>
+            </tr>
+          </thead>
+
+
             {isFeesDate ? allFeesObj?.map((fees, index) => (
-                  <FeesSupport
-                    fees={fees}
-                    index={index}
-                    key={index}
-                  />
-                ))
+              <FeesSupport
+                fees={fees}
+                index={index} 
+                key={index}
+              />
+            ))
               : filteredallFeesObj?.map((fees, index) => (
-                  <FeesSupport
-                    fees={fees}
-                    index={index}
-                    key={index}
-                  />
-                ))}
-          </tbody>
+                <FeesSupport
+                  fees={fees}
+                  index={index}
+                  key={index}
+                />
+              ))}
         </table>
       </div>
     </>

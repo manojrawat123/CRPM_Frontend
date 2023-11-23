@@ -20,9 +20,9 @@ function MyModal(props) {
   };
 
   return (
-    <div>
+    <div className='my-4'>
       <Button variant="contained" onClick={handleOpen}>
-        Open Modal
+        Edit
       </Button>
       <Dialog open={open} onClose={handleClose} sx={{
           '& .MuiDialog-paper': {

@@ -12,6 +12,8 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
+import ReactLoadingForm from '../../LoadingForm/ReactLoadingForm';
+import PaymentLoadingForm from './PaymentLoading';
 
 
 const paymentSchema =Yup.object({
@@ -65,8 +67,7 @@ const PaymentForm = () => {
 
 
   if(dataFetch===false){
-    return <>
-    Loading....</>
+    return <PaymentLoadingForm />
   }
 
   else if (dataFetch===true){
@@ -116,17 +117,15 @@ const PaymentForm = () => {
                   console.log('Response:', response.data);
                   toast.success(`${values.payment_type} Payment Added successfully For ${leadObj?.LeadName} Lead Id -: ${leadObj?.id}!!`, {
                     position: toast.POSITION.TOP_CENTER,
-                    autoClose: 20000,
-
+                    autoClose: 20000,    
                   });
+                  resetForm();
                 })
                 .catch(err => {
                   toast.error('Data submission failed', {
                     position: toast.POSITION.TOP_CENTER,
                   });
                   console.log(err);
-                  console.log(values);
-                  console.log(paymentType)
   
                 }).finally(()=>{
                   setLoadingButton(false);
@@ -241,9 +240,10 @@ const PaymentForm = () => {
                         name='payment_purpose'
                       >
                         <option value="">----Select-----</option>
-                        {service?.map((element, index) => (
+                                  
+                        {leadObj?.LeadServiceInterested?.map((element, index) => (
                           <option key={index} value={element.id}>
-                            {element.ServiceName} {element.id}
+                            {element.ServiceName} 
                           </option>
                         ))}
                       </Field>

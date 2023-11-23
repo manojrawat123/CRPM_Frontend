@@ -111,7 +111,7 @@ const VisitDemoForm = (props) => {
                     setButton(false)
                 })
             
-            setButton(false);
+            
             return 
 }
 

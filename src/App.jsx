@@ -35,6 +35,8 @@ import ViewStaffDetails from './pages/AddStaffForm/ViewStaffDetails';
 import LeadStatus from './LeadDetailsPage/leadDetails/LeadStatus';
 import LeadAnalytics from './pages/LeadAnalytics/LeadAnalytics';
 import ConvertLeadForm from './pages/ConvertLeadForm/ConvertLeadForm';
+import ReactLoadingForm from './LoadingForm/ReactLoadingForm';
+import FeesDetailsWithGst from './pages/FeesDetailsWithGst/FeesDetailsWithGst';
 
 function App() {
   
@@ -157,6 +159,9 @@ function App() {
       </Route>
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/leadanalytics' Component={LeadAnalytics}/>
+      </Route>    
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/fesstaxdetails' Component={FeesDetailsWithGst}/>
       </Route>    
      <Route path='/login' Component={MyLogin} />
 

@@ -10,9 +10,7 @@ const MyBrand = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (localStorage.getItem("brand")) {
-      navigate("/dashboard")
-    }
+    
     profileFunc();
   }, [])
 

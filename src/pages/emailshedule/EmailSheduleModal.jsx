@@ -2,11 +2,15 @@ import Modal from 'react-modal';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import API_BASE_URL from "../../config";
+import { CircularProgress } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import EmailSupport from './EmailSupport';
+import ExcludeEmailSupport from './ExcludeEmailSupport';
 
 
 const EmailSheduleModal = (props) => {
   
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
   const [myEmailContainer , setMyEmailContainer] = useState();
   const [excludedEmailContainerList, setExcludexEmailContainer] = useState();
   const token = localStorage.getItem('token');
@@ -27,7 +31,7 @@ const EmailSheduleModal = (props) => {
 
   const handleConfirmSendEmail = () => {
     // Logic of sending Email
-    setIsLoading(true); // Start loading animation
+    setLoadingButton(true); // Start loading animation
     const email_lis = myEmailContainer?.map((element, index) => {
       return element.LeadEmail
     });
@@ -48,29 +52,25 @@ axios.post(`${API_BASE_URL}/emailshedule/`, {
                 "Authorization": `Bearer ${token}`
               }
             }).then((value) => {
-              console.log(value.data);
-              axios.post(`${API_BASE_URL}/saveemail/`,{
-                template_id: props.myProps.templateId,
-                CompanyID: customer_id
-              }, {
-                headers: {
-                  "Authorization": `Bearer ${token}`
-                }
-              }).then((values2)=>{
-                console.log(values2.data)
-                props.myProps.myResetForm();
-                props.myProps.setModalIsOpen(false);    
-                alert("Email Send Successfully!!");
-              }).catch((err)=>{
-                console.log(err)
-              })
+              console.log(value.data)
+              toast.success('Email Send Sucessfully!!', {
+                position: toast.POSITION.TOP_CENTER,
+              });
+              setLoadingButton(false);
+              // props.myProps.setModalIsOpen(false);    
+              // props.myProps.myResetForm();
             }).catch((err) => {
-              alert("Some Error Occured");
-              console.log(err);
-            }).finally(() => {
-              setIsLoading(false); // Stop loading animation when the request is complete
+            toast.error('Email Sending Failed !!', {
+              position: toast.POSITION.TOP_CENTER,
             });
+            console.log(err);
+          }).finally(() => {
+            setLoadingButton(false);
             setShowConfirmModal(false);
+          });
+             
+             
+                
   };
 
   const handleCancelSendEmail = () => {
@@ -92,20 +92,11 @@ axios.post(`${API_BASE_URL}/emailshedule/`, {
             backgroundColor: 'rgba(0, 0, 0, 0.4)',
           },
           content: {
-            // top: '50%',
-            // left: '50%',
-            // right: 'auto',
-            // bottom: 'auto',
-            // marginRight: '-50%',
-            // transform: 'translate(-50%, -50%)',
-            
-
           },
         }}
       >
-        <div className="progress-container ">
-    <div className={`progress-bar ${isLoading ? 'animate-progress' : ''}`}></div>
-  </div>
+        
+        <ToastContainer />
         {/* Modal content goes here */}
         <div
   className={`fixed ${props.myProps.modalIsOpen ? 'block' : 'hidden'}`}
@@ -119,11 +110,12 @@ axios.post(`${API_BASE_URL}/emailshedule/`, {
   </button>
 </div>
 
- <div className="flex justify-center mt-20 ">
+ <div className="flex justify-center mt-10 ">
       <div className="w-full lg:w-3/4">
-        <table className="table-auto w-full border">
-          <thead>
-            <tr>
+        <h1 className='text-center font-bold underline my-4'>Email Recipients</h1>
+      <table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
               <th className="px-4 py-2 border">Name</th>
               <th className="px-4 py-2 border">Email</th>
               <th className="px-4 py-2 border">Course</th>
@@ -132,43 +124,33 @@ axios.post(`${API_BASE_URL}/emailshedule/`, {
               <th className="px-4 py-2 border">Remove</th>
             </tr>
           </thead>
-          <tbody>
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Email Lead Details</th>
+            </tr>
+          </thead>
+
+          {/* Laptop Code */}
             {/* Replace the following data with your actual data */}
             {myEmailContainer?.map((element, index)=>{
-              return <tr key={index}>
-              <td className="border px-4 py-2">{element?.LeadName}</td>
-              <td className="border px-4 py-2">{element?.LeadEmail}</td>
-              <td className="border px-4 py-2">{element?.CourseName}</td>
-              <td className="border px-4 py-2">{element?.LeadSource}</td>
-              <td className="border px-4 py-2">{element?.LeadStatus}</td>
-              <td className="border px-4 py-2">
-                <button className="bg-red-500 text-white px-4 py-2 rounded"
-                type='button'
-                onClick={() => {
-                  const newEmailContainer = myEmailContainer?.filter((element2) => {
-                    return element.LeadEmail !== element2?.LeadEmail;
-                  });
-                  setMyEmailContainer(newEmailContainer);
-                  console.log("My Email Container!!",myEmailContainer)
-                }}
-              >
-                  Remove
-                </button>
-              </td>
-            </tr>
+              return <EmailSupport element={element} index={index} myEmailContainer={myEmailContainer} setMyEmailContainer={setMyEmailContainer} />
             })}
-          </tbody>
+
+          {/* Mobile Code */}
+
         </table>
       </div>
       
     </div>
 {/* Excluded List */}
-<div className='mt-4'>
+<div className="flex justify-center mt-10 ">
+      <div className="w-full lg:w-3/4">
   <h1 className='text-center underline text-red-500'>Excluded list</h1>
-</div>
-<table className="table-auto w-full border">
-          <thead>
-            <tr>
+
+<table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
               <th className="px-4 py-2 border">Name</th>
               <th className="px-4 py-2 border">Email</th>
               <th className="px-4 py-2 border">Course</th>
@@ -177,38 +159,19 @@ axios.post(`${API_BASE_URL}/emailshedule/`, {
               <th className="px-4 py-2 border">Remove</th>
             </tr>
           </thead>
-          <tbody>
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Exclued Lead Details</th>
+            </tr>
+          </thead>
             {/* Replace the following data with your actual data */}
             {excludedEmailContainerList?.map((element, index)=>{
-              return <tr key={index}>
-              <td className="border px-4 py-2">{element?.LeadName}</td>
-              <td className="border px-4 py-2">{element?.LeadEmail}</td>
-              <td className="border px-4 py-2">{element?.CourseName}</td>
-              <td className="border px-4 py-2">{element?.LeadSource}</td>
-              <td className="border px-4 py-2">{element?.LeadStatus}</td>
-              <td className="border px-4 py-2">
-                <button className="bg-green-500 text-white px-4 py-2 rounded"
-                type='button'
-                onClick={() => {
-                  const newEmailContainer = excludedEmailContainerList?.filter((element2) => {
-                    return element.LeadEmail !== element2?.LeadEmail
-                  });
-                  setExcludexEmailContainer(newEmailContainer)
-                  let newContainer = myEmailContainer;
-                  newContainer = newContainer?.concat(element)
-                  setMyEmailContainer(newContainer);
-                  console.log("My New Container!!",newContainer)
-                }}
-              >
-                  Add
-                </button>
-              </td>
-            </tr>
+              return <ExcludeEmailSupport setExcludexEmailContainer={setExcludexEmailContainer} element={element} index={index} setMyEmailContainer={setMyEmailContainer}/>
             })}
-          </tbody>
         </table>
 
-
+        </div>
+        </div>
 
 {/* End Of Excluded List */}
     <br />
@@ -242,7 +205,7 @@ axios.post(`${API_BASE_URL}/emailshedule/`, {
                 className="bg-green-500 text-white px-4 py-2 rounded mx-2"
                 onClick={handleConfirmSendEmail}
               >
-                Confirm
+                 {loadingButton?<CircularProgress color="inherit" size={19}/>:<>Confirm </>} 
               </button>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded mx-2"

@@ -33,7 +33,7 @@ const MobileNavbar = () => {
     return (
         <>
 
-<div className='text-white w-[100%] flex justify-center items-center col-span-12 h-[4rem] bg-gradient-to-r from-blue-700 via-pink-300 to-red-700 pr-8 md:hidden '>
+<div className='text-white w-full flex justify-center items-center col-span-12 h-[4rem] bg-gradient-to-r from-blue-700 via-pink-300 to-red-700 pr-8 md:hidden '>
        {/* Mobile Menu Start */}
        <div className='ml-auto '>
 

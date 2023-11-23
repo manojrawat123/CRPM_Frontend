@@ -4,6 +4,7 @@ import VisitSupport from './VisitSupport';
 import { DateRangePicker } from 'react-date-range';
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import LoadingTabel from '../Lead/LeadLoader';
 
 const VisitSchedule = () => {
 
@@ -59,9 +60,13 @@ const VisitSchedule = () => {
         <h1 className='text-center text-xl font-bold'>Visit Schedule</h1>
     </div>
 
-<div className='text-center'>
-  <div className='border-black rounded'>
-    <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />
+    <div className="text-center mt-8 overflow-x-auto">
+  <div className="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto rounded">
+    <DateRangePicker
+      ranges={[selectionRange]}
+      onChange={handleSelect}
+      className="w-full max-w-full"
+    />
   </div>
 </div>
 <div className="text-center my-4">
@@ -77,27 +82,34 @@ const VisitSchedule = () => {
         </div>
 
 <div className='m-8'>
-    <table className="min-w-full">
-          <thead>
-            <tr className="bg-gray-200 border border-black">
-              <th className="px-4 py-2 border border-black">S.No</th>
-              <th className="px-4 py-2 border border-black">Name</th>
-              <th className="px-4 py-2 border border-black">
+<table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Name</th>
+              <th className="px-4 py-2 border border-gray-300">
                 Details
               </th>
-              <th className="px-4 py-2 border border-black">Actions</th>
+              <th className="px-4 py-2 border border-gray-300">
+                Other Details
+              </th>
+              <th className="px-4 py-2 border border-gray-300">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Visit Schedule Details</th>
+            </tr>
+          </thead>
+
+            {VisitSchedule ? 
             isVisitDate ? 
             visitSechudule?.map((visit, index) => (
               <VisitSupport visit={visit} index={index} key={index} />
             )) 
             : filteredVisitSechudule?.map((visit, index) => (
               <VisitSupport visit={visit} index={index} key={index} />
-            ))}
-          </tbody>
+            )) : <LoadingTabel />}
         </table>
   </div>
     </>

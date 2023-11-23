@@ -32,14 +32,19 @@ const SearchModal = (props) => {
   </button>
 </div>
           <table className="min-w-full my-10">
-          <thead  className='bg-purple-500 text-white'>
-            <tr className=" border border-gray-300">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
               <th className="px-4 py-2 border border-gray-300">Name</th>
-              <th className="px-4 py-2 border border-gray-300">
-                Lead Details
-              </th>
-              <th className="px-4 py-2 border border-gray-300">Lead Date & Time</th>
+              <th className="px-4 py-2 border border-gray-300 ">Lead Details</th>
+              <th className="px-4 py-2 border border-gray-300 ">Lead Date & Time</th>
               <th className="px-4 py-2 border border-gray-300">Actions</th>
+            </tr>
+          </thead>
+
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Lead Details</th>
             </tr>
           </thead>
             {props.filterLead?.map((lead, index)=>{

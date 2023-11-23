@@ -2,6 +2,8 @@ import Modal from 'react-modal';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import API_BASE_URL from "../../config";
+import MessageExcludedSupport from './MessageExcludedSupport';
+import MessageSheduleSupport from './MessageSheduleSupport';
 
 
 const MessageSheduleModal = (props) => {
@@ -102,9 +104,7 @@ axios.post(`${API_BASE_URL}/messageshedule/`, {
           },
         }}
       >
-        <div className="progress-container ">
-    <div className={`progress-bar ${isLoading ? 'animate-progress' : ''}`}></div>
-  </div>
+        
         {/* Modal content goes here */}
         <div
   className={`fixed ${props.myProps.modalIsOpen ? 'block' : 'hidden'}`}
@@ -118,11 +118,13 @@ axios.post(`${API_BASE_URL}/messageshedule/`, {
   </button>
 </div>
 
- <div className="flex justify-center mt-20 ">
+ <div className="flex justify-center mt-10 ">
       <div className="w-full lg:w-3/4">
-        <table className="table-auto w-full border">
-          <thead>
-            <tr>
+        
+      <h1 className='text-center font-bold underline my-4'>Message Recipients</h1>
+      <table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
               <th className="px-4 py-2 border">Name</th>
               <th className="px-4 py-2 border">Phone Number</th>
               <th className="px-4 py-2 border">Course</th>
@@ -131,82 +133,51 @@ axios.post(`${API_BASE_URL}/messageshedule/`, {
               <th className="px-4 py-2 border">Remove</th>
             </tr>
           </thead>
-          <tbody>
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Message Lead Details</th>
+            </tr>
+          </thead>
             {/* Replace the following data with your actual data */}
             {myEmailContainer?.map((element, index)=>{
-              return <tr key={index}>
-              <td className="border px-4 py-2">{element?.LeadName}</td>
-              <td className="border px-4 py-2">{element?.LeadPhone}</td>
-              <td className="border px-4 py-2">{element?.CourseName}</td>
-              <td className="border px-4 py-2">{element?.LeadSource}</td>
-              <td className="border px-4 py-2">{element?.LeadStatus}</td>
-              <td className="border px-4 py-2">
-                <button className="bg-red-500 text-white px-4 py-2 rounded"
-                type='button'
-                onClick={() => {
-                  const newEmailContainer = myEmailContainer?.filter((element2) => {
-                    return element.LeadEmail !== element2?.LeadEmail;
-                  });
-                  setMyEmailContainer(newEmailContainer);
-                  console.log("My Email Container!!",myEmailContainer)
-                }}
-              >
-                  Remove
-                </button>
-              </td>
-            </tr>
+              return <MessageSheduleSupport element={element} myEmailContainer={myEmailContainer} setMyEmailContainer={setMyEmailContainer} index={index}/>
             })}
-          </tbody>
         </table>
       </div>
       
     </div>
 {/* Excluded List */}
+
+<div className="flex justify-center mt-10 ">
+      <div className="w-full lg:w-3/4">
+        
 <div className='mt-4'>
   <h1 className='text-center underline text-red-500'>Excluded list</h1>
 </div>
-<table className="table-auto w-full border">
-          <thead>
-            <tr>
+<table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
               <th className="px-4 py-2 border">Name</th>
               <th className="px-4 py-2 border">Email</th>
               <th className="px-4 py-2 border">Course</th>
               <th className="px-4 py-2 border">Scource</th>
               <th className="px-4 py-2 border">Status</th>
-              <th className="px-4 py-2 border">Remove</th>
+              <th className="px-4 py-2 border">Action</th>
             </tr>
           </thead>
-          <tbody>
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Exclued Lead Details</th>
+            </tr>
+          </thead>
             {/* Replace the following data with your actual data */}
             {excludedEmailContainerList?.map((element, index)=>{
-              return <tr key={index}>
-              <td className="border px-4 py-2">{element?.LeadName}</td>
-              <td className="border px-4 py-2">{element?.LeadEmail}</td>
-              <td className="border px-4 py-2">{element?.CourseName}</td>
-              <td className="border px-4 py-2">{element?.LeadSource}</td>
-              <td className="border px-4 py-2">{element?.LeadStatus}</td>
-              <td className="border px-4 py-2">
-                <button className="bg-green-500 text-white px-4 py-2 rounded"
-                type='button'
-                onClick={() => {
-                  const newEmailContainer = excludedEmailContainerList?.filter((element2) => {
-                    return element.LeadEmail !== element2?.LeadEmail
-                  });
-                  setExcludexEmailContainer(newEmailContainer)
-                  let newContainer = myEmailContainer;
-                  newContainer = newContainer?.concat(element)
-                  setMyEmailContainer(newContainer);
-                  console.log("My New Container!!",newContainer)
-                }}
-              >
-                  Add
-                </button>
-              </td>
-            </tr>
+              return <MessageExcludedSupport element={element} index={index} excludedEmailContainerList={excludedEmailContainerList} setMyEmailContainer={setMyEmailContainer}/>
             })}
-          </tbody>
         </table>
-
+        </div>
+        </div>
 
 
 {/* End Of Excluded List */}

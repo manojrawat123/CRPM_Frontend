@@ -80,19 +80,7 @@ const MyDashboard = () => {
 
   return (
     <>
-    {leadCustomAlert? 
-    <><Alert severity={leadCustomAlert.status} className="fixed top-0 w-[100%] z-[100] " >
-      {leadCustomAlert.message}
-      
-
-    </Alert> 
-    <div className='z-[300] fixed top-1 right-1'>
-    <CloseIcon fontSize="medium" className='absolute top-0 right-0' onClick={()=>{
-        setLeadCustomAlert(false)
-        
-      }}/>
-    </div>
-    </>:null}
+    
     
     <ToastContainer />
       <div className="w-[100%] py-10 bg-blue-50">

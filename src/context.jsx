@@ -67,7 +67,7 @@ export const DataProvider = ({ children }) => {
   /// ///
   const getResisteredStudentAll = () => {
     axios
-      .get(`${API_BASE_URL}/convertedlead/`, {
+      .get(`${API_BASE_URL}/convertedwithfeesdetails/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -109,8 +109,10 @@ export const DataProvider = ({ children }) => {
      
            if (existing_date_object) {
              existing_date_object.leadObject.push(lead);
+             existing_date_object.myLead.push(lead.LeadID);
+
            } else {
-             filter_data.push({ date: leadDate, leadObject: [lead]  });
+             filter_data.push({ date: leadDate, leadObject: [lead] , myLead : [lead.LeadID] });
            }
          });
          console.log(filter_data);
@@ -272,7 +274,7 @@ export const DataProvider = ({ children }) => {
       .then((response) => {
         console.log("Lead data submitted successfully:", response.data);
         console.log(values?.course);
-        toast.success('Data submitted successfully', {
+        toast.success('Lead Added successfully', {
           position: toast.POSITION.TOP_CENTER,
         });
         
