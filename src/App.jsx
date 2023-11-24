@@ -81,12 +81,12 @@ function App() {
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/convertlead/:id' Component={ConvertLeadForm} />
       </Route>
-      <Route path='' Component={ProtectedRoutes}>
+     {/*  <Route path='' Component={ProtectedRoutes}>
         <Route path='/leaddetails/:id' Component={LeadDetailsCustom}/>
-      </Route>
-      {/* <Route path='' Component={ProtectedRoutes}>
-        <Route path='/leaddetails/:id' Component={LeadStatus}/>
       </Route> */}
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/leaddetails/:id' Component={LeadStatus}/>
+      </Route>
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/convertedleaddata' Component={ConvertedLeadGet}/>
       </Route>
