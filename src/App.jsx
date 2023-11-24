@@ -37,6 +37,10 @@ import LeadAnalytics from './pages/LeadAnalytics/LeadAnalytics';
 import ConvertLeadForm from './pages/ConvertLeadForm/ConvertLeadForm';
 import ReactLoadingForm from './LoadingForm/ReactLoadingForm';
 import FeesDetailsWithGst from './pages/FeesDetailsWithGst/FeesDetailsWithGst';
+import BatchDetails from './pages/Batch/BatchDetails/BatchDetails';
+import AddBatchForm from './pages/Batch/AddBatchForm';
+import PaymentLinkForm from './pages/PaymentLink/PaymentLinkForm';
+import LeadDetailsCustom from './pages/LeadDetailsCustomizePage/leadDetailsMain/LeadDetailsCustom';
 
 function App() {
   
@@ -66,13 +70,9 @@ function App() {
         <Route path='/payment/:id' Component={PaymentForm} />
       </Route>
 
-      {/* <Route path='' Component={ProtectedRoutes} >
-        <Route path='/table' Component={Table} />
-      </Route> */}
-
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/search' Component={SearchPage} /> 
-      s</Route>
+      </Route>
 
       <Route path='' Component={ProtectedRoutes} >
         <Route path='/leadfollowup' Component={LeadFollowUp} />
@@ -82,8 +82,11 @@ function App() {
         <Route path='/convertlead/:id' Component={ConvertLeadForm} />
       </Route>
       <Route path='' Component={ProtectedRoutes}>
-        <Route path='/leaddetails/:id' Component={LeadStatus}/>
+        <Route path='/leaddetails/:id' Component={LeadDetailsCustom}/>
       </Route>
+      {/* <Route path='' Component={ProtectedRoutes}>
+        <Route path='/leaddetails/:id' Component={LeadStatus}/>
+      </Route> */}
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/convertedleaddata' Component={ConvertedLeadGet}/>
       </Route>
@@ -127,6 +130,9 @@ function App() {
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/paymentlink' Component={PaymentLink}/>
       </Route>
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/createpaymentlink' Component={PaymentLinkForm}/>
+      </Route>
 
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/paymentredirectlink/:id' Component={PaymentRedirectLink}/>
@@ -141,7 +147,10 @@ function App() {
       </Route>
       
       <Route path='' Component={ProtectedRoutes}>
-        <Route path='/batch' Component={Batch}/>
+        <Route path='/batch' Component={BatchDetails}/>
+      </Route>
+      <Route path='' Component={ProtectedRoutes}>
+        <Route path='/createnewbatch' Component={AddBatchForm}/>
       </Route>
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/assignbatch' Component={AssignBatches}/>

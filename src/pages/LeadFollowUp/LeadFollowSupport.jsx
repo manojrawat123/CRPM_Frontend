@@ -49,7 +49,7 @@ const LeadFollowUpSupport = (props) => {
             {props?.items?.LeadEvent}
             <br />
             <span className="font-bold mr-4">Call Representative:</span>
-            {props?.items?.leadRepName}
+            {props?.items?.LeadID?.LeadRepresentativePrimary?.name}
             <br />
             <span className="font-bold mr-4">Course:</span>
             {props?.items?.LeadServiceInterested?.ServiceName}
@@ -121,7 +121,7 @@ const LeadFollowUpSupport = (props) => {
             </div>
           <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Call Representative:</div>
-              <div className='col-span-3'>{props?.items?.leadRepName}</div>
+              <div className='col-span-3'>{props?.items?.LeadID?.LeadRepresentativePrimary?.name}</div>
             </div>
           <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Course:</div>

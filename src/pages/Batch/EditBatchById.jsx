@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -6,12 +6,13 @@ import { useContext } from 'react';
 import { useEffect } from 'react';
 import { DataContext } from '../../context';
 import API_BASE_URL from "../../config";
+import { ToastContainer, toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 
 
 const validationSchema = Yup.object().shape({
   batchname: Yup.string().required('Batch Name is required'),
-//   batchbrand: Yup.string().required('Batch Brand Type is required'),
   batchmode: Yup.string().required('Batch Mode is required'),
   addtags: Yup.string().required('Add Tags is required'),
   teacher: Yup.string().required('Assign Teacher is required'),
@@ -25,14 +26,18 @@ const validationSchema = Yup.object().shape({
 
 function EditBatchForm(props) {
 
-    const { profileFunc, username, service, userId} = useContext(DataContext)
-    const token = localStorage.getItem('token')
+    const { profileFunc, username, service, userId} = useContext(DataContext);
+    const token = localStorage.getItem('token');
+    const [loadingButton , setLoadingButton] = useState(false);
+
     useEffect(()=>{
         profileFunc()
     },[])
 
   return (
-    <div className="w-[30rem] p-4 bg-green-100 rounded-md">
+    <div className="md:w-[30rem] p-4 bg-green-100 rounded-md">
+   
+      
       <h2 className="text-2xl text-green-800 font-semibold mb-4 text-center underline">Create New Batch</h2>
       <Formik
         initialValues={{
@@ -49,34 +54,43 @@ function EditBatchForm(props) {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { resetForm }) => {
-          // Handle form submission here
-            
+          console.log("Data Will Save ")
+            setLoadingButton(true);
           const batch = {
             BatchName: values?.batchname,
             BatchDescription: 'This is a dummy batch.',
             BatchMode: values?.batchmode,
             BatchTags: values?.addtags,
-            BatchTeacher: 1, // Assuming you have a teacher with ID 1 in your database
-            BatchStartDate: values?.batchstartdate, // Replace with the desired date and time
-            BatchEndDate: values?.batchenddate,   // Replace with the desired date and time
-            BatchTime: values?.batchstarttime, // Replace with the desired time
-            BatchEndTime: values?.batchendtime, // Replace with the desired time
+            BatchTeacher: 1, 
+            BatchStartDate: values?.batchstartdate, 
+            BatchEndDate: values?.batchenddate,   
+            BatchTime: values?.batchstarttime, 
+            BatchEndTime: values?.batchendtime,
             BatchTeacherName:values?.teacher,
-BatchStaffAssigned:values?.assignstaff,
+            BatchStaffAssigned:values?.assignstaff,
           };
           axios.put(`${API_BASE_URL}/batch/${props.editd.BatchID}/`,batch,{
           headers: {
             "Authorization": `Bearer ${token}`
           }
           }).then((value)=>{
-            console.log(value);
-            alert("Data Submitted Successfully!!");
+           if(props.open){
+             toast.success('Changes are saved sucessfully!!', {
+               position: toast.POSITION.TOP_CENTER,});
+              }
+              resetForm();
             props.batchDetails()
-            resetForm();
+            props.handleClose()
           }).catch((err)=>{
             console.log(err);
             resetForm();
+            if(props.open){
 
+              toast.error('Some Error Occured!!', {
+                position: toast.POSITION.TOP_CENTER,});
+              } 
+          }).finally(()=>{
+            setLoadingButton(false)
           })
         }}
       >
@@ -97,24 +111,7 @@ BatchStaffAssigned:values?.assignstaff,
             {/* End Batch Name */}
             {/* Batch Brand Type */}
 
-            {/* <div className="mb-4">
-              <label htmlFor="batchbrand" className="block text-green-700 font-semibold">
-                Batch Brand Type
-              </label>
-              <Field
-                as="select"
-                id="batchbrand"
-                name="batchbrand"
-                className="border rounded-md p-2 w-full"
-              >
-                <option value="">Select Type</option>
-                <option>Batch Brand Type 1</option>
-                <option>Batch Brand Type 2</option>
-                <option>Batch Brand Type 3</option>
-                <option>Batch Brand Type 4</option>
-              </Field>
-              <ErrorMessage name="batchbrand" component="div" className="text-red-600" />
-            </div> */}
+          
 
 
             {/* End Batch Brand Type */}
@@ -246,7 +243,8 @@ BatchStaffAssigned:values?.assignstaff,
             <button
               type="submit"
               className="bg-green-500 text-white px-4 py-2 rounded-md">
-              Submit
+                
+               {loadingButton ? <> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</> : <> Save Changes</>}
             </button>
                 </div>
           </Form>

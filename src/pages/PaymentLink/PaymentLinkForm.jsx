@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -6,6 +6,10 @@ import { useContext } from 'react';
 import { useEffect } from 'react';
 import { DataContext } from '../../context';
 import API_BASE_URL from "../../config";
+import { NavLink } from 'react-router-dom';
+import { ArrowBack } from '@mui/icons-material';
+import { ToastContainer, toast } from 'react-toastify';
+import { Button, CircularProgress } from '@mui/material';
 
 
 const validationSchema = Yup.object().shape({
@@ -16,15 +20,30 @@ const validationSchema = Yup.object().shape({
 
 function PaymentLinkForm() {
 
-    const { profileFunc, username, service, userId} = useContext(DataContext)
-    const token = localStorage.getItem('token')
+    const { profileFunc, username, service, userId} = useContext(DataContext);
+    const token = localStorage.getItem('token');
+    const [loadingButton, setLoadingButton] = useState(false);
+
     useEffect(()=>{
         profileFunc()
     },[])
 
   return (
-    <div className="w-[30rem] p-4 bg-green-100 rounded-md">
-      <h2 className="text-2xl text-green-800 font-semibold mb-4 text-center">Create Payment Link</h2>
+    <>
+    
+    <ToastContainer />
+      <div className='md:mx-4 mx-2 mt-4 rounded-full p-2 inline-block top-5 hover:bg-green-200 sticky'>
+        <NavLink to={'/paymentlink'} className={'inline-block'}>
+            <Button variant='outlined'>
+            <ArrowBack className='inline-block'/>
+            Show Payment Link
+            </Button>
+        </NavLink>
+        </div>
+        
+
+    <div className="w-full md:w-[80%] mx-auto md:mt-4 p-4 bg-green-100 rounded-md">
+      <h2 className="text-2xl text-green-800 font-semibold mb-4 text-center bg-gray-200 py-4 underline px-4">Create Payment Link</h2>
       <Formik
         initialValues={{
           representative: '',
@@ -32,8 +51,8 @@ function PaymentLinkForm() {
           amount: '',
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          // Handle form submission here
+        onSubmit={(values, {resetForm}) => {
+          setLoadingButton(true)
           axios.post(`${API_BASE_URL}/paymentlink/`, {         
             Package :values.package,
             Amount :values.amount,
@@ -46,12 +65,18 @@ function PaymentLinkForm() {
             }
           }).then((value)=>{
             
-            console.log(value.data)
-            alert("Data Submitted Successfully!!")
+            console.log(value.data);
+            toast.success(`Payment Link Created Sucessfully for ${values.package} of ${values.amount} rupees!!`, {
+              position: toast.POSITION.TOP_CENTER
+            });
+             resetForm();
           }).catch((err)=>{
             console.log(err)
-            console.log(err?.response?.data)
-            alert("Congrulatins Some Error Occured!!")
+            toast.error('Payment Link Not Created!!', {
+              position: toast.POSITION.TOP_CENTER
+            });
+          }).finally(()=>{
+            setLoadingButton(false);
           })
         }}
       >
@@ -109,13 +134,18 @@ function PaymentLinkForm() {
               type="submit"
               className="bg-green-500 text-white px-4 py-2 rounded-md"
               >
-              Create Link
+                
+             {loadingButton ? <> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</> : <>   Create Payment Link</>}
+           
             </button>
                 </div>
           </Form>
         )}
       </Formik>
     </div>
+    <br />
+    <br />
+    </>
   );
 }
 

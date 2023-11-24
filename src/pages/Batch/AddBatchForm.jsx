@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -6,6 +6,10 @@ import { useContext } from 'react';
 import { useEffect } from 'react';
 import { DataContext } from '../../context';
 import API_BASE_URL from "../../config";
+import { Button, CircularProgress } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import { NavLink } from 'react-router-dom';
+import { ArrowBack } from '@mui/icons-material';
 
 
 
@@ -25,15 +29,30 @@ const validationSchema = Yup.object().shape({
 
 function AddBatchForm() {
 
-    const { profileFunc, username, service, userId} = useContext(DataContext)
-    const token = localStorage.getItem('token')
+    const { profileFunc, username, service, userId} = useContext(DataContext);
+    const token = localStorage.getItem('token');
+    const [loadingButton, setLoadingButton] = useState();
+
     useEffect(()=>{
         profileFunc()
     },[])
 
   return (
-    <div className="w-[30rem] p-4 bg-green-100 rounded-md">
-      <h2 className="text-2xl text-green-800 font-semibold mb-4 text-center underline">Create New Batch</h2>
+
+    <>
+     <div className='md:mx-4 mx-2 mt-4  rounded-full p-2 inline-block top-5 hover:bg-green-200 md:sticky'>
+        <NavLink to={'/assignbatch'} className={'inline-block'}>
+            
+            <Button variant="outlined">
+            <ArrowBack className='inline-block'/>
+                 Show Batches
+            </Button>
+        </NavLink>
+        </div>
+
+    <div className="md:w-[80%] w-full p-4 bg-green-100 rounded-md md:mx-auto md:my-4">
+      <ToastContainer />
+      <h2 className="text-2xl text-green-800 font-semibold mb-4 text-center underline bg-gray-200 py-4">Create New Batch</h2>
       <Formik
         initialValues={{
           batchname: '',
@@ -48,31 +67,37 @@ function AddBatchForm() {
           batchendtime: '' 
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          // Handle form submission here
+        onSubmit={(values, {resetForm}) => {
+          setLoadingButton(true);
           console.log(values);
           const batch = {
             BatchName: values?.batchname,
             BatchDescription: 'This is a dummy batch.',
             BatchMode: values?.batchmode,
             BatchTags: values?.addtags,
-            BatchTeacher: 1, // Assuming you have a teacher with ID 1 in your database
-            BatchStartDate: values?.batchstartdate, // Replace with the desired date and time
-            BatchEndDate: values?.batchenddate,   // Replace with the desired date and time
-            BatchTime: values?.batchstarttime, // Replace with the desired time
-            BatchEndTime: values?.batchendtime, // Replace with the desired time
+            BatchTeacher: 1,
+            BatchStartDate: values?.batchstartdate,
+            BatchEndDate: values?.batchenddate,  
+            BatchTime: values?.batchstarttime, 
+            BatchEndTime: values?.batchendtime, 
             BatchTeacherName:values?.teacher,
 BatchStaffAssigned:values?.assignstaff,
 };
-console.log(batch)
+console.log(batch);
           axios.post(`${API_BASE_URL}/batch/`,batch,{
           headers: {
             "Authorization": `Bearer ${token}`
           }
           }).then((value)=>{
-            console.log(value);
+            toast.success(`${values?.batchname} Batch Created Sucessfully!! From ${values?.batchstartdate} to ${values?.batchenddate} Batch Timing ${values?.batchstarttime}-${values?.batchendtime}`, {
+              position: toast.POSITION.TOP_CENTER,
+            autoClose: 20000});
+            resetForm()
           }).catch((err)=>{
-            console.log(err);
+            toast.error('Some error Occured!!', {
+              position: toast.POSITION.TOP_CENTER,});
+          }).finally(()=>{
+            setLoadingButton(false);
           })
         }}
       >
@@ -239,13 +264,15 @@ console.log(batch)
             <button
               type="submit"
               className="bg-green-500 text-white px-4 py-2 rounded-md">
-              Submit
+                {loadingButton ? <> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19} />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</> : <> Create New Batch</>}
+           
             </button>
                 </div>
           </Form>
         )}
       </Formik>
     </div>
+    </>
   );
 }
 

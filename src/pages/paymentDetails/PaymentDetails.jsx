@@ -6,6 +6,7 @@ import { DataContext } from "../../context";
 import axios from "axios";
 import API_BASE_URL from "../../config";
 import PaymentSupport from "./PaymentSupport";
+import PaymentLoading from "./PaymentLoading";
 
 
 
@@ -110,7 +111,7 @@ const PaymentDetails = () => {
             </tr>
           </thead>  
 
-            {isFeesDate ? paymentObj?.map((payment, index) => (
+            {paymentObj ? isFeesDate ? paymentObj?.map((payment, index) => (
                   <PaymentSupport
                     payment={payment}
                     index={index}
@@ -123,7 +124,7 @@ const PaymentDetails = () => {
                     index={index}
                     key={index}
                   />
-                ))}
+                )) : <PaymentLoading />}
         </table>
       </div>
     </>

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { DataContext } from '../../context';
-import ViewStaffDetails from './ViewStaffDetails';
 import API_BASE_URL from "../../config";
+import { ToastContainer, toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 
 const validationSchema = Yup.object().shape({
@@ -42,22 +42,25 @@ const initialValues = {
 function AddStaffForm() {
 
     const { company,brandarr, profileFunc } = useContext(DataContext);
+    const [loadingButton , setLoadingButton] = useState(false);
 
     useEffect(()=>{
         profileFunc()
     },[])
 
     const token = localStorage.getItem("token");
-    const formik = useFormik({
+        const formik = useFormik({
         initialValues,
-        validationSchema,
-        onSubmit: (values) => {
+        validationSchema, 
+        onSubmit: (values, {resetForm}) => {
+            console.log("Button Click")
+            setLoadingButton(true);
             const post_data = {
                 email: values.username,
                 name: values.name,
                 phone: values.phone,
                 company: company,
-                brand: [+values.brand], // Replace with the actual brand IDs
+                brand: [+values.brand], 
                 password: values.password, 
                 password2: values.confirmPassword,
                 designation: values.designation,
@@ -73,20 +76,35 @@ function AddStaffForm() {
                     "Authorization": `Bearer ${token}`
                 }
             }).then((value)=>{
-                console.log(value)
-                setIsHidden(true);
-                setSuccess(true)
+                toast.success(`Staff Added Sucessfully with Email ${values.username} `, {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+                  resetForm();        
 
             }).catch((err)=>{
-                console.log("----data---")
-                console.log(post_data);
-                if(err.response.data.errors.email == "my user with this email address already exists."){
-                    setIsHidden(false);
-                    setSuccess(false);
-                    setMessage("This Email Already Exists!!")
-
+                console.log(err);
+                try {
+                    if(err.response.data.errors){
+                        const err_arr = Object.keys(err.response.data.errors)?.map(key => ({ [key]: err.response.data.errors[key] }))
+                        console.log(err_arr);
+                        err_arr.forEach(element => {
+                            Object.entries(element).forEach(([key, value]) => {
+                              toast.error(`${key}: ${value}`, {
+                                position: toast.POSITION.TOP_CENTER,
+                              });
+                            });
+                          });
+                    }
+    
+                } catch (error) {
+                    toast.error(`Internal Server Error`, {
+                        position: toast.POSITION.TOP_CENTER,
+                      });
                 }
-            },[])
+               
+            }).finally(()=>{
+                setLoadingButton(false)
+            })
 
         },
     });
@@ -104,26 +122,7 @@ function AddStaffForm() {
         <>
 
         <div className="  m-4">
-
-{/* This is Error Message */}
-<div className={`bg-red-500 text-white p-4 rounded fixed top-[3rem] w-[90%] ${isHidden ? 'hidden' : ''}`}>
-      <button className="float-right text-white" onClick={handleClose}>
-        &times;
-      </button>
-      <div>{message}</div>
-    </div>
-
-    {/* This is success Message */}
-<div className={`bg-green-500 text-white p-4 rounded fixed top-[3rem] w-[90%] ${success ? '' : 'hidden'}`}>
-      <button className="float-right text-white" onClick={()=>{
-        setSuccess(false)
-      }}>
-        &times;
-      </button>
-      <div>Staff Created Successfully!!</div>
-    </div>
-
-
+              <ToastContainer />
             <form onSubmit={formik.handleSubmit} className="bg-green-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h2 className="text-2xl font-semibold text-center mb-4 text-green-500 underline">Add Staff Details</h2>
                 {/* Username */}
@@ -366,7 +365,7 @@ function AddStaffForm() {
 
                 {/* Submit Button */}
                 <div className="mb-4">
-                    <button
+                <button
                         className={`mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 font-semibold mt-5 uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]`}
                         type="submit"
                         data-te-ripple-init
@@ -374,17 +373,13 @@ function AddStaffForm() {
                         style={{
                             background: "linear-gradient(to right, #34D399, #22A7F0)",
                         }}
-                    >
-                       Submit
+                    >  
+                    {loadingButton?<> &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19}/></>: <>Add Staff</>}  
                     </button>
 
                 </div>
             </form>
         </div>
-
-                        {/* Staff Details */}
-                        
-<ViewStaffDetails />
         </>
     );
 }

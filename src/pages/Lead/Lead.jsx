@@ -16,7 +16,6 @@ const Lead = () => {
   const [filteredLead, setFilteredLead] = useState([]);
   const { id } = useParams();
 
-  /// /// Inside your useEffect, set isLoading to false when the data is fetched
 
   useEffect(() => {
     const fetchData = async () => {

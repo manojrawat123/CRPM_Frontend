@@ -23,15 +23,21 @@ function EditBatchButton(props) {
   return (
     <div className='inline-block'>
         <div className='text-center m-4'>
-      <Button variant="outlined" onClick={handleOpen}>
-      Edit
-      </Button>
+    
+      <button
+  className="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-1 px-8 rounded"
+  onClick={handleOpen}
+>
+  Edit
+</button>
+
+
         </div>
       <Dialog open={open} onClose={handleClose}>      
         <DialogContent>
           <DialogContentText>
            {/* Batch Form Content */}
-            <EditBatchForm editd={props.item} batchDetails={props.batchDetails}/>
+            <EditBatchForm editd={props.item} batchDetails={props.batchDetails} open={open} handleClose={handleClose}/>
            {/* Batch Form Content End */}
           </DialogContentText>
         </DialogContent>

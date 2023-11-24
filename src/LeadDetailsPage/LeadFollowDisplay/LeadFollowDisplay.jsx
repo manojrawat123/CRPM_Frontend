@@ -10,67 +10,67 @@ import LoadingTabel from '../../LoadingTabel/LoadingTabel';
 const LeadFollowDisplay = () => {
   const { profileFunc,
   } = useContext(DataContext)
-  const { id } = useParams() 
-    
+  const { id } = useParams()
+
   const [leadfollowUpObj, setLeadFollowUpObj] = useState();
-  
+
 
   const apiUrl = `${API_BASE_URL}/leadfollowup/${id}/`;
-const authToken = localStorage.getItem("token");
+  const authToken = localStorage.getItem("token");
 
-// Define a function to make the GET request
-const fetchData = async () => {
-try {
-const response = await axios.get(apiUrl, {
-headers: {
-  Authorization: `Bearer ${authToken}`,
-},
-});
+  // Define a function to make the GET request
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
-// Handle the response data here
-console.log(response.data);
-setLeadFollowUpObj(response.data)
-} catch (error) { 
-// Handle any errors here
-console.error('Error fetching data:', error);
-}
-};
-    useEffect(()=>{
-      profileFunc()
+      // Handle the response data here
+      console.log(response.data);
+      setLeadFollowUpObj(response.data)
+    } catch (error) {
+      // Handle any errors here
+      console.error('Error fetching data:', error);
+    }
+  };
+  useEffect(() => {
+    profileFunc()
 
-// Call the fetchData function to make the GET request
-fetchData();
+    // Call the fetchData function to make the GET request
+    fetchData();
 
-},[])
+  }, [])
   return (
     <>
-    <div className='m-8'>
-  <div className="overflow-x-auto">
-  <table className="min-w-full table-auto border border-gray-300 ">
-    <thead className='bg-purple-500 text-white'>
-      <tr>
-        <th className="border border-gray-300 p-2">Date & Time</th>
-        <th className="border border-gray-300 p-2">Follow Up Details</th>
-        <th className="border border-gray-300 p-2">More Details</th> 
-      </tr>
-    </thead>
+      <div className='m-8'>
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto border border-gray-300 ">
+            <thead className='bg-purple-500 text-white'>
+              <tr>
+                <th className="border border-gray-300 p-2">Date & Time</th>
+                <th className="border border-gray-300 p-2">Follow Up Details</th>
+                <th className="border border-gray-300 p-2">More Details</th>
+              </tr>
+            </thead>
 
-    
-    {leadfollowUpObj? <>
-      <tbody>
-     { leadfollowUpObj?.map((element, index)=>{
-    return <LeadFollowupSupport leadfollowUpObjEl={element} key={index}/>
-  })} 
-  </tbody>
-  </>: <LoadingTabel />
-  }   
-  
-  </table>
 
-</div>
+            {leadfollowUpObj ? <>
+              <tbody>
+                {leadfollowUpObj?.map((element, index) => {
+                  return <LeadFollowupSupport leadfollowUpObjEl={element} key={index} />
+                })}
+              </tbody>
+            </> : <LoadingTabel />
+            }
 
-  </div>
-  
+          </table>
+
+        </div>
+
+      </div>
+
     </>
   )
 }

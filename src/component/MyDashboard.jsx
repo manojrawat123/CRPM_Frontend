@@ -347,16 +347,7 @@ const MyDashboard = () => {
                   value={values.course}
                 />
                 <ErrorMessage name="course" component="div" className="text-red-500" />
-                        {/* <option value="">----Select------</option>
-                        {service?.map((element, index) => (
-                          <option key={index} value={element.id}>
-                            {element.ServiceName}
-                          </option>
-                        ))} */}
-                      {/* </Field> */}
-                      {/* <ErrorMessage name="course" component="div" className="text-red-500" /> */}
                     </div>
-
                     <div>
                       <h4 className="text-green-600 mb-2">Class Mode</h4>
                       <Field

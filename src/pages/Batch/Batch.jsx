@@ -1,6 +1,6 @@
 import React from 'react';
 import BatchButton from './BatchButton';
-import BatchDetails from './BatchDetails';
+import BatchDetails from './BatchDetails/BatchDetails';
 
 function Batch() {
   

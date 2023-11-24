@@ -4,6 +4,10 @@ import PaymentLinkSupport from './PaymentLinkSupport';
 import { useState } from 'react';
 import PaymentModal from './PaymentModal';
 import API_BASE_URL from "../../config";
+import { NavLink } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { ArrowForward } from '@mui/icons-material';
+import PaymentLinkLoader from './PaymentLoader/PaymentLinkLoader';
 
 
 const PaymentLink = () => {
@@ -32,37 +36,45 @@ const PaymentLink = () => {
   
   return (
     <div className=' m-8'>
-      <PaymentModal />
-        <div className="py-4">
+     <NavLink to={"/createpaymentlink"}>
+     <Button variant="outlined">
+
+      Create Payment
+      <ArrowForward className='inline-block'/>
+      </Button>
+     </NavLink>
+        <div className="py-4"> 
       <div className="overflow-x-auto">
-        <table className="table-auto min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100 border border-black px-4 py-2">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider border border-black">
-                S.No
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider  border border-black">
+      <table className="min-w-full">
+          <thead className="bg-purple-500 text-white hidden md:table-header-group">
+            <tr className="border border-gray-300">
+              
+              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider  border border-black">
                 Course Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider  border border-black">
+              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider  border border-black">
                 Amount
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider border border-black">
+              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider border border-black">
                 Service
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider  border border-black">
+              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider  border border-black">
                 Payment Link
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+
+          <thead className="bg-purple-500 text-white md:hidden table-header-group">
+            <tr className="border border-gray-300">
+              <th className="px-4 py-2 border border-gray-300">Payment Links</th>
+            </tr>
+          </thead>
+
         
-          {data?.map((item, index) => (
+          {data ?   data?.map((item, index) => (
               <PaymentLinkSupport items={item} key={index} index={index}/>
-            ))}
+            )) : <PaymentLinkLoader />}
          
-            
-          </tbody>
         </table>
       </div>
     </div>
