@@ -8,11 +8,6 @@ const YesModal = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
 
-  useEffect(() => {
-    console.log(props.yesModalOpen);
-  }, [props.yesModalOpen]);
-
-
   return (
     <>
       <Modal
@@ -50,7 +45,12 @@ const YesModal = (props) => {
 
         <div className='mt-10'>
           <h1 className='text-center text-2xl font-bold underline my-4'>Phone Picked --: <span className='font-extrabold'>Yes</span></h1>
-          <YesModalForm leadFollowUpServiceId={props?.leadFollowUpServiceId} />
+          <YesModalForm 
+          setYesModalOpen={props.setYesModalOpen}
+          selectedService={props.selectedService}
+          setSelectedService={props.setSelectedService}
+          feesOffered={props.feesOffered}
+          setFeesOffered={props.setFeesOffered} />
         </div>
       </Modal>
     </>

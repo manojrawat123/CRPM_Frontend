@@ -1,21 +1,18 @@
 import Modal from 'react-modal';
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import API_BASE_URL from "../../../config";
-import NoModalForm from './NoModalForm';
-// import YesModalForm from './YesModalForm';
+import VisitDemoForm from './VisitDemoForm';
 
 
-const NoModal = (props) => {  
+const VisitDemoModal = (props) => {  
   return (
     <>
      <Modal
         isOpen=
         {            
-            props?.noModalOpen
+            props?.visitDemoModalOpen
         } 
         onRequestClose={() => 
-            props.setNoModalOpen(false)
+            props.setVisitDemoModalOpen(false)
         }
         style={{
           overlay: {
@@ -33,19 +30,20 @@ const NoModal = (props) => {
 >
   <button
     className="hover:bg-red-500 text-red-500 hover:text-white p-4 text-4xl font-extrabold"
-    onClick={() => props.setNoModalOpen(false)}
-  >
-    X
-  </button>
+    onClick={() => props.setVisitDemoModalOpen(false)}> X </button>
 </div>
 
  <div className='mt-10'>
-        <h1 className='text-center text-2xl font-bold underline my-4'>Phone Picked --: <span className='font-extrabold'>No</span></h1>
-        <NoModalForm leadFollowUpServiceId={props?.leadFollowUpServiceId}/>
+        <h1 className='text-center text-2xl font-bold underline my-4'><span className='font-extrabold'>Update Visit</span> & <span className='font-extrabold'>Demo Happned</span></h1>     
  </div>
+ <VisitDemoForm 
+  setVisitDemoModalOpen={props.setVisitDemoModalOpen}
+  selectedService={props.selectedService}
+  setSelectedService={props.setSelectedService}
+  />
         </Modal>
     </>
   )
 }
 
-export default NoModal;
+export default VisitDemoModal;

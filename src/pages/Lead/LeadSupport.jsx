@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { DataContext } from '../../context';
 import { NavLink } from 'react-router-dom';
 import { format } from "date-fns";
-import axios from 'axios';
-import API_BASE_URL from '../../config';
 
 const LeadSupport = (props) => {
   

@@ -1,13 +1,14 @@
 import React from 'react'
 import { useContext } from 'react';
 import { useState } from 'react';
-import { DataContext } from '../../../context';
+import { DataContext } from '../../../../../context';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import VisitInputFiled from './VisitInputFiled';
 import { Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
-import API_BASE_URL from '../../../config';
+import API_BASE_URL from "../../../../../config";
+import { toast } from 'react-toastify';
 
 const VisitDemoForm = (props) => {
 
@@ -87,8 +88,10 @@ const VisitDemoForm = (props) => {
                   "LeadStatusDate":`${nextFollowupDate} 00:00`,
                   "LeadEventDate":`${visitHappenedDate} ${visitHappenedTime}`,
                   "LeadEventTakenBy": visitAttendedBy,
-                  "LeadServiceInterested": props?.leadFollowUpServiceId,
+                  "LeadServiceInterested": props.selectedService,
                 };
+
+                
 
                 axios.post(`${API_BASE_URL}/leadfollowup/`,requestData, {
                     headers: {
@@ -96,11 +99,11 @@ const VisitDemoForm = (props) => {
                     }
                 }).then((value)=>{
 
-                        setCustomAlert({
-                            status: "success",
-                            message: "Data Submitted Sucessfully!!"
-                        });
-                    
+                    props.setSelectedService("");
+                    props.setVisitDemoModalOpen(false);
+                    toast.success('Lead FollowUp Updated Sucessfully !!', {
+                        position: toast.POSITION.TOP_CENTER,
+                      });
                 }).catch((err)=>{
                     console.log(err)
                     setCustomAlert({
@@ -124,11 +127,11 @@ const VisitDemoForm = (props) => {
         setSelectedButton(buttonId);
         setSelectedButtonObj(button);
         setLeadEvent(button.label);
-        setLeadStatus(button.status)
-        setVisitHappenedDate('')
-setVisitHappenedTime('')
-setNextFollowupDate('')
-setVisitAttendedBy('')
+        setLeadStatus(button.status);
+        setVisitHappenedDate('');
+setVisitHappenedTime('');
+setNextFollowupDate('');
+setVisitAttendedBy('');
                                
         
     };

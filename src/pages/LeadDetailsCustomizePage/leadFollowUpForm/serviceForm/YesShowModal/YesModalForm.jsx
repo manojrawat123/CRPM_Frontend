@@ -3,9 +3,10 @@ import DateAndTimeInput from "./DateAndTimeInput";
 import CustomRadioButton from "./RadioButton";
 import { Alert, CircularProgress } from '@mui/material';
 import axios from "axios";
-import API_BASE_URL from "../../../config";
+import API_BASE_URL from "../../../../../config";
 import { useParams } from "react-router-dom";
-import { DataContext } from "../../../context";
+import { DataContext } from "../../../../../context";
+import { toast } from "react-toastify";
 
 const YesModalForm = (props) => {
     const [selectedButton, setSelectedButton] = useState(null);
@@ -18,7 +19,8 @@ const YesModalForm = (props) => {
     const { id } = useParams();
     const brand = localStorage.getItem("brand");
     const { serviceFunc,profileFunc,company, userId } = useContext(DataContext);
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+    const [remarks, setRemarks] = useState("");
 
     useEffect(()=>{
         serviceFunc();
@@ -94,7 +96,6 @@ const YesModalForm = (props) => {
         }
 
         const requestData = {
-            
             "LeadID": id,
             "Company": company,
             "Brand": brand,
@@ -102,42 +103,32 @@ const YesModalForm = (props) => {
             "LeadPhonePicked":"Yes",
             "LeadStatus":leadStatus,
             "LeadStatusDate": leadStatusDate ? `${leadStatusDate} ${leadStatusTime}` : null,
-            "LeadServiceInterested": props?.leadFollowUpServiceId,   
+            "LeadServiceInterested":  props.selectedService,
+            "LeadFeeOffered": props.feesOffered,
+            "LeadComments": remarks == "" ? null : remarks
     }
         axios.post(`${API_BASE_URL}/leadfollowup/`, requestData, {
             headers: {
             "Authorization": `Bearer ${token}`
             }
         }).then((val)=>{
-
-                setCustomAlert({
-                    status: "success",
-                    message: "Data Submitted Sucessfully!!"
-                });  
-            // axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
-            //     headers: {
-            //         "Authorization": `Bearer ${token}`
-            //     }
-            // }).then((values1)=>{
-            //     setButton(false)
-            //  }).catch((err)=>{
-            //     console.log(err)
-            //     setCustomAlert({
-            //         status: "error",
-            //         message: "Could Not update in lead Last Followup"
-            //     });   
-            //     setButton(false)
-            //  })
-            
-             setButton(false)
+                props.setSelectedService("");
+                props.setFeesOffered("");
+                setRemarks("");
+                props.setYesModalOpen(false);
+                toast.success('Lead FollowUp Updated Sucessfully !!', {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
             }).catch((err)=>{
                 console.log(err)
                 setCustomAlert({
                     status: "error",
                     message: "Some Error Occured"
-                })
+                })                
+            }).finally(()=>{
                 setButton(false)
         })
+                
         // setButton(false)
     }
     
@@ -219,6 +210,16 @@ const YesModalForm = (props) => {
                         {/* Lead Status Not Intrestead Code End */}
                     </div>
                 })}
+            </div>
+            <div className="mx-8 my-4">
+                <label htmlFor="">
+                    Remarks:
+                </label>
+                <textarea name="" id="" cols="30" rows="2" className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                value={remarks}
+                onChange={(e)=>{
+                    setRemarks(e.target.value);
+                }}></textarea>
             </div>
 
             <div className="text-center">

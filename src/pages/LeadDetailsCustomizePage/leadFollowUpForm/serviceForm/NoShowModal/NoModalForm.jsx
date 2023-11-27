@@ -1,9 +1,10 @@
 import { Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import React, { useState ,useContext, useEffect } from 'react'
-import API_BASE_URL from '../../../config';
-import { DataContext } from '../../../context';
+import API_BASE_URL from '../../../../../config';
+import { DataContext } from '../../../../../context';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const NoModalForm = (props) => {
 
@@ -17,6 +18,7 @@ const NoModalForm = (props) => {
     const { serviceFunc,profileFunc,company, userId } = useContext(DataContext);
     const { id } = useParams() 
     const token = localStorage.getItem('token');
+    const [remarks, setRemarks] = useState("");
 
     useEffect(()=>{
         serviceFunc();
@@ -62,7 +64,9 @@ const NoModalForm = (props) => {
               "LeadPhonePicked":"No",
               "LeadReasonPhoneNotPicked":leadNotInterstedReason,
               "LeadStatus": "Try Next Time",
-              "LeadServiceInterested":props?.leadFollowUpServiceId,
+              "LeadServiceInterested":props?.selectedService,
+              "LeadFeeOffered": props.feesOffered,
+              "LeadComments": remarks == "" ? null : remarks,
               ...(leadStatusDate !== null
         ? { "LeadStatusDate": `${leadStatusDate} 00:00` }
         : {})
@@ -73,22 +77,13 @@ const NoModalForm = (props) => {
                 "Authorization": `Bearer ${token}`
             }
         }).then((value)=>{
-                        setCustomAlert({
-                            status: "success",
-                            message: "Data Submitted Sucessfully!!"
-                        });  
-            //  axios.post(`${API_BASE_URL}/leadlastfollowupbyid/${id}/`, requestData, {
-            //             headers: {
-            //                 "Authorization": `Bearer ${token}`
-            //             }
-            //         }).then((values1)=>{
-            //          }).catch((err)=>{
-            //             setCustomAlert({
-            //                 status: "error",
-            //                 message: "Could Not update in lead Last Followup"
-            //             });   
-            //          })
-           
+            props.setSelectedService("");
+            props.setFeesOffered("");
+            setRemarks(""); 
+            props.setNoModalOpen(false);      
+            toast.success('Lead FollowUp Updated Sucessfully !!', {
+                position: toast.POSITION.TOP_CENTER,
+              });
         }).catch((err)=>{
             console.log(err)
             setCustomAlert({
@@ -96,7 +91,7 @@ const NoModalForm = (props) => {
                 message: "Internal Server Error"
             });            
         }).finally(()=>{
-            setButton(false)
+            setButton(false);
         })
     }
 
@@ -158,6 +153,18 @@ const NoModalForm = (props) => {
                     </div>
                 })}
             </div>
+            <div className="mx-8 my-4">
+                <label htmlFor="">
+                    Remarks:
+                </label>
+                <textarea name="" id="" cols="30" rows="2" className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                value={remarks}
+                onChange={(e)=>{
+                    setRemarks(e.target.value);
+                }}></textarea>
+            </div>
+
+
 <div className="text-center">
                 <button className="bg-blue-500 hover:bg-blue-600 text-white  rounded" 
                 onClick={handleSubmit}>

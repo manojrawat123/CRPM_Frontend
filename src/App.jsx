@@ -32,7 +32,6 @@ import EmailShedule from './pages/emailshedule/EmailShedule';
 import MessageShedule from './pages/MessageShedule/MessageShedule';
 import SearchPage from './component/Search/Search';
 import ViewStaffDetails from './pages/AddStaffForm/ViewStaffDetails';
-import LeadStatus from './LeadDetailsPage/leadDetails/LeadStatus';
 import LeadAnalytics from './pages/LeadAnalytics/LeadAnalytics';
 import ConvertLeadForm from './pages/ConvertLeadForm/ConvertLeadForm';
 import ReactLoadingForm from './LoadingForm/ReactLoadingForm';
@@ -81,12 +80,12 @@ function App() {
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/convertlead/:id' Component={ConvertLeadForm} />
       </Route>
-     {/*  <Route path='' Component={ProtectedRoutes}>
-        <Route path='/leaddetails/:id' Component={LeadDetailsCustom}/>
-      </Route> */}
       <Route path='' Component={ProtectedRoutes}>
-        <Route path='/leaddetails/:id' Component={LeadStatus}/>
+        <Route path='/leaddetails/:id' Component={LeadDetailsCustom}/>
       </Route>
+      {/* <Route path='' Component={ProtectedRoutes}>
+        <Route path='/leaddetails/:id' Component={LeadStatus}/>
+      </Route> */}
       <Route path='' Component={ProtectedRoutes}>
         <Route path='/convertedleaddata' Component={ConvertedLeadGet}/>
       </Route>
