@@ -15,6 +15,7 @@ const LeadDetailsCustom = (props) => {
   const authToken = localStorage.getItem("token");
   const [leadObj, setLeadObj] = useState();
   const [leadFollowUpObj, setLeadFollowUpObj] = useState();
+  const [avaliableServices, setAvaliableServices] = useState();
 
   const leadFollowUpFunc = () => {
     axios
@@ -27,7 +28,8 @@ const LeadDetailsCustom = (props) => {
         console.log(values);
         setLeadObj(values.data[0].LeadID);
         console.log(values.data[0].LeadID);
-        setLeadFollowUpObj(values.data)
+        setLeadFollowUpObj(values.data);
+        setAvaliableServices(values.data[0].available_services);
       })
       .catch((err) => {
         console.log(err);
@@ -49,27 +51,29 @@ const LeadDetailsCustom = (props) => {
         </div>
 
         <div className="col-span-2 md:col-span-1">
-          { leadObj ? (
-            <LeadFollowUpLeadService leadObj={leadObj} />
+          {leadObj ? (
+            <LeadFollowUpLeadService
+              leadObj={leadObj}
+              avaliableServices={avaliableServices}
+              leadFollowUpFunc={leadFollowUpFunc}
+            />
           ) : (
             <LeadFollowUpLeadServiceLoading />
           )}
         </div>
 
         <div className="col-span-2 m-4 border border-solid border-green-500 rounded-xl">
-            {leadObj ?
-                <LeadFollowUpForm leadObj={leadObj}/> :
-               <LeadFollowUpFormLoading />
-            }
+          {leadObj ? (
+            <LeadFollowUpForm leadObj={leadObj} />
+          ) : (
+            <LeadFollowUpFormLoading />
+          )}
         </div>
       </div>
 
-{       leadFollowUpObj ? 
-        <LeadFollowUpDisplayById leadFollowUpObj={leadFollowUpObj} /> :
-        null
-}
-
-        
+      {leadFollowUpObj ? (
+        <LeadFollowUpDisplayById leadFollowUpObj={leadFollowUpObj} />
+      ) : null}
     </>
   );
 };

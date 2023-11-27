@@ -5,20 +5,22 @@ import MySupport from './AssignBatchSupport';
 import API_BASE_URL from "../../config";
 import { Button } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import AssignBatchesLoading from './AssignBatchesLoading';
 
 
 const AssignBatch = () => {
-  const [data, setData] = useState([]);  
+  const [data, setData] = useState();  
   const authToken = localStorage.getItem('token');
+  const [batches, setBatches] = useState()
   const convertedLeadGetFunc = () => {
-    axios.get(`${API_BASE_URL}/convertedlead/`, {
+    axios.get(`${API_BASE_URL}/batchforconverted/`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
       }
     }).then((values) => {
-      console.log(values.data);
-      setData(values.data);
-    })
+      setData(values.data.converted_data);
+      setBatches(values.data.batch_data);
+    });
   }
 
   useEffect(()=>{    
@@ -33,16 +35,14 @@ const AssignBatch = () => {
   return (
 
     <>
-   
-
-        <div className='md:mx-4 mx-2 mt-4  rounded-full p-2 inline-block top-5 hover:bg-green-200 '>
+        <div className='md:mx-4 mx-2 mt-4  rounded-full p-2 inline-block top-5'>
         <NavLink to={'/createnewbatch'} className={'inline-block'}>
-            
             <Button variant="outlined">
             Create Batches &nbsp;&nbsp;
             <ArrowForward className='inline-block'/>
             </Button>
         </NavLink>
+            
         </div>
 
     <div className="py-4 mx-4">
@@ -53,15 +53,16 @@ const AssignBatch = () => {
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Lead Details
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Id's & Date
+              <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
+                Converted Data
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Enrolled Batches
+              <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
+                Assign Batch
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Avialable Batches
+              <th className="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
+                Course Date
               </th>
+              
             </tr>
           </thead>
 
@@ -71,11 +72,11 @@ const AssignBatch = () => {
             </tr>
           </thead>
               
-            {data?.map((item, index) => (
-              <MySupport items={item} key={index}/>
-            ))}
+            {data ? data?.map((item, index) => (
+              <MySupport items={item} key={index} batches={batches} convertedLeadGetFunc={convertedLeadGetFunc} index={index}/>
+            )) : <AssignBatchesLoading />}
         </table>
-      </div>
+      </div> 
     </div>
     </>
   );

@@ -2,29 +2,24 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Alert, AlertTitle, CircularProgress } from '@mui/material';
-import { DataContext } from '../../context';
+import { DataContext } from '../../../context';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import API_BASE_URL from "../../config";
+import API_BASE_URL from "../../../config";
 
 
 const LeadUpdateForm = (props) => {
     const [leadUpdateButton, setLeadUpdateButton] = useState(false);
-    const { leadGetById, leadByIdObj } = useContext(DataContext);
     const [updateStatus, setUpdateStatus] = useState(false);
     const token = localStorage.getItem("token");
     const { id } = useParams(); 
 
-    useEffect(()=>{
-        leadGetById(id);
-        
-        console.log(leadByIdObj);
-    },[])
+   
 
   const initialValues = {
-    name: leadByIdObj?.LeadName,
-    email: leadByIdObj?.LeadEmail,
-    phone: leadByIdObj?.LeadPhone,
+    name: props.leadObj?.LeadName,
+    email: props.leadObj?.LeadEmail,
+    phone: props.leadObj?.LeadPhone,
   };
 
   const validationSchema = Yup.object().shape({
@@ -47,13 +42,14 @@ const LeadUpdateForm = (props) => {
         }
       }).then((value)=>{
         console.log(value);
-        setLeadUpdateButton(false);
         setUpdateStatus("success")
       }).catch((err)=>{
         console.log(err);
-        setUpdateStatus("error")
+        setUpdateStatus("error");
+      }).finally(()=>{
         setLeadUpdateButton(false);
       })
+        
   };
 
   return (

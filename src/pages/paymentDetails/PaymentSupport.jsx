@@ -64,9 +64,14 @@ console.log(props)
           
         </td>
         <td className="border border-black px-4 py-2">
-          <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out">
+        
+{props.payment?.fees_data != false && (parseInt(props?.payment?.payment_amount, 10) -  parseInt(props.payment?.fees_data?.fee_received) == 0) ?  <span style={{ color: 'green' }}>  Payment Done ✔️</span> :  <span style={{ color: 'red' }}> Payment Pending ❗  </span> }
+       
+     
+       
+          {/* <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out">
                 Show Detail
-          </button>
+          </button> */}
         </td>
       </tr>
       </tbody>

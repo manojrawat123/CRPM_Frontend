@@ -29,18 +29,40 @@ const validationSchema = Yup.object().shape({
 
 function AddBatchForm() {
 
-    const { profileFunc, username, service, userId} = useContext(DataContext);
     const token = localStorage.getItem('token');
     const [loadingButton, setLoadingButton] = useState();
+    const [allUser, setAllUser] = useState();
+    const getAllUserFunc = ()=>{
+      axios.get(`${API_BASE_URL}/getalluser/`, {
+        headers:{
+          "Authorization": `Bearer ${token}`
+        }
+      }).then((values)=>{
+        console.log(values.data);
+          setAllUser(values.data);
+      },[]).catch((err)=>{
+        console.log(err);
+        console.log("UnAuthorized User")
+
+      })
+    }
 
     useEffect(()=>{
-        profileFunc()
+      getAllUserFunc();
     },[])
+
+    if (!allUser){
+      return <>
+       <div className='flex items-center justify-center h-[100vh]' >
+    <CircularProgress size={50} />
+  </div>
+      </> 
+    }
 
   return (
 
     <>
-     <div className='md:mx-4 mx-2 mt-4  rounded-full p-2 inline-block top-5 hover:bg-green-200 md:sticky'>
+     <div className='md:mx-4 mx-2 mt-4  rounded-full p-2 inline-block top-5'>
         <NavLink to={'/assignbatch'} className={'inline-block'}>
             
             <Button variant="outlined">
@@ -75,7 +97,7 @@ function AddBatchForm() {
             BatchDescription: 'This is a dummy batch.',
             BatchMode: values?.batchmode,
             BatchTags: values?.addtags,
-            BatchTeacher: 1,
+            BatchTeacher: values.teacher,
             BatchStartDate: values?.batchstartdate,
             BatchEndDate: values?.batchenddate,  
             BatchTime: values?.batchstarttime, 
@@ -187,10 +209,9 @@ console.log(batch);
                 className="border rounded-md p-2 w-full"
               >
                 <option value="">Select Teacher</option>
-                <option>Teacher 1</option>
-                <option>Teacher 2</option>
-                <option>Teacher 3</option>
-                <option>Teacher 4</option>
+                {allUser?.map((element, index)=>{
+                 return <option value={element.id}>{element.name}</option>
+                })}
               </Field>
               <ErrorMessage name="teacher" component="div" className="text-red-600" />
             </div>

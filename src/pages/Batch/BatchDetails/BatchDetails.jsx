@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import API_BASE_URL from "../../../config";
-import EditBatchButton from '../EditButton';
 import BatchSupport from './BatchSupport';
 import { ToastContainer } from 'react-toastify';
 
@@ -18,7 +17,6 @@ const BatchDetails = () => {
           "Authorization": `Bearer ${token}`
         }
       }).then((value) => {
-        console.log(value.data);
         setBatchObj(value.data);
       }).catch((err) => {
         console.log(err);

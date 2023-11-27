@@ -12,6 +12,7 @@ import API_BASE_URL from "../../config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CircularProgress } from "@mui/material";
+import ConvertLeadFormLoading from "./ConvertLeadFormLoading";
 
 const ConvertLeadForm = () => {
   const { id } = useParams();
@@ -85,7 +86,7 @@ const ConvertLeadForm = () => {
   };
 
   if (!leadByIdObj) {
-    return <>Loading...</>;
+    return <><ConvertLeadFormLoading /></>;
   }
 
   return (
