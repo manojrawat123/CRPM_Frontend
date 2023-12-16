@@ -1,15 +1,18 @@
 import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import API_BASE_URL from "../../config";
+import { toast } from 'react-toastify';
+import { CircularProgress } from '@mui/material';
 
 
 const Form3 = () => {
   
   const token = localStorage.getItem("token"); 
   const { id } = useParams();
+  const [button, setButton] = useState();
 
   return (
     <>
@@ -26,7 +29,7 @@ const Form3 = () => {
             }}
             onSubmit={(values) => {
               // Handle form submission
-              axios.put(`${API_BASE_URL}/customer/${id}`,{
+              axios.put(`${API_BASE_URL}/customer/${id}/`,{
                 CustomerShippingAddress: values?.addressLine1,
                 CustomerBillingAddress: values?.addressLine2,
                 CustomerLocation: `${values?.townCity} ${values?.state} ${values?.pincode} ${values?.country}`
@@ -35,9 +38,16 @@ const Form3 = () => {
         'Authorization': `Bearer ${token}`
       }
     }).then((value)=>{
-      console.log(value);
+      setButton(true)
+      toast.success('Details Update Sucessfully', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }).catch((err)=>{
-      console.log(err);
+      toast.error('Internal Server Error', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }).finally(()=>{
+      setButton(false)
     })
 }}
             validationSchema={Yup.object().shape({
@@ -128,7 +138,7 @@ const Form3 = () => {
           type="submit"
           className=" bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300"
         >
-          Update
+          {button ? <CircularProgress color='inherit' size={19}/> : "Update"}
         </button>
         <button
           type="button"

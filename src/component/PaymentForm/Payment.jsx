@@ -9,11 +9,12 @@ import API_BASE_URL from "../../config";
 import 'react-toastify/dist/ReactToastify.css';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
-import { useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import ReactLoadingForm from '../../LoadingForm/ReactLoadingForm';
 import PaymentLoadingForm from './PaymentLoading';
+import { ArrowBack } from '@mui/icons-material';
 
 
 const paymentSchema =Yup.object({
@@ -31,7 +32,7 @@ const paymentSchema =Yup.object({
 const PaymentForm = () => {
 
   const { id } = useParams();
-  const { profileFunc, company, service, username, serviceFunc,paymentTypeModeFunc, paymentType, paymentmode } = useContext(DataContext);
+  const { profileFunc, company,  username, paymentTypeModeFunc, paymentType, paymentmode,userId } = useContext(DataContext);
   const selectedBrand = localStorage.getItem("brand");
   const [leadObj, setLeadObj] = useState();
   const [loadingButton,setLoadingButton] = useState(false);
@@ -54,7 +55,6 @@ const PaymentForm = () => {
 
 
   useEffect(() => {
-    serviceFunc();
     getLeadByIdFunc(id);
     paymentTypeModeFunc();
     profileFunc();
@@ -73,7 +73,13 @@ const PaymentForm = () => {
   else if (dataFetch===true){
     return (
       <div className="w-[100%] py-10 bg-blue-50">
+         <div className='md:mx-4 mx-2 bg-white rounded-full p-2 inline-block top-5 hover:bg-green-200 sticky'>
+        <NavLink to={`/leaddetails/${id}`} className={'inline-block'}>
+            <ArrowBack className='inline-block'/>
+        </NavLink>
         
+
+        </div>
         <ToastContainer />
         <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
           <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">Payment Form</h2>
@@ -106,6 +112,7 @@ const PaymentForm = () => {
                 "brand": selectedBrand, 
                 "payment_type_id": paymentType.payment_type_id,
                 "payment_date": combinedDatetime,
+                "user_id" : userId
               }
               console.log(requestData);
               axios.post(`${API_BASE_URL}/payments/`, requestData, {

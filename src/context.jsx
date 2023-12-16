@@ -26,6 +26,9 @@ export const DataProvider = ({ children }) => {
   const [leads, setLead] = useState();
   const [leadByIdObj, setLeadIdByObj] = useState();
   const [visitSechudule, setVisitSechudule] = useState();
+  const [visitHappned, setVisitHappned]  = useState();
+  const [demoHappned, setDemoHappned]  = useState();
+  const [demoSchedule, setDemoSchedule]  = useState();
   const [registeredStudent, setRegisteredStudent] = useState();
   const [allFeesObj, setAllFeesObj] = useState();
   const navigate = useNavigate();
@@ -40,11 +43,15 @@ export const DataProvider = ({ children }) => {
   const [leadAnalyticsObj, setLeadAnyticsObj] = useState();
   const [paymentmode, setPaymentMode] = useState([]); 
   const [paymentType, setPaymentType] = useState([]);
+  const [register_student_detail_obj, setRegisterStudentDetailObj] = useState();
+  const [paymentObj, setPaymentObj] = useState();
+  const [refundPaymentObj, setRefundObj] = useState();
   
 
   useEffect(() => {
     serviceFunc();
   }, []);
+
 
   /// Fees Details
   const GetFeesAll = () => {
@@ -67,7 +74,7 @@ export const DataProvider = ({ children }) => {
   /// ///
   const getResisteredStudentAll = () => {
     axios
-      .get(`${API_BASE_URL}/convertedwithfeesdetails/`, {
+      .get(`${API_BASE_URL}/registeredstudent/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -91,11 +98,23 @@ export const DataProvider = ({ children }) => {
       })
       .then((values) => {
         console.log("Data received:", values.data);
-        const filteredData = values.data?.filter((element) => {
-          // Keep elements where LeadEvent is not null
-          return element.LeadEvent !== null;
+        const fl_visitSchedule = values.data?.filter((element) => {
+          return element.LeadStatus == "Visit scheduled";
         });
-        setVisitSechudule(filteredData);
+        const fl_demoSchedule = values.data?.filter((element) => {
+          return element.LeadStatus == "Demo scheduled";
+        });
+        const fl_visitHappned = values.data?.filter((element) => {
+          return element.LeadStatus == "Visit Happened";
+        });
+        const fl_demoHappned = values.data?.filter((element) => {
+          return element.LeadStatus == "Demo Happened";
+        });
+        setVisitSechudule(fl_visitSchedule);
+        setDemoSchedule(fl_demoSchedule);
+        setDemoHappned(fl_demoHappned);
+        setVisitHappned(fl_visitHappned);
+        
          // Lead Analitics
          const filter_data = [];
     
@@ -277,9 +296,10 @@ export const DataProvider = ({ children }) => {
         toast.success('Lead Added successfully', {
           position: toast.POSITION.TOP_CENTER,
         });
+       
         
           leadScourceFunc();
-        resetForm();     
+        // resetForm();     
       }).catch((err)=>{
         console.log(err)
         toast.error('Data submission failed', {
@@ -432,7 +452,55 @@ export const DataProvider = ({ children }) => {
     })
   }
 
+
+  const registeredStudentDetailFunc = (id)=>{
+    axios.get(`${API_BASE_URL}/customerdetails/${id}/`, {
+      headers: {"Authorization": `Bearer ${token}`}
+    }).then((value)=>{
+      console.log(value.data);
+      setRegisterStudentDetailObj(value.data);
+    }).catch((err)=>{
+      console.log(err)
+      if (err.response){
+        if (err.response.status){
+          toast.error('No Data Found', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+      }
+    })
+  }
   
+
+  const paymentFunc =  (id, setLoad) => {
+    if (id == undefined){
+      return;
+    }
+    axios.get(`${API_BASE_URL}/payments/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => {
+      setPaymentObj(res.data);
+      console.log(res.data);
+      setLoad(true)
+    }).catch((errr) => {
+      console.log(errr);
+    });
+  }
+
+
+  const paymentRefundFeesDetailsFunc = ()=>{
+    axios.get(`${API_BASE_URL}/refundfees/`, {
+        headers : {
+            "Authorization": `Bearer ${token}`
+        }
+    }).then((response)=>{
+        setRefundObj(response.data);
+    }).catch((err)=>{
+        console.log(err);
+    })
+}
   // End OF lead Function
   return (
     <DataContext.Provider
@@ -463,6 +531,9 @@ export const DataProvider = ({ children }) => {
         setLead,
         setCourseName,
         visitSechudule,
+        demoHappned,
+        demoSchedule,
+        visitHappned,
         getLeadFollowUpAll,
         setService,
         getLeadFunc,
@@ -494,6 +565,12 @@ export const DataProvider = ({ children }) => {
         paymentTypeModeFunc,
         paymentType,
         paymentmode,
+        registeredStudentDetailFunc,
+        register_student_detail_obj,
+        paymentFunc,
+        paymentObj,
+        paymentRefundFeesDetailsFunc,
+        refundPaymentObj
       }}
     >
       {children}

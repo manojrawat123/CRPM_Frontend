@@ -1,15 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import MySupport from './Support';
+import MySupport from './PendingFeesSupport';
 import API_BASE_URL from "../../config";
-import ConvertedLeadLoading from './ConvertedLeadLoading';
+import ConvertedLeadLoading from './PendingFeesLoading';
 
 
-const ConvertedLeadGet = () => {
+const PendingFeeGet = () => {
   const [data, setData] = useState();  
   const authToken = localStorage.getItem('token')  
-  const convertedLeadGetFunc = () => {
+  const PendingFeeGetFunc = () => {
     axios.get(`${API_BASE_URL}/convertedwithfeesdetails/`, {
       headers: {
         'Authorization': `Bearer ${authToken}`
@@ -24,7 +24,7 @@ const ConvertedLeadGet = () => {
   useEffect(()=>{    
     const fetchData = async () => {
       await Promise.all([
-        convertedLeadGetFunc(),
+        PendingFeeGetFunc(),
       ]);
     }
     fetchData();
@@ -36,7 +36,8 @@ const ConvertedLeadGet = () => {
   return (
     <div className="py-4 ">
       <div className="overflow-x-auto mx-4">
-        <table className="table-auto min-w-full divide-y divide-gray-200 mx-4">
+        <h1 className='text-center md:text-xl font-bold underline mb-4'>Pending Fees Details</h1>
+        <table className="min-w-full">
           <thead className="bg-gray-100  hidden md:table-header-group">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
@@ -48,15 +49,7 @@ const ConvertedLeadGet = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                 Fees Details 
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Lost Sales
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Package
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                Fees Due Date
-              </th>
+              
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                 Links
               </th>
@@ -77,4 +70,4 @@ const ConvertedLeadGet = () => {
   );
 };
 
-export default ConvertedLeadGet;
+export default PendingFeeGet;

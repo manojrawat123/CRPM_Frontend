@@ -36,7 +36,7 @@ const ConvertLeadForm = () => {
 
   useEffect(() => {
     serviceFunc();
-    paymentFunc();
+    paymentLeadFunc();
     profileFunc();
     leadGetById(id);
   }, []);
@@ -61,7 +61,7 @@ const ConvertLeadForm = () => {
     ),
   });
 
-  const paymentFunc = async () => {
+  const paymentLeadFunc = async () => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -69,7 +69,7 @@ const ConvertLeadForm = () => {
       },
     };
     axios
-      .get(`${API_BASE_URL}/payments/${id}/`, config)
+      .get(`${API_BASE_URL}/paymentsbylead/${id}/`, config)
       .then((res) => {
         console.log(res.data);
         setPaymetObj(res.data.payment_detail);
@@ -84,6 +84,8 @@ const ConvertLeadForm = () => {
         console.log(errr);
       });
   };
+  const totalPaymentAmount = paymentObj.reduce((sum, payment) => sum + parseInt(payment.payment_amount, 10), 0);
+
 
   if (!leadByIdObj) {
     return <><ConvertLeadFormLoading /></>;
@@ -118,8 +120,10 @@ const ConvertLeadForm = () => {
           </div>
         </div>
         <div className="md:w-[80%] w-[95%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
-
+        {console.log(paymentObj.reduce((sum, payment) => sum + parseInt(payment.payment_amount, 10), 0))}
           <Formik
+
+          
             initialValues={{
               CourseID: "",
               classMode: "",
@@ -127,24 +131,25 @@ const ConvertLeadForm = () => {
               courseEndDate: "",
               fee_payment_datetime: "",
               payment_id: "",
-              totalFee: "",
-              fee_received: "",
+              totalFee:  "" ,
+              fee_received:"",
               nextDueDate: "",
               receipt_number: "",
               clientRepresentative: "",
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { resetForm }) => {
+              
               setLoadingButton(true);
               console.log(values.package)
               // console.log(values.package.ServiceName)
               const authToken = localStorage.getItem("token");
               const brandID = localStorage.getItem("brand");
               console.log(values.package.length);
-              const packageSelected = leadByIdObj?.LeadServiceInterested.find((element)=> {
+              const packageSelected = leadByIdObj?.LeadServiceInterested.find((element) => {
                 return element.id == values.package
               })
-              
+
               const requestData = {
                 ...values,
                 Company: company,
@@ -173,7 +178,7 @@ const ConvertLeadForm = () => {
                     position: toast.POSITION.TOP_CENTER,
                   });
                   resetForm();
-                  paymentFunc();
+                  paymentLeadFunc();
                 })
                 .catch((err) => {
                   console.log(err);
@@ -203,7 +208,7 @@ const ConvertLeadForm = () => {
                       >
                         <option value="">Please Select</option>
                         {leadByIdObj?.LeadServiceInterested?.map((element, index) => {
-                         return <option key={index} value={element.id}>
+                          return <option key={index} value={element.id}>
                             {element.ServiceName}
                           </option>
                         })}
@@ -313,9 +318,10 @@ const ConvertLeadForm = () => {
                             const selected_payment_obj = paymentObj.find(
                               (element) => element.payment_id == id_payment
                             );
+                            
                             setSelectedPaymentObject(selected_payment_obj);
                             setFieldValue(
-                              "totalFee",
+                              "fee_received",
                               selected_payment_obj?.payment_amount
                             );
                             setFieldValue(

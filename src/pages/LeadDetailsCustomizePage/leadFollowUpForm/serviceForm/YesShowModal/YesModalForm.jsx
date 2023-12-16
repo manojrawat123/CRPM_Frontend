@@ -71,6 +71,15 @@ const YesModalForm = (props) => {
                     status: "error",
                     message: "Please Select Date"
                 });
+                setButton(false);
+                return
+            }
+            else if (new Date(leadStatusDate) < new Date()){
+                setCustomAlert({
+                    status: "error",
+                    message: "Date Must in Future"
+                });
+                console.log()
                 setButton(false)
                 return
             }
@@ -119,6 +128,7 @@ const YesModalForm = (props) => {
                 toast.success('Lead FollowUp Updated Sucessfully !!', {
                     position: toast.POSITION.TOP_CENTER,
                   });
+                  props.leadFollowUpFunc()
             }).catch((err)=>{
                 console.log(err)
                 setCustomAlert({

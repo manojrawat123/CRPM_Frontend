@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
   studentEmail: Yup.string().email('Invalid email').required('Student Email is required'),
   leadSource: Yup.string().required('Lead Source is required'),
   leadSourceDetails: Yup.string().required('Lead Source Details is required'),
-  countryCode: Yup.string().required('Country Code is required'),
+  // countryCode: Yup.string().required('Country Code is required'),
   country: Yup.string().required('Country is required'),
   location: Yup.string().required('Location is required'),
   phoneNumber: Yup.string()
@@ -47,8 +47,8 @@ const formattedTime = today.toTimeString().slice(0, 5);
 
 const MyDashboard = () => {
 
-  const { number, leadSubmitButton, setLeadSubmitButton, code, leadScource, leadScourceFunc, addLeadFunc, profileFunc, service, username, serviceFunc,leadCustomAlert, setLeadCustomAlert } = useContext(DataContext);
-  
+  const { number, leadSubmitButton, setLeadSubmitButton, code, leadScource, leadScourceFunc, addLeadFunc, profileFunc, service, username, serviceFunc, leadCustomAlert, setLeadCustomAlert } = useContext(DataContext);
+
   const ctCode = code
   const ctnumber = number
 
@@ -59,8 +59,8 @@ const MyDashboard = () => {
     studentEmail: '',
     leadSource: '',
     leadSourceDetails: '',
-    countryCode: ctCode,
-    country: '',
+    countryCode: "",
+    country: 'India',
     location: '',
     phoneNumber: ctnumber,
     state: '',
@@ -80,11 +80,11 @@ const MyDashboard = () => {
 
   return (
     <>
-    
-    
-    <ToastContainer />
+
+
+      <ToastContainer />
       <div className="w-[100%] py-10 bg-blue-50">
-      
+
         <div className="sm:w-[80%] w-[90%]  mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
           <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">Add New Lead</h2>
           <Formik
@@ -95,37 +95,18 @@ const MyDashboard = () => {
             {({ values, handleSubmit, resetForm, setFieldValue, handleBlur }) => (
               <Form>
                 <div className="px-6 pb-4">
-                  <h4 className="text-green-600 mb-2 text-center underline text-xl">Lead Details</h4>
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <div className="w-full ">
-                        <h4 className="text-green-600 mb-2">Lead Date</h4>
-                        <Field
-                          type="date"
-                          name="leadDate"
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        />
-                        <ErrorMessage name="leadDate" component="div" className="text-red-500" />
-                      </div>
-                    </div>
+                  {/* <h4 className="text-green-600 mb-2 text-center underline text-xl">Lead Details</h4> */}
+                  <div className="">
+                   
 
-                    <div>
-                      <div className="w-full">
-                        <h4 className="text-green-600 mb-2">Lead Time</h4>
-                        <Field
-                          type="time"
-                          name="leadTime"
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        />
-                        <ErrorMessage name="leadTime" component="div" className="text-red-500" />
-                      </div>
-                    </div>
+
                   </div>
 
                   {/* Second Input Tag */}
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="text-green-600 mb-2">Student Name</h4>
+                  <div className="mb-4 grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-4">
+
+                  <div>
+                      <h4 className="text-green-600 mb-2">Student Name <span className="text-red-500">*</span></h4>
                       <div className={"w-full relative col-span-1 "}>
                         <Field
                           type="text"
@@ -138,9 +119,8 @@ const MyDashboard = () => {
                       </div>
                       <ErrorMessage name="studentName" component="div" className="text-red-500" />
                     </div>
-
                     <div>
-                      <h4 className="text-green-600 mb-2">Student Email</h4>
+                      <h4 className="text-green-600 mb-2">Student Email <span className="text-red-500">*</span></h4>
                       <div className="w-full relative">
                         <Field
                           type="email"
@@ -153,31 +133,92 @@ const MyDashboard = () => {
                       </div>
                       <ErrorMessage name="studentEmail" component="div" className="text-red-500" />
                     </div>
-                  </div>
-
-                  {/* ... (remaining fields) ... */}
-                  
-                  {/* ... (remaining fields) ... */}
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">Lead Source</h4>
+                      <h4 className="text-green-600 mb-2">Phone Number <span className="text-red-500">*</span></h4>
+                      <div className="w-full relative">
                         <Field
-                          as="select"
-                          name="leadSource"
+                          type="number"
+                          name="phoneNumber"
+                          placeholder="Phone Number"
+                          className="pl-8 w-full py-2 px-3 border peer border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                        />
+                        <LocalPhoneIcon className='absolute top-2 border-r-2 left-2  peer-focus:text-green-600' />
+                      </div>
+                      <ErrorMessage name="phoneNumber" component="div" className="text-red-500" />
+                    </div>
+                    <div>
+                      <div className="w-full ">
+                        <h4 className="text-green-600 mb-2">Lead Date <span className="text-red-500">*</span></h4>
+                        <Field
+                          type="date"
+                          name="leadDate"
                           className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        >
-                          <option value="">--------Select------</option>
-                          {leadScource?.map((element1, index) => (
-                            <option key={index} value={element1.LeadSource}>
-                              {element1.LeadSource}
-                            </option>
-                          ))}
-                        </Field>
-
-                        <ErrorMessage name="leadSource" component="div" className="text-red-500" />
+                        />
+                        <ErrorMessage name="leadDate" component="div" className="text-red-500" />
                       </div>
                     </div>
+
+                    <div>
+                      <div className="w-full">
+                        <h4 className="text-green-600 mb-2">Lead Time <span className="text-red-500">*</span></h4>
+                        <Field
+                          type="time"
+                          name="leadTime"
+                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                        />
+                        <ErrorMessage name="leadTime" component="div" className="text-red-500" />
+                      </div>
+                    </div>
+
+
+                    <div>
+                      <h4 className="text-green-600 mb-2">Course <span className="text-red-500">*</span></h4>
+
+
+                      <Select
+                        name="course"
+                        options={service?.map((element, index) => {
+                          return { value: element?.id, label: element?.ServiceName }
+                        })}
+                        isMulti
+                        onChange={(selectedOptions) => setFieldValue('course', selectedOptions)}
+                        onBlur={handleBlur}
+                        value={values.course}
+                      />
+                      <ErrorMessage name="course" component="div" className="text-red-500" />
+                    </div>
+
+                    <div>
+                      <h4 className="text-green-600 mb-2">Lead Source <span className="text-red-500">*</span></h4>
+                      <Field
+                        as="select"
+                        name="leadSource"
+                        className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                      >
+                        <option value="">--------Select------</option>
+                        {leadScource?.map((element1, index) => (
+                          <option key={index} value={element1.LeadSource}>
+                            {element1.LeadSource}
+                          </option>
+                        ))}
+                      </Field>
+
+                      <ErrorMessage name="leadSource" component="div" className="text-red-500" />
+                    </div>
+                    <div>
+                      <h4 className="text-green-600 mb-2">Class Mode <span className="text-red-500">*</span></h4>
+                      <Field
+                        as="select"
+                        name="classMode"
+                        className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                      >
+                        <option value="">----Select------</option>
+                        <option>Online</option>
+                        <option>Offline</option>
+                      </Field>
+                      <ErrorMessage name="classMode" component="div" className="text-red-500" />
+                    </div>
+
 
                     <div>
                       <div>
@@ -192,51 +233,49 @@ const MyDashboard = () => {
                         <ErrorMessage name="leadSourceDetails" component="div" className="text-red-500" />
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">Country Code</h4>
-                        <Field
-                          as="select"
-                          name="countryCode"
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-
-                        >
-                          <option value="">--------Select------</option>
-                          {countryList.map((country, index) => (
-                            <option key={index} value={country?.code}>
-                              {country.code}
-                            </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage name="countryCode" component="div" className="text-red-500" />
-                      </div>
+                      <h4 className="text-green-600 mb-2">Country Code</h4>
+                      <Field
+                        as="select"
+                        name="country"
+                        className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                       defaultValue={"India"}
+                        
+                      >
+                        <option value="">--------Select------</option>
+                        {countryList.map((country, index) => (
+                          <option key={index} value={country?.name}>
+                           {country.code} - {country.name}
+                          </option>
+                        ))}
+                      </Field>
+                      <ErrorMessage name="country" component="div" className="text-red-500" />
                     </div>
-
                     <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">Country</h4>
-                        <Field
-                          as="select"
-                          name="country"
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        >
-                          <option value="">--------Select------</option>
-                          {countryList.map((country, index) => (
-                            <option key={index} value={country?.name}>
-                              {country.name}
-                            </option>
-                          ))}
-                        </Field>
-                        <ErrorMessage name="country" component="div" className="text-red-500" />
-                      </div>
+                      <h4 className="text-green-600 mb-2">Lead Representative</h4>
+                      <Field
+                        as="select"
+                        name="leadRepresentative"
+                        className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                      >
+                        <option>{username}</option>
+                      </Field>
+                      <ErrorMessage name="leadRepresentative" component="div" className="text-red-500" />
                     </div>
-                  </div>
-
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
+                        <h4 className="text-green-600 mb-2">Parent Name</h4>
+                        <Field
+                          type="text"
+                          name="parentName"
+                          required
+                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                          placeholder='Parent Name'
+                        />
+                        <ErrorMessage name="parentName" component="div" className="text-red-500" />
+                      </div>
+
+                      <div>
                       <h4 className="text-green-600 mb-2">Location</h4>
                       <div className='relative'>
                         <Field
@@ -251,125 +290,28 @@ const MyDashboard = () => {
                       <ErrorMessage name="location" component="div" className="text-red-500" />
                     </div>
 
-                    <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">Phone Number</h4>
-                        <div className="w-full relative">
-                          <Field
-                            type="number"
-                            name="phoneNumber"
-                            placeholder="Phone Number"
-                            className="pl-8 w-full py-2 px-3 border peer border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                          />
-                          <LocalPhoneIcon className='absolute top-2 border-r-2 left-2  peer-focus:text-green-600' />
-                        </div>
-                        <ErrorMessage name="phoneNumber" component="div" className="text-red-500" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">State</h4>
-                        <Field
-                          type="text"
-                          name="state"
-                          required
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                          placeholder='State'
-                        />
-                        <ErrorMessage name="state" component="div" className="text-red-500" />
-                      </div>
-                    </div>
 
                     <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">Parent Name</h4>
-                        <Field
-                          type="text"
-                          name="parentName"
-                          required
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                          placeholder='Parent Name'
-                        />
-                        <ErrorMessage name="parentName" component="div" className="text-red-500" />
-                      </div>
-                    </div>
-                  </div>
-
-
-                  {/* Remaining Field */}
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <div>
-                        <h4 className="text-green-600 mb-2">Lead Representative</h4>
-                        <Field
-                          as="select"
-                          name="leadRepresentative"
-                          className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        >
-                          <option>{username}</option>
-                        </Field>
-                        <ErrorMessage name="leadRepresentative" component="div" className="text-red-500" />
-                      </div>
-                    </div>
-                    <div>
-                      {/* Placeholder */}
-                    </div>
-                  </div>
-
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-
-
-                    <div>
-                      {/* Placeholder */}
-                    </div>
-                  </div>
-                  {/* Remaining Field end */}
-                  {/* end remaining fileds */}
-                  <div>
-                    <h4 className="text-green-600 mb-2 underline text-xl text-center">Course Details</h4>
-                  </div>
-                  <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="text-green-600 mb-2">Course</h4>
-                     
-
-              <Select
-                  name="course"
-                  options={service?.map((element, index)=>{
-                    return { value: element?.id , label: element?.ServiceName }
-                  })}
-                  isMulti
-                  onChange={(selectedOptions) => setFieldValue('course', selectedOptions)}
-                  onBlur={handleBlur}
-                  value={values.course}
-                />
-                <ErrorMessage name="course" component="div" className="text-red-500" />
-                    </div>
-                    <div>
-                      <h4 className="text-green-600 mb-2">Class Mode</h4>
+                      <h4 className="text-green-600 mb-2">State</h4>
                       <Field
-                        as="select"
-                        name="classMode"
+                        type="text"
+                        name="state"
+                        required
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                      >
-                        <option value="">----Select------</option>
-                        <option>Online</option>
-                        <option>Offline</option>
-                      </Field>
-                      <ErrorMessage name="classMode" component="div" className="text-red-500" />
+                        placeholder='State'
+                      />
+                      <ErrorMessage name="state" component="div" className="text-red-500" />
                     </div>
+
                   </div>
                   {/* Button Code */}
                   <div className="mb-4">
                     <button
                       type="submit"
-                      
+
                       className="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300"
                     >
-                      {leadSubmitButton?<> &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19}/></>: <>Submit</>}
+                      {leadSubmitButton ? <> &nbsp;&nbsp;&nbsp;<CircularProgress color="inherit" size={19} /></> : <>Submit</>}
                     </button>
                   </div>
                 </div>

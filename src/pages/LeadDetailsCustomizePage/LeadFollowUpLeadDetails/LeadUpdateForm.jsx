@@ -32,7 +32,7 @@ const LeadUpdateForm = (props) => {
     setLeadUpdateButton(true);
       setSubmitting(false); 
     
-    axios.put(`${API_BASE_URL}/lead/${id}/`, {
+    axios.put(`${API_BASE_URL}/lead/${props.leadObj.id}/`, {
         "LeadName": values.name, 
     "LeadPhone":values.phone, 
     "LeadEmail":values.email, 
@@ -42,7 +42,8 @@ const LeadUpdateForm = (props) => {
         }
       }).then((value)=>{
         console.log(value);
-        setUpdateStatus("success")
+        setUpdateStatus("success");
+        props.leadFollowUpFunc();
       }).catch((err)=>{
         console.log(err);
         setUpdateStatus("error");
@@ -53,10 +54,13 @@ const LeadUpdateForm = (props) => {
   };
 
   return (
-<>{updateStatus? <Alert severity={`${updateStatus}`}>
+<>
+{
+updateStatus? <Alert severity={`${updateStatus}`}>
   <AlertTitle>{updateStatus=="success"?"Success": "Error"}</AlertTitle>
   {updateStatus == "success"? "Data Updated Sucessfully": "Some Error Occured"} — <strong>check it out!</strong>
-</Alert>: <></>}
+</Alert>: <></>
+}
     {/* Modal content goes here */}
     <div
   className={`fixed ${props?.modalIsOpen ? 'block' : 'hidden'}`}

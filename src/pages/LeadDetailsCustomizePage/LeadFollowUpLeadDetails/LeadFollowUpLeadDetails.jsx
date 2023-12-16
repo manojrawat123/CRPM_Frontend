@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import LeadUpdateForm from "./LeadUpdateForm";
 import Modal from "react-modal";
+import { CheckCircleOutline, CopyAll, CopyAllOutlined } from "@mui/icons-material";
+import { copy } from "clipboard";
 
 const LeadFollowUpLeadDetails = (props) => {
   console.log(props);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { id } = useParams();
+  const [numberCopy, setNumberCopy] = useState(false);
 
   return (
     <>
@@ -28,15 +31,22 @@ const LeadFollowUpLeadDetails = (props) => {
             leadObj={props?.leadObj}
             modalIsOpen={modalIsOpen}
             setModalIsOpen={setModalIsOpen}
+            leadFollowUpFunc={props.leadFollowUpFunc}
           />
         </Modal>
-        <div className=" grid sm:grid-cols-2 grid-cols-1 text-center bg-gray-200 border border-solid border-green-500 my-4 rounded-xl">
-          <h1 className="text-xl font-bold p-2 ">{props.leadObj?.LeadName}</h1>
-          <div className="my-3">
-            <span className="bg-white px-2 py-1 ">+91</span>&nbsp;
-            <span className="bg-white px-4 py-1">
-              {props.leadObj?.LeadPhone}&nbsp;
-            </span>
+        <div className="  text-center bg-gray-200 border border-solid border-green-500 my-1 rounded-xl">
+          <h1 className="text-xl font-bold p-2 ">{props.leadObj?.LeadName}  <span className="bg-white px-2 py-1 text-base">+91</span>&nbsp;
+            <span className="bg-white px-4 py-1 text-base">
+              {props.leadObj?.LeadPhone}&nbsp; 
+            </span> <button onClick={()=>{
+              copy(props.leadObj.LeadPhone);
+              setNumberCopy(true);
+              setTimeout(() => {
+                setNumberCopy(false);
+              }, 2000);
+            }}>{numberCopy? <CheckCircleOutline className="text-green-500 text-base"/> : <CopyAllOutlined />}</button></h1>
+          <div className="my-1">
+            
           </div>
         </div>
         <div className="grid grid-cols-5 gap-10 border border-green-600 p-2 text-left text-green-600 font-semibold rounded-t-xl">

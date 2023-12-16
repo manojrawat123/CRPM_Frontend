@@ -1,10 +1,10 @@
 import axios from 'axios';
+import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react'
-import API_BASE_URL from "../../config";
 import { NavLink } from 'react-router-dom';
 
 
-const VisitSupport = (props) => {
+const DemoScheduleSupport = (props) => {
 
     console.log(props.visit);
 
@@ -34,15 +34,16 @@ const VisitSupport = (props) => {
             <br />
           Followup Status:
           </span>
-          Visit Scheduled
+          Demo Schedule
         </td>
         <td className="border border-black px-4 py-2">
         
           <span className="font-bold">
             <br />
-            Visit Scheduled Date:
+            Demo Schedule Date:
           </span>
-          {props.visit?.LeadEventDate}
+          {props.visit?.LeadStatusDate ? format(new Date(props.visit.LeadStatusDate),"dd MMM yyyy h a" ) : ""}
+
             <br />
           <span className="font-bold">
             Representative:
@@ -89,13 +90,13 @@ const VisitSupport = (props) => {
             </div>
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Followup Status:</div>
-              <div className='col-span-3'>Visit Scheduled</div>
+              <div className='col-span-3'>Demo Schedule</div>
             </div>
 
 
             <div className='grid grid-cols-5 gap-10'>
-              <div className='col-span-2 font-bold'> Visit Scheduled Date:</div>
-              <div className='col-span-3'>{props.visit?.LeadEventDate}</div>
+              <div className='col-span-2 font-bold'> Demo Schedule Date:</div>
+              <div className='col-span-3'> {props.visit?.LeadStatusDate ? format(new Date(props.visit.LeadStatusDate),"dd MMM yyyy h a" ) : ""}</div>
             </div>
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Lead Representative:</div>
@@ -125,4 +126,4 @@ const VisitSupport = (props) => {
   )
 }
 
-export default VisitSupport
+export default DemoScheduleSupport

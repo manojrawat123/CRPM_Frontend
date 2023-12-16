@@ -8,7 +8,7 @@ const LeadFollowUpForm = (props) => {
   const [yesModalOpen, setYesModalOpen] = useState(false);
   const [noModalOpen, setNoModalOpen] = useState(false);
   const [visitDemoModalOpen, setVisitDemoModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState("");
+  const [selectedService, setSelectedService] = useState(props.leadObj.LeadServiceInterested[0].id);
   const [feesOffered,  setFeesOffered] = useState();
 
   useEffect(() => {}, []);
@@ -17,11 +17,11 @@ const LeadFollowUpForm = (props) => {
     <>
     <ToastContainer />
       <div className="text-center bg-gray-100 rounded-xl ">
-        <h1 className=" text-2xl  font-bold p-2 col-span-3 text-center underline text-green-500 inline-block ">
+        <h1 className=" text-2xl  font-bold col-span-3 text-center underline text-green-500 inline-block ">
           Lead Follow Up Form.
         </h1>
         <select
-          className="outline-green-500 border-green-500  border-solid border rounded sm:w-[15rem] w-[8rem] h-[2rem]"
+          className="outline-green-500 border-green-500  border-solid border rounded sm:w-[15rem] w-[8rem] h-[2rem] mb-2"
           value={selectedService}
           onChange={(e) => {
             setSelectedService(e.target.value);
@@ -37,22 +37,22 @@ const LeadFollowUpForm = (props) => {
           })}
         </select>
       </div>
-      <div className="mx-4 pt-3 rounded grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <div className="">
+      <div className="mx-4 pt-3 rounded grid grid-cols-1  gap-4 ">
+        <div className="bg-gray-200">
           <button
-            className={`rounded py-2 px-4 w-full mx-[.5%] my-4  ${"bg-blue-500 text-white"}`}
+            className={`rounded py-2 px-4 w-full mx-[.5%] my-4  ${"bg-gray-200"} border border-solid`}
           >
             Did You talk to Customer
           </button>
           {/* Buttons of Yes & no */}
-          <div className="my-4 mx-4">
+          {/* <div className="my-4 mx-4">
             <label htmlFor="" >Fees Offered</label>
             <input type="number" className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600 "
             value={feesOffered}
             onChange={(e)=>{
                 setFeesOffered(e.target.value);
             }}/>
-          </div>
+          </div> */}
 
           <div className={` grid grid-cols-2 gap-4 mx-4 mb-4`}>
             <button
@@ -64,12 +64,12 @@ const LeadFollowUpForm = (props) => {
                       });
                       return;
                 }
-                if (feesOffered === null || feesOffered === undefined || feesOffered === ""){
-                    toast.error(`Fees Offered can't be null`, {
-                        position: toast.POSITION.TOP_CENTER,
-                      });
-                      return;
-                }
+                // if (feesOffered === null || feesOffered === undefined || feesOffered === ""){
+                //     toast.error(`Fees Offered can't be null`, {
+                //         position: toast.POSITION.TOP_CENTER,
+                //       });
+                //       return;
+                // }
                 setYesModalOpen(true);
               }}
             >
@@ -85,14 +85,7 @@ const LeadFollowUpForm = (props) => {
                         position: toast.POSITION.TOP_CENTER,
                       });
                       return;
-                }
-                if (feesOffered === null || feesOffered === undefined || feesOffered === ""){
-                    toast.error(`Fees Offered can't be null`, {
-                        position: toast.POSITION.TOP_CENTER,
-                      });
-                      return;
-                }
-                
+                }                
                 setNoModalOpen(true);
               }}
             >
@@ -130,6 +123,7 @@ const LeadFollowUpForm = (props) => {
         setSelectedService={setSelectedService}
         feesOffered={feesOffered}
         setFeesOffered={setFeesOffered}
+        leadFollowUpFunc={props.leadFollowUpFunc}
       />
 
       {/* No Modal Modal */}
@@ -140,6 +134,7 @@ const LeadFollowUpForm = (props) => {
         setSelectedService={setSelectedService}
         feesOffered={feesOffered}
         setFeesOffered={setFeesOffered}
+        leadFollowUpFunc={props.leadFollowUpFunc}
       />
 
       {/* Visit Demo Modal */}
@@ -150,6 +145,7 @@ const LeadFollowUpForm = (props) => {
         setSelectedService={setSelectedService}
         feesOffered={feesOffered}
         setFeesOffered={setFeesOffered}
+        leadFollowUpFunc={props.leadFollowUpFunc}
       />
     </>
   );

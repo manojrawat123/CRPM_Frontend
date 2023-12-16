@@ -40,6 +40,7 @@ const VisitDemoModal = (props) => {
   setVisitDemoModalOpen={props.setVisitDemoModalOpen}
   selectedService={props.selectedService}
   setSelectedService={props.setSelectedService}
+  leadFollowUpFunc={props.leadFollowUpFunc}
   />
         </Modal>
     </>

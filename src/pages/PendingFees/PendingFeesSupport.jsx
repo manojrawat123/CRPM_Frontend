@@ -12,8 +12,7 @@ const MySupport = (props) => {
 
   return (
     <>
-
-      <tbody className='md:table-footer-group hidden'>
+      <tbody className='md:table-footer-group hidden border'>
         <tr key={props.index} className={`${props.index % 2 == 0 ? `bg-[#f5f5dc]` : `bg-white`}  `}>
           <td className="px-6 py-4 whitespace-nowrap"> <span className='font-bold mr-4'> Converted ID: </span> {props?.items?.ConvertedID}
             <br />
@@ -31,6 +30,11 @@ const MySupport = (props) => {
               Name:
             </span>
             {props.items?.lead_obj?.LeadName}
+            <br />
+            <span className='font-bold mr-4'>
+              Course Name:
+            </span>
+            {props?.items?.CourseID.ServiceName ? props?.items?.CourseID.ServiceName : "---"}
             <br />
             <span className='font-bold mr-4'>
               Lead Representative:
@@ -56,13 +60,16 @@ const MySupport = (props) => {
             <span className='font-bold mr-4'>
               Balance:
             </span>
+
             {props?.items?.pending_fees}
+            <br />
+            <span className='font-bold mr-4'>
+              Next Due Date:
+            </span>
+            {props?.items?.NextDueDate ? props?.items?.NextDueDate : "---"}
           </td>
-          <td className="px-6 py-4 whitespace-nowrap">{props?.items?.LostSales ? props?.items?.LostSales : "---"}</td>
-          <td className="px-6 py-4 whitespace-nowrap">{props?.items?.CourseID.ServiceName ? props?.items?.CourseID.ServiceName : "---"}</td>
-          <td className="px-6 py-4 whitespace-nowrap">{props?.items?.NextDueDate ? props?.items?.NextDueDate : "---"}</td>
           <td className="px-6 py-4 whitespace-nowrap">
-            <NavLink to={`/addpendingfee/${props?.items?.LeadID}`}>
+            <NavLink to={`/addpendingfee/${props?.items?.ConvertedID}`}>
               <button className="bg-blue-500 hover:bg-blue-600 w-[10rem] text-white font-semibold py-2 px-4 rounded focus:outline-none">
                 Add Pending Fee
               </button>
@@ -131,10 +138,10 @@ const MySupport = (props) => {
               <div className='col-span-2 font-bold'>  Balance:</div>
               <div className='col-span-3'>  {props?.items?.pending_fees}</div>
             </div>
-            <div className='grid grid-cols-5 gap-10'>
+            {/* <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Lost Sale:</div>
               <div className='col-span-3'>{props?.items?.LostSales ? props?.items?.LostSales : "---"}</div>
-            </div>
+            </div> */}
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Course Name:</div>
               <div className='col-span-3'>{props?.items?.CourseID.ServiceName ? props?.items?.CourseID.ServiceName : "---"}</div>
@@ -146,7 +153,7 @@ const MySupport = (props) => {
 
 
             <div className='flex items-center justify-center my-4'>
-              <NavLink to={`/addpendingfee/${props?.items?.LeadID}`}>
+              <NavLink to={`/addpendingfee/${props?.items?.ConvertedID}`}>
                 <button className="bg-blue-500 hover:bg-blue-600 w-[10rem] text-white font-semibold py-2 px-4 rounded focus:outline-none">
                   Add Pending Fee
                 </button>

@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from "yup";
 import Form2 from './Form2';
 import Form3 from './Form3';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import API_BASE_URL from "../../config";
+import { CircularProgress } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import LeadDetailsUpdate from './LeadDetailsUpdateForm';
 
 
 const CustomerRegister = () => {
 
   const [profilePhoto, setProfilePhoto] = useState();
+  const [button, setButton] = useState(false);
   const token = localStorage.getItem("token");
   const { id } = useParams();
   
@@ -19,26 +21,32 @@ const CustomerRegister = () => {
       <div className="w-[100%] py-10 bg-blue-50">
     <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
         <form onSubmit={(e)=>{
+          setButton(true);
           e.preventDefault()
-          axios.put(`${API_BASE_URL}/customer/${id}/`,{
-            CustomerPhoto: profilePhoto
-          },{
+
+          const formData = new FormData();
+          formData.append('CustomerPhoto', profilePhoto);
+          axios.put(`${API_BASE_URL}/customer/${id}/`,formData,{
             headers : {
               'Authorization': `Bearer ${token}`
             }
           }).then((value)=>{
-            alert("Data Updated Sucessfully!!");
-            console.log(value.data);
+            toast.success('Details Update Sucessfully', {
+              position: toast.POSITION.TOP_CENTER,
+            });
           }).catch((err)=>{
-            console.log(err);
-            alert("Error", err);
+            toast.error('Internal Server Error', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }).finally(()=>{
+            setButton(false);
           })
         }}>
 <div className='px-6'>
 <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">Customer Registration Form</h2>
       {/* File Input for Profile Photo */}
       <div className="mb-4">
-      
+      <ToastContainer />
 
         <label className="text-green-600 mb-2 block">Profile Photo</label>
         <input
@@ -46,6 +54,7 @@ const CustomerRegister = () => {
           name="profilePhoto"
           onChange={(e)=>{
             const uploadedFile = e.target.files[0];
+            // file = new File(uploadedFile);
             setProfilePhoto(uploadedFile)
           }}
           required
@@ -59,7 +68,7 @@ const CustomerRegister = () => {
           type="submit"
           className=" bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-300"
           >
-          Update
+         {button ? <CircularProgress color='inherit' size={19}/> : "Update"}
         </button>
         <button
           type="button"
@@ -78,6 +87,7 @@ const CustomerRegister = () => {
 
 <Form2 />
 <Form3 />
+<LeadDetailsUpdate />
 </div>
 
   )

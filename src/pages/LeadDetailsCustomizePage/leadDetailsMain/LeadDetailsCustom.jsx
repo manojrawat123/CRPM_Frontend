@@ -41,16 +41,16 @@ const LeadDetailsCustom = (props) => {
 
   return (
     <>
-      <div className="grid grid-cols-2  md:m-4 gap-5">
-        <div className="col-span-2 md:col-span-1">
+      <div className="grid lg:grid-cols-3  md:m-4 gap-5">
+        <div className="">
           {leadObj ? (
-            <LeadFollowUpLeadDetails leadObj={leadObj} />
+            <LeadFollowUpLeadDetails leadObj={leadObj} leadFollowUpFunc={leadFollowUpFunc}/>
           ) : (
             <LeadFollowUpLeadLoader />
           )}
         </div>
 
-        <div className="col-span-2 md:col-span-1">
+        <div className="">
           {leadObj ? (
             <LeadFollowUpLeadService
               leadObj={leadObj}
@@ -62,9 +62,9 @@ const LeadDetailsCustom = (props) => {
           )}
         </div>
 
-        <div className="col-span-2 m-4 border border-solid border-green-500 rounded-xl">
+        <div className=" m-4 border border-solid border-green-500 rounded-xl">
           {leadObj ? (
-            <LeadFollowUpForm leadObj={leadObj} />
+            <LeadFollowUpForm leadObj={leadObj} leadFollowUpFunc={leadFollowUpFunc}/>
           ) : (
             <LeadFollowUpFormLoading />
           )}

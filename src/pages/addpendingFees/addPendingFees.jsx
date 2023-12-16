@@ -32,7 +32,6 @@ const AddFeesDetails = () => {
       return;
     }
     axios.get(`${API_BASE_URL}/payments/${id}/`, config).then((res) => {
-      console.log(res.data);
       setPaymetObj(res.data);
       setFeesObj(res.data.feesDetails[0]);
       setLeadObj(res.data.lead_details);
@@ -54,17 +53,13 @@ const AddFeesDetails = () => {
   }
   else if (load === true) {
     return (
-
       <>
       <ToastContainer />
       <div className="w-[100%] py-10 bg-blue-50">
-
         <div className='md:mx-4 mx-2 bg-white rounded-full p-2 inline-block top-5 hover:bg-green-200 sticky'>
-        <NavLink to={'/convertedleaddata'} className={'inline-block'}>
+        <NavLink to={'/pendingfees'} className={'inline-block'}>
             <ArrowBack className='inline-block'/>
         </NavLink>
-        
-
         </div>
         
         <div className="w-[80%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
@@ -94,10 +89,11 @@ const AddFeesDetails = () => {
             onSubmit={(values, { resetForm }) => {
               setLoadingButton(true);
               const feeTracerData = {
-                lead: id,
+                lead: leadObj.id,
                 fee_received: values?.fees_paid,
                 fee_created_datetime: feesObj?.fee_created_datetime,
                 fee_payment_datetime: feesObj?.fee_payment_datetime,
+                next_due_date: values?.next_due_date,
                 receipt_number: values?.receipt_number,
                 student: feesObj?.student,
                 payment_mode: feesObj?.payment_mode,
@@ -108,7 +104,8 @@ const AddFeesDetails = () => {
                 brand: feesObj?.brand,
                 converted_id: feesObj?.converted_id,
                 updated_by: feesObj?.updated_by,
-                payment_id: values?.payment_id
+                payment_id: values?.payment_id,
+                next_payment_date: values?.next_due_date
               };
               console.log(feeTracerData)
               console.log(values?.fees_paid);
@@ -153,7 +150,7 @@ const AddFeesDetails = () => {
                       >
                         <option value="">---- Select Student ----</option>
                         <option>
-                          {`${id}-${leadObj?.LeadName}-${paymentObj?.done_payment}`}
+                        {`${id}-${leadObj?.LeadName}-${paymentObj?.done_payment}`}
                         </option>
 
                       </Field>

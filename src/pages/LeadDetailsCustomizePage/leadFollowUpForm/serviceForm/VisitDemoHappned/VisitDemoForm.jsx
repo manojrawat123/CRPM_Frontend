@@ -52,6 +52,14 @@ const VisitDemoForm = (props) => {
                     setButton(false)
                     return 
                 }
+               else if (visitHappenedDate > new Date().getDate){
+                    setCustomAlert({
+                        status: "error",
+                        message: "Date Must in Past"
+                    });
+                    setButton(false)
+                    return
+                }
                 else if ( visitHappenedTime == null || visitHappenedTime == "" || visitHappenedTime == undefined){
                     setCustomAlert({
                         status: "error",
@@ -64,6 +72,14 @@ const VisitDemoForm = (props) => {
                     setCustomAlert({
                         status: "error",
                         message: "Please Select Next Follow Up Date"
+                    });
+                    setButton(false)
+                    return 
+                }
+                else if ( new Date(nextFollowupDate) < new Date()){
+                    setCustomAlert({
+                        status: "error",
+                        message: "Next Follow Date cann't be past date"
                     });
                     setButton(false)
                     return 
@@ -104,6 +120,7 @@ const VisitDemoForm = (props) => {
                     toast.success('Lead FollowUp Updated Sucessfully !!', {
                         position: toast.POSITION.TOP_CENTER,
                       });
+                      props.leadFollowUpFunc()
                 }).catch((err)=>{
                     console.log(err)
                     setCustomAlert({
@@ -119,8 +136,8 @@ const VisitDemoForm = (props) => {
 }
 
     const buttons = [    
-        { id: 1, label: "Visit happened", status: "Visit scheduled" },
-        { id: 2, label: "Demo happened" , status: "Demo scheduled"},
+        { id: 1, label: "Visit happened", status: "Visit Happened" },
+        { id: 2, label: "Demo happened" , status: "Demo Happened"},
     ];
 
     const handleButtonClick = (buttonId, button) => {

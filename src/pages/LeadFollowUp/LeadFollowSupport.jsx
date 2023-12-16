@@ -42,11 +42,8 @@ const LeadFollowUpSupport = (props) => {
             {props?.items?.LeadStatusDate?.substring(0, 10)}{" "}
             {props?.items?.LeadStatusDate?.substring(11, 16)}
             <br />
-            <span className="font-bold mr-4">UTM Content:</span>
-            {props?.items?.TotalFee}
-            <br />
             <span className="font-bold mr-4">Event Status:</span>
-            {props?.items?.LeadEvent}
+            {props?.items?.LeadEvent ? props?.items?.LeadEvent : "----"}
             <br />
             <span className="font-bold mr-4">Call Representative:</span>
             {props?.items?.LeadID?.LeadRepresentativePrimary?.name}
@@ -54,10 +51,8 @@ const LeadFollowUpSupport = (props) => {
             <span className="font-bold mr-4">Course:</span>
             {props?.items?.LeadServiceInterested?.ServiceName}
             <br />
-            <span className="font-bold mr-4">Remarks:</span>
-            <br />
             <span className="font-bold mr-4">Lead Status:</span>
-            {props?.items?.LeadStatus}
+            {props?.items?.LeadStatus ? props?.items?.LeadStatus : "----"}
             <br /> 
           </td>
           <td className="px-6 py-4   border border-gray-300">

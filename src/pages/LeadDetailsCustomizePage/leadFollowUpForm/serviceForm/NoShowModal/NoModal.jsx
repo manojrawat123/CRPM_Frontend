@@ -44,6 +44,7 @@ const NoModal = (props) => {
         setSelectedService={props.setSelectedService}
         feesOffered={props.feesOffered}
         setFeesOffered={props.setFeesOffered}
+        leadFollowUpFunc={props.leadFollowUpFunc}
         />
  </div>
         </Modal>

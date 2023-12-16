@@ -10,7 +10,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ArrowDownward, ArrowDownwardOutlined, ArrowDownwardTwoTone, ExpandMore, More, MoreHoriz, MoreHorizOutlined } from '@mui/icons-material';
 
 const MobileNavbar = () => {
-
     const [navItem, setNavItem] = useState([]);
     const token = localStorage.getItem("token");
     const [display1, setDisplay1] = useState('none');
@@ -55,12 +54,13 @@ const MobileNavbar = () => {
        </div>
        {/* Mobile Menu End */}
            <nav className={`${showMenu?'h-[0rem] none': 'block'} absolute z-10  text-center shadow-2xl overflow-hidden bg-white px-12 right-0 rounded-xl transition-height duration-500 `}>
+            
                 <div className="container  flex justify-between items-center mx-8">
                     <ul className="space-x-6 ">
                         {navItem?.filter((item) => item.Level === 0)?.map((element, index) => {
                             return (
                                     <li key={index}
-                                        className="block py-[.8rem] {{home}} hover:underline"
+                                        className="block py-[.8rem] hover:underline"
                                         onClick={()=>{
                                             if(display1 == element.ID){
                                                 setDisplay1("");

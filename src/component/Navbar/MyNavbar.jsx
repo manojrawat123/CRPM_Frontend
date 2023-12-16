@@ -5,7 +5,8 @@ import Button from '@mui/material/Button';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import { DataContext, DataProvider } from '../../context';
 import API_BASE_URL, { API_ROUTE_URL } from "../../config";
-import MobileNavbar from './DummyNavbar';
+import MobileNavbar from './MobileNavbar';
+
 
 
 const MyNavbar = () => {

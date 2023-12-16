@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import API_BASE_URL from "../../config";
 import { format } from 'date-fns';
 import { NavLink } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 
 const RegisteredSupport = (props) => {
@@ -24,9 +25,18 @@ const RegisteredSupport = (props) => {
             <span className="font-bold">Pending Fee -: &nbsp;  </span>
             {props?.student?.pending_fees}
             <br />
+            <span className="font-bold">Refund Fees -: &nbsp;  </span>
+            {props?.student?.fees_refund}
+            <br />
             <span className='font-bold'>Primary Course Name -: &nbsp; </span>
             {props?.student?.CourseID?.ServiceName}</td>
           <td className="border border-gray-300 px-4 py-2">
+
+            <span className='font-bold '>
+              Student Name -: &nbsp;
+            </span>
+            {props.student.lead_obj?.LeadName}
+            <br />
 
             <span className='font-bold '>
               Phone -: &nbsp;
@@ -78,13 +88,23 @@ const RegisteredSupport = (props) => {
 
 
           <td className="border border-gray-300 px-4 py-2">
-            <NavLink to={`/leaddetails/${props.student?.lead_obj?.id}`}>
+            <NavLink to={`/student_details/${props.student?.ConvertedID}`}>
 
               <button
                 className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out"
               >
                 Show Details
               </button>
+            </NavLink>
+            <br />
+            <br />
+            <NavLink to={`/refund/${props.student?.ConvertedID}`}>
+
+              <Button
+              variant='outlined'
+                >
+                Refund Fees
+              </Button>
             </NavLink>
 
           </td>
@@ -110,6 +130,10 @@ const RegisteredSupport = (props) => {
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Pending Fee  &nbsp;</div>
               <div className='col-span-3'>{props?.student?.pending_fees}</div>
+            </div>
+            <div className='grid grid-cols-5 gap-10'>
+              <div className='col-span-2 font-bold'>Fees Refund &nbsp;</div>
+              <div className='col-span-3'>{props?.student?.fees_refund}</div>
             </div>
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Primary Course Name  &nbsp;</div>
@@ -163,7 +187,7 @@ const RegisteredSupport = (props) => {
 
 <br />
             <div className='flex items-center justify-center'>
-              <NavLink to={`/leaddetails/${props.student?.lead_obj?.id}`}>
+              <NavLink to={`/student_details/${props.student?.ConvertedID}`}>
 
                 <button
                   className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-md transition duration-300 ease-in-out"

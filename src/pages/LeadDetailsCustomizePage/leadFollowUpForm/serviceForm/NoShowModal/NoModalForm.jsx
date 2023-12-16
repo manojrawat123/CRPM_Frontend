@@ -84,6 +84,7 @@ const NoModalForm = (props) => {
             toast.success('Lead FollowUp Updated Sucessfully !!', {
                 position: toast.POSITION.TOP_CENTER,
               });
+              props.leadFollowUpFunc()
         }).catch((err)=>{
             console.log(err)
             setCustomAlert({

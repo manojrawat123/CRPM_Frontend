@@ -30,9 +30,9 @@ const AddCourseForm = (props) => {
           console.log(leadSelectedService);
           axios
             .put(
-              `${API_BASE_URL}/lead/${id}/`,
+              `${API_BASE_URL}/leadcourseupdate/${id}/`,
               {
-                LeadServiceInterested: newArr,
+                LeadServiceInterested: [values.course],
               },
               {
                 headers: {

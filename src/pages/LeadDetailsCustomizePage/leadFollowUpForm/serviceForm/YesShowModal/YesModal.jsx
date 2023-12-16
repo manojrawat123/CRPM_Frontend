@@ -50,7 +50,8 @@ const YesModal = (props) => {
           selectedService={props.selectedService}
           setSelectedService={props.setSelectedService}
           feesOffered={props.feesOffered}
-          setFeesOffered={props.setFeesOffered} />
+          setFeesOffered={props.setFeesOffered}
+          leadFollowUpFunc={props.leadFollowUpFunc} />
         </div>
       </Modal>
     </>

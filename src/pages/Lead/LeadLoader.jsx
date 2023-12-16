@@ -78,3 +78,26 @@ const LoadingTabel = () => {
 }
 
 export default LoadingTabel
+
+
+
+{/* <button
+onClick={() => setShowCalendar(!showCalendar)}
+className={`mx-10 mt-8 p-2 rounded-full transition duration-300 ease-in-out ${
+  showCalendar
+    ? "border border-red-500 hover:bg-red-500 hover:text-white text-red-500 fixed top-[4rem] left-[2rem]"
+    : "border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 relative left-[2rem] "
+}`}
+>
+{showCalendar ? <CloseOutlined /> : "Filter Lead's"}
+</button>
+
+<div className={showCalendar ? "hidden" : " inline-block"}>
+
+  
+        &nbsp;&nbsp;&nbsp;
+
+</div>
+
+
+)} */}
