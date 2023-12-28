@@ -7,6 +7,7 @@ import { DataContext } from "../../context";
 import Modal from "react-modal"; // Import the react-modal library
 import EmailSheduleModal from "./EmailSheduleModal";
 import API_BASE_URL from "../../config";
+import Cookies from "js-cookie";
 
 Modal.setAppElement("#root"); // Set the app root element (usually the root div in your HTML)
 
@@ -72,54 +73,42 @@ const EmailShedule = () => {
     templateSubject: "",
   });
 
-  const { service, serviceFunc, leadScource, leadScourceFunc } =
-    useContext(DataContext);
-
   // State Are Defined Here!!
   const [emailTempObj, setEmailTempObj] = useState();
   const [leadObj, setLeadObj] = useState();
   const [modalFilterData, setModalFilterData] = useState();
   const [templateId, setTemplateId] = useState();
   const [modalExcludedList, setModalExcludedList] = useState();
+  const [service, setService] = useState();
+  const [leadScource, setLeadScource] = useState();
   // State Are Defined Here!!
   const token = localStorage.getItem("token");
 
   const emailTemplateFunc = () => {
+    const brand_id = Cookies.get('brand')
     axios
-      .get(`${API_BASE_URL}/emailtemplate/`, {
+      .get(`${API_BASE_URL}/emailtemplateformdata/${brand_id}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((values) => {
         console.log(values.data);
-        setEmailTempObj(values.data);
+        // setEmailTempObj(values.data);
+        setEmailTempObj(values.data.email_template);
+        setLeadObj(values?.data?.lead_data);
+        setLeadScource(values.data.scource)
+        setService(values.data.services)
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const getLeadFunc = () => {
-    axios
-      .get(`${API_BASE_URL}/lead/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((values) => {
-        setLeadObj(values.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+ 
 
   useEffect(() => {
-    getLeadFunc();
     emailTemplateFunc();
-    leadScourceFunc();
-    serviceFunc();
   }, []);
 
   // This is Exclude List

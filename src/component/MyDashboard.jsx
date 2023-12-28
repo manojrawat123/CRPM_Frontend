@@ -8,13 +8,11 @@ import { countryList } from '../data';
 import { DataContext } from '../context';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
 import Select from 'react-select';
-import { Alert, CircularProgress } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import { CircularProgress } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const validationSchema = Yup.object().shape({
   leadDate: Yup.date()
@@ -47,9 +45,8 @@ const formattedTime = today.toTimeString().slice(0, 5);
 
 const MyDashboard = () => {
 
-  const { number, leadSubmitButton, setLeadSubmitButton, code, leadScource, leadScourceFunc, addLeadFunc, profileFunc, service, username, serviceFunc, leadCustomAlert, setLeadCustomAlert } = useContext(DataContext);
+  const { number, leadSubmitButton,  addLeadFunc, dashboardFunc,dashboardData} = useContext(DataContext);
 
-  const ctCode = code
   const ctnumber = number
 
   const initialValues = {
@@ -71,10 +68,7 @@ const MyDashboard = () => {
   };
 
   useEffect(() => {
-    profileFunc();
-    serviceFunc();
-    leadScourceFunc();
-    console.log("Profile Function run");
+    dashboardFunc();
   }, []);
 
 
@@ -177,7 +171,7 @@ const MyDashboard = () => {
 
                       <Select
                         name="course"
-                        options={service?.map((element, index) => {
+                        options={dashboardData?.service?.map((element, index) => {
                           return { value: element?.id, label: element?.ServiceName }
                         })}
                         isMulti
@@ -196,7 +190,7 @@ const MyDashboard = () => {
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                       >
                         <option value="">--------Select------</option>
-                        {leadScource?.map((element1, index) => (
+                        {dashboardData?.lead_scource?.map((element1, index) => (
                           <option key={index} value={element1.LeadSource}>
                             {element1.LeadSource}
                           </option>
@@ -258,8 +252,13 @@ const MyDashboard = () => {
                         as="select"
                         name="leadRepresentative"
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                        value={JSON.parse(Cookies.get('user_data')).user_name}
+                        // defaultValue={JSON.parse(Cookies.get('user_data')).user_name}
+
                       >
-                        <option>{username}</option>
+                        {console.log(JSON.parse(Cookies.get('user_data')))}
+                        <option value="">Please Select</option>
+                        <option value={JSON.parse(Cookies.get('user_data')).user_name}>{JSON.parse(Cookies.get('user_data')).user_name}</option>
                       </Field>
                       <ErrorMessage name="leadRepresentative" component="div" className="text-red-500" />
                     </div>

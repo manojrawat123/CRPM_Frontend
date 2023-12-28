@@ -4,6 +4,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { DataContext } from "../context";
 import { NavLink } from "react-router-dom";
 import lotus from "../img/lotus.webp";
+import Cookies from "js-cookie";
 
 const MyLogin = () => {
 
@@ -11,6 +12,7 @@ const MyLogin = () => {
   const {loginFunc, invalidInfo, internalError,isLoading,setIsLoading,} = useContext(DataContext);
 useEffect(()=>{
   setIsLoading(false)
+  console.log(document.cookie)
 },[])
   
 

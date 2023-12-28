@@ -3,16 +3,14 @@ import { DataContext } from "../context";
 import { Navigate, useNavigate } from "react-router-dom";
 
 import lotus from "../img/lotus.webp";
+import Cookies from "js-cookie";
 
 
 const MyBrand = () => {
-  const { brandarr, profileFunc } = useContext(DataContext);
-  const navigate = useNavigate()
 
-  useEffect(() => {
-    
-    profileFunc();
-  }, [])
+  const navigate = useNavigate();
+
+
 
   return (
     <section className="gradient-form  bg-neutral-200  dark:bg-neutral-700">
@@ -25,8 +23,7 @@ const MyBrand = () => {
               </div>
               <h1 className="text-xl text-center font-sans font-bold p-2 w-full underline rounded-lg my-4">Select your brand</h1>
               <div className="items-center justify-between space-y-5 ">
-
-                {brandarr?.map((value, index) => {
+                {JSON.parse(Cookies.get('user_data')).user_brands?.map((value, index) => {
                   return (
                     <div key={index}>
                       <button
@@ -37,7 +34,9 @@ const MyBrand = () => {
                         }}
                         onClick={() => {
                           localStorage.setItem("brand", value?.id);
+                          Cookies.set('brand', value?.id)
                           navigate("/dashboard");
+                          showNavbar(true);
                         }}
                       >
                         {value.BrandName}

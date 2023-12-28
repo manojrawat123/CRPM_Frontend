@@ -1,8 +1,9 @@
 import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import API_BASE_URL from "./config";
+import API_BASE_URL, { API_ROUTE_URL } from "./config";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 export const DataContext = createContext();
 
@@ -46,12 +47,8 @@ export const DataProvider = ({ children }) => {
   const [register_student_detail_obj, setRegisterStudentDetailObj] = useState();
   const [paymentObj, setPaymentObj] = useState();
   const [refundPaymentObj, setRefundObj] = useState();
-  
-
-  useEffect(() => {
-    serviceFunc();
-  }, []);
-
+  const [dashboardData, setDashboardData] = useState();
+  const [navItem, setNavItem] = useState();
 
   /// Fees Details
   const GetFeesAll = () => {
@@ -182,7 +179,8 @@ export const DataProvider = ({ children }) => {
 
   const profileFunc = async () => {
     const apiUrl = `${API_BASE_URL}/profile/`;
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
 
     const config = {
       headers: {
@@ -195,10 +193,10 @@ export const DataProvider = ({ children }) => {
       .then((response) => {
         console.log("Response data:", response.data);
         setBrandarr(response.data.brand);
-        const data = response.data;
-        setCompany(data.company);
-        setUserId(data.id);
-        setUsername(data.name);
+        setCompany(response.data.company);
+        setUserId(response.data.id);
+        setUsername(response.data.name);
+        Cookies.set("user_data", JSON.stringify({"user_id": response.data.id, "user_company": response.data.company, "user_name": response.data.name, "user_brands": response.data.brand}))
         setShowNavbar(true);
       })
       .catch((error) => {
@@ -212,23 +210,23 @@ export const DataProvider = ({ children }) => {
   const loginFunc = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const username = e.target.username.value;
-    const password = e.target.password.value;
 
-    const loginEndpoint = `${API_BASE_URL}/login/`;
     async function login() {
       try {
-        const response = await axios.post(loginEndpoint, {
-          email: username,
-          password: password,
+        const response = await axios.post(`${API_BASE_URL}/login/`, {
+          email: e.target.username.value,
+          password: e.target.password.value,
         });
         const token = response.data.token;
         console.log("Login successfull Token:", token);
         localStorage.setItem("token", token.access);
-        console.log(token.access);
+        Cookies.set('token', token.access, { secure: true });
+        const stored_token = Cookies.get("token");
+        console.log(stored_token);
         setAuth(true);
         setShowNavbar(true);
-        navigate("");
+        profileFunc();
+        navigate("/brand");
       } catch (error) {
         setShowNavbar(false);
         if (error.response && error.response.status === 400) {
@@ -454,7 +452,7 @@ export const DataProvider = ({ children }) => {
 
 
   const registeredStudentDetailFunc = (id)=>{
-    axios.get(`${API_BASE_URL}/customerdetails/${id}/`, {
+    axios.get(`${API_BASE_URL}/customer/${id}/`, {
       headers: {"Authorization": `Bearer ${token}`}
     }).then((value)=>{
       console.log(value.data);
@@ -490,6 +488,8 @@ export const DataProvider = ({ children }) => {
   }
 
 
+  
+
   const paymentRefundFeesDetailsFunc = ()=>{
     axios.get(`${API_BASE_URL}/refundfees/`, {
         headers : {
@@ -501,6 +501,36 @@ export const DataProvider = ({ children }) => {
         console.log(err);
     })
 }
+
+const dashboardFunc = ()=>{
+  axios.get(`${API_BASE_URL}/dashboard/${brandId}/`, {
+   headers: {"Authorization": `Bearer ${token}`}
+ }).then((value)=>{
+   console.log(value.data);
+   setDashboardData(value.data)
+
+ }).catch((err)=>{
+   console.log(err)
+   if (err.response){
+     if (err.response.status){
+       toast.error('No Data Found', {
+         position: toast.POSITION.TOP_CENTER,
+       });
+     }
+}
+})}
+
+const navFunc = ()=>{
+  axios.get(`${API_BASE_URL}/navbar/`, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+}).then((value) => {
+    setNavItem(value.data);
+})
+}
+
+
   // End OF lead Function
   return (
     <DataContext.Provider
@@ -570,7 +600,12 @@ export const DataProvider = ({ children }) => {
         paymentFunc,
         paymentObj,
         paymentRefundFeesDetailsFunc,
-        refundPaymentObj
+        refundPaymentObj,
+        dashboardFunc,
+        dashboardData,
+        navFunc,
+        navItem,
+        
       }}
     >
       {children}

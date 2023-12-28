@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PaymentForm from './component/PaymentForm/Payment'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 // import Table from './component/Table'
 import MyProcess from './component/MyProcess';
 import MyLogin from './login/MyLogin';
@@ -53,16 +53,19 @@ import StudentDetailsAndUpdateLink from './pages/StudentDetailsUpdate/StudentDet
 function App() {
 
   const brand = localStorage.getItem("brand");
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
+
+  const location = useLocation();
+  console.log(location);
 
   return (
 
     <>
-      {brand && token ? <MyNavbar /> : null}
+      {location.pathname == "/login" || location.pathname === "/brand" ?  null : <MyNavbar />}
 
       <Routes>
         <Route path='' Component={ProtectedRoutes}>
-          <Route index path='' Component={MyBrand} />
+          <Route index path='/brand' Component={MyBrand} />
         </Route>
 
         <Route path='' Component={ProtectedRoutes} >
@@ -182,21 +185,27 @@ function App() {
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/message' Component={MessageShedule} />
         </Route>
+        
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/staffdetails' Component={ViewStaffDetails} />
         </Route>
+        
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/leadanalytics' Component={LeadAnalytics} />
         </Route>
+        
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/fesstaxdetails' Component={FeesDetailsWithGst} />
         </Route>
+        
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/student_details/:id' Component={StudentDetails} />
         </Route>
+        
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/refundfees' Component={PaymentRefundDetails} />
         </Route>
+        
         <Route path='/login' Component={MyLogin} />
 
       </Routes>

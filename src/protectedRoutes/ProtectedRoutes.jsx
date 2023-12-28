@@ -4,11 +4,8 @@ import { DataContext } from "../context";
 
 
 const ProtectedRoutes = () => {
-    
-    const { profileFunc } = useContext(DataContext);
     const navigate = useNavigate()
       useEffect(()=>{
-        profileFunc()
         if (!localStorage.getItem("token")){
             return navigate("/login");
         }
