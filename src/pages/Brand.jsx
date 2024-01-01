@@ -10,7 +10,18 @@ const MyBrand = () => {
 
   const navigate = useNavigate();
 
+const {
+  brandPageFunc,
+  brand_cookie_arr} = useContext(DataContext);
 
+  useEffect(()=>{
+    try{
+      brandPageFunc();
+    }
+    catch{
+      console.log("")
+    }
+  })
 
   return (
     <section className="gradient-form  bg-neutral-200  dark:bg-neutral-700">
@@ -23,7 +34,7 @@ const MyBrand = () => {
               </div>
               <h1 className="text-xl text-center font-sans font-bold p-2 w-full underline rounded-lg my-4">Select your brand</h1>
               <div className="items-center justify-between space-y-5 ">
-                {JSON.parse(Cookies.get('user_data')).user_brands?.map((value, index) => {
+                {brand_cookie_arr?.map((value, index) => {
                   return (
                     <div key={index}>
                       <button

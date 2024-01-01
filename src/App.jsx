@@ -49,14 +49,11 @@ import StudentDetails from './pages/StudentDetails/StudentDetails';
 import PendingFeeGet from './pages/PendingFees/PendingFeesDetails';
 import PaymentRefundDetails from './pages/PaymentRefund/PaymentRefundDetails/PaymentRefundDetails';
 import StudentDetailsAndUpdateLink from './pages/StudentDetailsUpdate/StudentDetailsAndUpdateLink';
+import DownloadInvoiceForm from './pages/DownloadInvoice/InvoiceForm';
 
 function App() {
 
-  const brand = localStorage.getItem("brand");
-  const token = localStorage.getItem("token");
-
   const location = useLocation();
-  console.log(location);
 
   return (
 
@@ -205,6 +202,12 @@ function App() {
         <Route path='' Component={ProtectedRoutes}>
           <Route path='/refundfees' Component={PaymentRefundDetails} />
         </Route>
+        
+        <Route path='' Component={ProtectedRoutes}>
+          <Route path='/studentinvoice' Component={DownloadInvoiceForm} />
+        </Route>
+
+
         
         <Route path='/login' Component={MyLogin} />
 

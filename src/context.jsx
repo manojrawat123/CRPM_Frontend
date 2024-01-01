@@ -49,6 +49,12 @@ export const DataProvider = ({ children }) => {
   const [refundPaymentObj, setRefundObj] = useState();
   const [dashboardData, setDashboardData] = useState();
   const [navItem, setNavItem] = useState();
+  const [brand_cookie_arr, setbrand_cookie_arr] = useState();
+
+const brandPageFunc = ()=>{
+ const brand_cookie = JSON.parse(Cookies.get('user_data')).user_brands
+  setbrand_cookie_arr(brand_cookie);
+}
 
   /// Fees Details
   const GetFeesAll = () => {
@@ -225,8 +231,15 @@ export const DataProvider = ({ children }) => {
         console.log(stored_token);
         setAuth(true);
         setShowNavbar(true);
-        profileFunc();
-        navigate("/brand");
+        (async () => {
+          try {
+            await profileFunc();
+            navigate("/brand");
+          } catch (error) {
+            // Handle errors if needed
+            console.error("Error in main code block:", error);
+          }
+        })();
       } catch (error) {
         setShowNavbar(false);
         if (error.response && error.response.status === 400) {
@@ -246,6 +259,8 @@ export const DataProvider = ({ children }) => {
     }
     login();
   };
+
+
 
   // Add Lead Functions
 
@@ -605,7 +620,8 @@ const navFunc = ()=>{
         dashboardData,
         navFunc,
         navItem,
-        
+        brandPageFunc,
+        brand_cookie_arr
       }}
     >
       {children}

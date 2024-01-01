@@ -48,6 +48,13 @@ const MyDashboard = () => {
   const { number, leadSubmitButton,  addLeadFunc, dashboardFunc,dashboardData} = useContext(DataContext);
 
   const ctnumber = number
+  var username = ""
+  try{
+    username = JSON.parse(Cookies.get('user_data')).user_name
+  }
+  catch{
+    username = ""
+  }
 
   const initialValues = {
     leadDate: formattedDate,
@@ -252,13 +259,13 @@ const MyDashboard = () => {
                         as="select"
                         name="leadRepresentative"
                         className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
-                        value={JSON.parse(Cookies.get('user_data')).user_name}
+                        value={username}
                         // defaultValue={JSON.parse(Cookies.get('user_data')).user_name}
 
                       >
-                        {console.log(JSON.parse(Cookies.get('user_data')))}
+                        
                         <option value="">Please Select</option>
-                        <option value={JSON.parse(Cookies.get('user_data')).user_name}>{JSON.parse(Cookies.get('user_data')).user_name}</option>
+                        <option value={username}>{username}</option>
                       </Field>
                       <ErrorMessage name="leadRepresentative" component="div" className="text-red-500" />
                     </div>
