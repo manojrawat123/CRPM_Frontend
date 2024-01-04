@@ -11,8 +11,7 @@ const MyLogin = () => {
 
   const {loginFunc, invalidInfo, internalError,isLoading,setIsLoading,} = useContext(DataContext);
 useEffect(()=>{
-  setIsLoading(false)
-  console.log(document.cookie)
+  setIsLoading(false);
 },[])
   
 

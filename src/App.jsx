@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PaymentForm from './component/PaymentForm/Payment'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 // import Table from './component/Table'
 import MyProcess from './component/MyProcess';
 import MyLogin from './login/MyLogin';
@@ -58,9 +58,12 @@ function App() {
   return (
 
     <>
-      {location.pathname == "/login" || location.pathname === "/brand" ?  null : <MyNavbar />}
+      {location.pathname == "/login" || location.pathname === "/brand" || location.pathname == "" ?  null : <MyNavbar /> }
 
       <Routes>
+        <Route path='' Component={ProtectedRoutes}>
+          <Route index path='' Component={DefaultPage} />
+        </Route>
         <Route path='' Component={ProtectedRoutes}>
           <Route index path='/brand' Component={MyBrand} />
         </Route>
@@ -204,7 +207,7 @@ function App() {
         </Route>
         
         <Route path='' Component={ProtectedRoutes}>
-          <Route path='/studentinvoice' Component={DownloadInvoiceForm} />
+          <Route path='/studentinvoice/:id' Component={DownloadInvoiceForm} />
         </Route>
 
 
@@ -217,3 +220,17 @@ function App() {
 }
 
 export default App
+
+
+
+const DefaultPage = ()=>{
+  const location = useLocation();
+  const navigate = useNavigate()
+  
+    useEffect(()=>{
+      if (location.pathname == ""){
+        navigate("/login")
+      }
+    },[])
+  return <></>
+}

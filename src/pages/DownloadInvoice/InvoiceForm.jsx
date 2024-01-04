@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person';
@@ -8,6 +8,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CircularProgress from '@mui/material/CircularProgress';
 import Select from 'react-select';  // Assuming you are using react-select
 import * as Yup from "yup";
+import InvoicePreview from './InviocePreview';
+import Modal from 'react-modal';
 
 const initialValues = {
   ID: '',
@@ -21,12 +23,14 @@ const initialValues = {
   ItemAmount: '',
   IGST: '',
   CGST: '',
-  SGST: ''
+  SGST: '',
+  CustomerName:"",
+  CustomerAdress:"",
+  CustomerGST:""
 };
 
 
 const validationSchema = Yup.object().shape({
-    ID: Yup.string().required('ID is required'),
     CustomerID: Yup.string().required('Customer ID is required'),
     InvoiceNumber: Yup.string().required('Invoice Number is required'),
     InvoiceDate: Yup.date().required('Invoice Date is required'),
@@ -38,24 +42,51 @@ const validationSchema = Yup.object().shape({
     IGST: Yup.number().required('IGST is required').positive('IGST must be positive'),
     CGST: Yup.number().required('CGST is required').positive('CGST must be positive'),
     SGST: Yup.number().required('SGST is required').positive('SGST must be positive'),
+    CustomerName:Yup.string().required('Customer Name is Required'),
+  CustomerAdress:Yup.string().required('Customer Address is Required'),
+  CustomerGST:Yup.string().required('Customer GST is Required')
   });
 
 
 
 const DownloadInvoiceForm = () => {
-  
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [my_values , setMyValues] = useState();
+  useEffect(()=>{
+    
+  },[])
 
   return (
+    <>
+    <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalIsOpen(false)}
+          style={{
+            overlay: {
+              backgroundColor: "rgba(0, 0, 0, 0.4)",
+            },
+            content: {},
+          }}
+        >
+          <InvoicePreview 
+          modalIsOpen={modalIsOpen}
+          setModalIsOpen={setModalIsOpen} 
+          values={my_values}/>
+        </Modal>
     <div className="w-[100%] py-10 bg-blue-50">
       <div className="sm:w-[80%] w-[90%] mx-auto bg-white rounded-lg shadow-2xl border border-solid border-gray-300">
         <h2 className="bg-gray-100 text-green-600 text-3xl py-4 px-6 mb-6 font-semibold text-center">Add New Invoice</h2>
         <Formik
           initialValues={initialValues}
           onSubmit={(values)=>{
+            console.log("Hello This is running")
+            setModalIsOpen(true);
+            setMyValues(values);
             console.log(values);
           }}
           validationSchema={validationSchema}
-        >
+        > 
           {({ values, handleSubmit, resetForm, setFieldValue, handleBlur }) => (
             <Form>
               <div className="px-6 pb-4">
@@ -69,6 +100,36 @@ const DownloadInvoiceForm = () => {
                       className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                     />
                     <ErrorMessage name="CustomerID" component="div" className="text-red-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-green-600 mb-2">Customer Name</h4>
+                    <Field
+                      type="text"
+                      name="CustomerName"
+                      placeholder="Customer Name"
+                      className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                    />
+                    <ErrorMessage name="CustomerName" component="div" className="text-red-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-green-600 mb-2">Customer Address</h4>
+                    <Field
+                      type="text"
+                      name="CustomerAdress"
+                      placeholder="Customer Address"
+                      className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                    />
+                    <ErrorMessage name="CustomerAdress" component="div" className="text-red-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-green-600 mb-2">Customer GST</h4>
+                    <Field
+                      type="text"
+                      name="CustomerGST"
+                      placeholder="Customer ID"
+                      className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
+                    />
+                    <ErrorMessage name="CustomerGST" component="div" className="text-red-500" />
                   </div>
 
                   <div>
@@ -196,6 +257,7 @@ const DownloadInvoiceForm = () => {
         </Formik>
       </div>
     </div>
+    </>
   );
 };
 

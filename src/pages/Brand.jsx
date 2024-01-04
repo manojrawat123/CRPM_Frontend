@@ -21,7 +21,7 @@ const {
     catch{
       console.log("")
     }
-  },[])
+  })
 
   return (
     <section className="gradient-form  bg-neutral-200  dark:bg-neutral-700">

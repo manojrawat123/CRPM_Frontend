@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-  const brandId = localStorage.getItem("brand");
+  const brandId = Cookies.get("brand");
   const [auth, setAuth] = useState(false);
   const [number, setNumber] = useState("");
   const [code, setCode] = useState("");
@@ -19,7 +19,7 @@ export const DataProvider = ({ children }) => {
   const [company, setCompany] = useState();
   const [brand, setBrandId] = useState();
   const [service, setService] = useState();
-  const [userId, setUserId] = useState();
+  // const [userId, setUserId] = useState();
   const [username, setUsername] = useState();
   const [brandarr, setBrandarr] = useState();
   const [leadCustomAlert, setLeadCustomAlert] = useState(false);
@@ -51,7 +51,17 @@ export const DataProvider = ({ children }) => {
   const [navItem, setNavItem] = useState();
   const [brand_cookie_arr, setbrand_cookie_arr] = useState();
 
-const brandPageFunc = ()=>{
+  var userId;
+
+  try{
+     userId = JSON.parse(Cookies.get('user_data')).user_id
+
+  }
+  catch{
+    userId = null
+  }
+  
+  const brandPageFunc = ()=>{
  const brand_cookie = JSON.parse(Cookies.get('user_data')).user_brands
   setbrand_cookie_arr(brand_cookie);
 }
@@ -200,7 +210,6 @@ const brandPageFunc = ()=>{
         console.log("Response data:", response.data);
         setBrandarr(response.data.brand);
         setCompany(response.data.company);
-        setUserId(response.data.id);
         setUsername(response.data.name);
         Cookies.set("user_data", JSON.stringify({"user_id": response.data.id, "user_company": response.data.company, "user_name": response.data.name, "user_brands": response.data.brand}))
         setShowNavbar(true);
@@ -283,14 +292,14 @@ const brandPageFunc = ()=>{
       Plateform: "Windows",
       LeadDateTime: `${values.leadDate}T${values.leadTime}:00Z`,
       LeadStatus: "Fresh",
-      LeadRepresentativePrimary: userId,
-      LeadRepresentativeSecondary: userId,
+      LeadRepresentativePrimary: JSON.parse(Cookies.get('user_data')).user_id,
+      LeadRepresentativeSecondary: JSON.parse(Cookies.get('user_data')).user_id,
       LeadCountry: values.country,
       LeadState: values.state,
       LeadAssignmentAlgo: values.classMode,
       LeadNextCallDate: "2023-08-05",
-      Brand: brandId,
-      Company: company,
+      Brand: Cookies.get('brand'),
+      Company: JSON.parse(Cookies.get('user_data')).user_company,
       LeadServiceInterested: values.course?.map((servelement, index) => {
         return servelement.value;
       }),
@@ -312,7 +321,7 @@ const brandPageFunc = ()=>{
        
         
           leadScourceFunc();
-        // resetForm();     
+        resetForm();     
       }).catch((err)=>{
         console.log(err)
         toast.error('Data submission failed', {
@@ -522,7 +531,8 @@ const dashboardFunc = ()=>{
    headers: {"Authorization": `Bearer ${token}`}
  }).then((value)=>{
    console.log(value.data);
-   setDashboardData(value.data)
+   setDashboardData(value.data);
+   setLeadScource(value.data.lead_scource);
 
  }).catch((err)=>{
    console.log(err)
