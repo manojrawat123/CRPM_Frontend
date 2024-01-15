@@ -29,7 +29,6 @@ import Batch from './pages/Batch/Batch';
 import EditStaffDetail from './pages/AddStaffForm/EditStaffDetails';
 import AssignBatches from './pages/AssignBatches/AssignBatches';
 import { DataContext, DataProvider } from './context';
-import LeadFollowUp from './pages/LeadFollowUp/LeadFollowUp';
 import EmailShedule from './pages/emailshedule/EmailShedule';
 import MessageShedule from './pages/MessageShedule/MessageShedule';
 import SearchPage from './component/Search/Search';
@@ -50,6 +49,7 @@ import PendingFeeGet from './pages/PendingFees/PendingFeesDetails';
 import PaymentRefundDetails from './pages/PaymentRefund/PaymentRefundDetails/PaymentRefundDetails';
 import StudentDetailsAndUpdateLink from './pages/StudentDetailsUpdate/StudentDetailsAndUpdateLink';
 import DownloadInvoiceForm from './pages/DownloadInvoice/InvoiceForm';
+import TodayCall from './pages/TodayCallFunc/TodayCall';
 
 function App() {
 
@@ -85,7 +85,7 @@ function App() {
         </Route>
 
         <Route path='' Component={ProtectedRoutes} >
-          <Route path='/leadfollowup' Component={LeadFollowUp} />
+          <Route path='/leadfollowup' Component={TodayCall} />
         </Route>
 
         <Route path='' Component={ProtectedRoutes}>

@@ -1,18 +1,23 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import LeadFollowUpSupport from "./LeadFollowSupport";
+import React, { useContext, useEffect, useState } from "react";
+import LeadFollowUpSupport from "./TodayCallSupport";
 import { DateRangePicker } from "react-date-range";
 import API_BASE_URL from "../../config";
 import LoadingTabel from "../Lead/LeadLoader";
 import { Button } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
 import ExcelDownloadButton from "../../component/ExcelDownloadButton/ExcelDownloadButton";
+import { DataContext } from "../../context";
 
 
 const LeadFollowUp = () => {
   const token = localStorage.getItem("token");
-  const [data, setData] = useState();
-  const [filteredData, setFilteredData] = useState();
+  const { 
+    todayCallFunc,
+    todayCallData, 
+    todayCallFilterFunc,
+    todayCallFilterData
+  } = useContext(DataContext);
   const [isFeesDate, setisFeesDate] = useState(true);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -22,24 +27,9 @@ const LeadFollowUp = () => {
     setisFeesDate(false);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
-    let filtered = data?.filter((product) => {
-      let productDate = new Date(product?.LeadStatusDate);
-      if (date.selection.endDate == date.selection.startDate) {
-        productDate.setHours(0, 0, 0, 0);
-        return productDate.getTime() === date.selection.startDate.getTime();
-      } else if (date.selection.startDate && date.selection.endDate) {
-        return (
-          productDate <= date.selection.endDate &&
-          productDate >= date.selection.startDate
-        );
-      } else if (date.selection.endDate != date.selection.startDate) {
-        return (
-          productDate >= date.selection.startDate &&
-          productDate <= date.selection.endDate
-        );
-      }
-    });
-    setFilteredData(filtered);
+    
+        todayCallFilterFunc(date.selection.startDate, date.selection.endDate);
+
   };
 
   const selectionRange = {
@@ -49,33 +39,8 @@ const LeadFollowUp = () => {
   };
 
   console.log(new Date());
-
-  const leadfollowUpFunc = () => {
-    axios
-      .get(`${API_BASE_URL}/leadnotconverted/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((value) => {
-        console.log(value.data);
-        const arrangeData = value.data?.filter((element, index) => {
-          if (element?.LeadStatus == null || element?.LeadStatus == "Fresh") {
-            const currentDate = new Date();
-            const leadDate = new Date(element?.LeadFollowupCreatedDate);
-            return leadDate <= currentDate;
-          }
-        });
-        setData(value.data);
-        console.log(arrangeData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    leadfollowUpFunc();
+    todayCallFunc();
   }, []);
 
   return (
@@ -85,7 +50,7 @@ const LeadFollowUp = () => {
           <div className='ml-auto flex'>
             {isFeesDate ? (
               <ExcelDownloadButton
-                data={filteredData?.map((element, index) => ({
+                data={todayCallFilterData?.map((element, index) => ({
                   "S. No.": index + 1,
                   "Name": element.LeadID?.LeadName,
                   "Lead Source": element.LeadID?.LeadScourceId.LeadSource,
@@ -102,7 +67,7 @@ const LeadFollowUp = () => {
               />
             ) : (
               <ExcelDownloadButton
-                data={data?.map((element, index) => ({
+                data={todayCallData?.map((element, index) => ({
                   "S. No.": index + 1,
                   "Name": element.LeadID?.LeadName,
                   "Lead Source": element.LeadID?.LeadScourceId.LeadSource,
@@ -182,17 +147,17 @@ const LeadFollowUp = () => {
                 </tr>
               </thead>
 
-              {data ? (
+              {todayCallData ? (
                 <>
                   {isFeesDate
-                    ? data?.map((item, index) => (
+                    ? todayCallData?.map((item, index) => (
                       <LeadFollowUpSupport
                         items={item}
                         key={index}
                         index={index}
                       />
                     ))
-                    : filteredData?.map((item, index) => (
+                    : todayCallFilterData?.map((item, index) => (
                       <LeadFollowUpSupport
                         items={item}
                         key={index}

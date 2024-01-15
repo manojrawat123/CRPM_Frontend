@@ -7,7 +7,6 @@ import { DataContext } from "../../context";
 import { useParams } from "react-router-dom";
 import LeadFollowUpDisplayById from "../LeadDetailsCustomizePage/LeadFollowUpDisplayById/LeadFollowUpDisplayById";
 import ConvertDetailLap from "./ConvertedDetails/ConvertDetLap";
-import { CircleOutlined } from "@mui/icons-material";
 import { CircularProgress } from "@mui/material";
 
 const StudentDetails = () => {

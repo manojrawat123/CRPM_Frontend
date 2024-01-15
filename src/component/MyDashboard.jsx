@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import MailIcon from '@mui/icons-material/Mail';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
@@ -12,7 +11,7 @@ import Select from 'react-select';
 import { CircularProgress } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'; 
 
 const validationSchema = Yup.object().shape({
   leadDate: Yup.date()
@@ -45,7 +44,8 @@ const formattedTime = today.toTimeString().slice(0, 5);
 
 const MyDashboard = () => {
 
-  const { number, leadSubmitButton,  addLeadFunc, dashboardFunc,dashboardData} = useContext(DataContext);
+  const { number, leadSubmitButton,  addLeadFunc, dashboardFunc,dashboardData, setRecaptchaToken} = useContext(DataContext);
+  
 
   const ctnumber = number
   var username = ""
@@ -174,8 +174,6 @@ const MyDashboard = () => {
 
                     <div>
                       <h4 className="text-green-600 mb-2">Course <span className="text-red-500">*</span></h4>
-
-
                       <Select
                         name="course"
                         options={dashboardData?.service?.map((element, index) => {
@@ -308,8 +306,13 @@ const MyDashboard = () => {
                       />
                       <ErrorMessage name="state" component="div" className="text-red-500" />
                     </div>
-
                   </div>
+
+                  
+                    {/* <ReCAPTCHA sitekey="6LcBrkkpAAAAAE6aCxcwdkn6R84fWFrgglbrUD3s" 
+                    onChange={(value)=>{
+                      setRecaptchaToken(value);
+                    }}/> */}
                   {/* Button Code */}
                   <div className="mb-4">
                     <button

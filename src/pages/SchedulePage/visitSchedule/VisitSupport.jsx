@@ -6,8 +6,7 @@ import { NavLink } from 'react-router-dom';
 
 const VisitSupport = (props) => {
 
-    console.log(props.visit);
-
+   
 
   return (
     <>

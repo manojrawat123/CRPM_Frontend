@@ -6,17 +6,19 @@ import { DataContext } from '../../../context';
 import { DateRangePicker } from "react-date-range";
 import { CloseOutlined } from "@mui/icons-material";
 import ExcelDownloadButton from '../../../component/ExcelDownloadButton/ExcelDownloadButton';
+import PaymentRefundPhone from './PaymentRefundPhone';
+import { format } from 'date-fns';
 
 const PaymentRefundDetails = () => {
 
     const { paymentRefundFeesDetailsFunc,
-        refundPaymentObj
+        refundPaymentObj,refundFilterDetailsFunc,
+        filterPaymentRefundData
     } = useContext(DataContext);
     const [isFeesDate, setisFeesDate] = useState(true);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [showCalendar, setShowCalendar] = useState(false);
-    const [filteredData, setFilteredData] = useState();
 
     useEffect(() => {
         paymentRefundFeesDetailsFunc();
@@ -27,24 +29,7 @@ const PaymentRefundDetails = () => {
         setisFeesDate(false);
         setStartDate(date.selection.startDate);
         setEndDate(date.selection.endDate);
-        let filtered = refundPaymentObj?.filter((product) => {
-            let productDate = new Date(product?.LeadStatusDate);
-            if (date.selection.endDate == date.selection.startDate) {
-                productDate.setHours(0, 0, 0, 0);
-                return productDate.getTime() === date.selection.startDate.getTime();
-            } else if (date.selection.startDate && date.selection.endDate) {
-                return (
-                    productDate <= date.selection.endDate &&
-                    productDate >= date.selection.startDate
-                );
-            } else if (date.selection.endDate != date.selection.startDate) {
-                return (
-                    productDate >= date.selection.startDate &&
-                    productDate <= date.selection.endDate
-                );
-            }
-        });
-        setFilteredData(filtered);
+        refundFilterDetailsFunc(date.selection.startDate, date.selection.endDate);
     };
 
     const selectionRange = {
@@ -66,7 +51,7 @@ const PaymentRefundDetails = () => {
                     <div className='ml-auto flex'>
                         {isFeesDate ? (
                             <ExcelDownloadButton
-                                data={filteredData?.map((element, index) => ({
+                                data={filterPaymentRefundData?.map((element, index) => ({
                                     "S. No.": index + 1,
                                     "Name": element?.lead_obj?.LeadName,
                                     "Phone": element?.lead_obj?.LeadPhone,
@@ -80,7 +65,7 @@ const PaymentRefundDetails = () => {
                             />
                         ) : (
                             <ExcelDownloadButton
-                                data={data?.map((element, index) => ({
+                                data={refundPaymentObj?.map((element, index) => ({
                                     "S. No.": index + 1,
                                     "Name": element?.lead_obj?.LeadName,
                                     "Phone": element?.lead_obj?.LeadPhone,
@@ -143,14 +128,13 @@ const PaymentRefundDetails = () => {
                         <div className='h-[65%] flex items-center justify-center'>
                             <CircularProgress />
                         </div>
-
                 }
 
             </div>
             <div className='block md:hidden h-[100vh]'>
                 {
                     refundPaymentObj ?
-                        <PaymentRefundLap refund_data={refundPaymentObj} /> :
+                        <PaymentRefundPhone refund_data={refundPaymentObj} /> :
                         <div className='h-[80%] flex items-center justify-center'>
                             <CircularProgress />
                         </div>

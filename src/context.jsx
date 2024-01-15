@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import API_BASE_URL, { API_ROUTE_URL } from "./config";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { format } from "date-fns";
 
 export const DataContext = createContext();
 
@@ -50,7 +51,24 @@ export const DataProvider = ({ children }) => {
   const [dashboardData, setDashboardData] = useState();
   const [navItem, setNavItem] = useState();
   const [brand_cookie_arr, setbrand_cookie_arr] = useState();
+  const [recaptcha, setRecaptchaToken] = useState();
+  const [filteredLead, setFilterLeadData] = useState([]);
+  const [todayCallData, setTodayCallData] = useState();
+  const [todayCallFilterData, setTodayCallFilterData] = useState();  
+  const [filterLeadAanlist, setFilterLeadAnalist] = useState();
+  const [filteredRegisteredStudent, setFilteredRegisterStudent] = useState();
+  const [filterPaymentRefundData, setFilterPaymentRefundData] = useState();
+  const [paymentAllObj, setpaymentAllObj] = useState();
+  const [filterPaymentObj, setpaymentFilterObj] = useState();
+  const [filteredVisitSechudule, setFilteredVisitSechudle] = useState([]);
+  const [filteredvisitHappned, setFilteredVisitHappned] = useState([]);
+  const [filtereddemoSchedule, setFilteredDemoSchedule] = useState([]);
+  const [filtereddemoHappned, setFilteredDemoHappned] = useState([]);
+  const [batchObj, setBatchObj] = useState();
+  const [batchFilterObj, setBatchFilterObj] = useState();
 
+ 
+  
   var userId;
 
   try{
@@ -62,8 +80,14 @@ export const DataProvider = ({ children }) => {
   }
   
   const brandPageFunc = ()=>{
- const brand_cookie = JSON.parse(Cookies.get('user_data')).user_brands
-  setbrand_cookie_arr(brand_cookie);
+    try{
+
+      const brand_cookie = JSON.parse(Cookies.get('user_data')).user_brands
+      setbrand_cookie_arr(brand_cookie);
+    }
+    catch{
+      console.log("no Brands Alocated")
+    }
 }
 
   /// Fees Details
@@ -84,6 +108,7 @@ export const DataProvider = ({ children }) => {
   };
   /// End Fees Details
 
+
   /// ///
   const getResisteredStudentAll = () => {
     axios
@@ -102,53 +127,69 @@ export const DataProvider = ({ children }) => {
   };
 
   /// /// GetLeadVisitSechudle start
-  const getLeadFollowUpAll = () => {
+  const getLeadFollowUpAll = (leadstatus) => {
+
+    
     axios
       .get(`${API_BASE_URL}/leadfollowup/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params : {
+          follow_up_status: leadstatus,
+        }
       })
       .then((values) => {
-        console.log("Data received:", values.data);
-        const fl_visitSchedule = values.data?.filter((element) => {
-          return element.LeadStatus == "Visit scheduled";
-        });
-        const fl_demoSchedule = values.data?.filter((element) => {
-          return element.LeadStatus == "Demo scheduled";
-        });
-        const fl_visitHappned = values.data?.filter((element) => {
-          return element.LeadStatus == "Visit Happened";
-        });
-        const fl_demoHappned = values.data?.filter((element) => {
-          return element.LeadStatus == "Demo Happened";
-        });
-        setVisitSechudule(fl_visitSchedule);
-        setDemoSchedule(fl_demoSchedule);
-        setDemoHappned(fl_demoHappned);
-        setVisitHappned(fl_visitHappned);
-        
-         // Lead Analitics
-         const filter_data = [];
+        if (leadstatus == "Visit scheduled"){
+          setVisitSechudule(values.data);
+        }
+        else if(leadstatus == "Demo scheduled"){
+          setDemoSchedule(values.data);
+        }
+        else if(leadstatus == "Visit Happened"){
+          setVisitHappned(values.data);
+        }
+        else if(leadstatus == "Demo Happened"){
+          setDemoHappned(values.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  
+  const getLeadFollowUpFilter = (leadstatus, s_startdate, p_endDate) => {
+
+    const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+    const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
     
-         values.data?.forEach((lead, index) => {
-           const leadDate = lead?.LeadStatusDate
-           const existing_date_object = filter_data?.find(
-             (ele) => ele.date.substring(0,10) == leadDate.substring(0,10)
-           );
-
-
-     
-           if (existing_date_object) {
-             existing_date_object.leadObject.push(lead);
-             existing_date_object.myLead.push(lead.LeadID);
-
-           } else {
-             filter_data.push({ date: leadDate, leadObject: [lead] , myLead : [lead.LeadID] });
-           }
-         });
-         console.log(filter_data);
-         setLeadAnyticsObj(filter_data);
+    axios
+      .get(`${API_BASE_URL}/leadfollowup/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params : {
+          follow_up_status: leadstatus,
+          from_date : startDate,
+          to_date : endDate
+        }
+      })
+      .then((values) => {
+        
+        if (leadstatus == "Visit scheduled"){
+          setFilteredVisitSechudle(values.data);
+        }
+        else if(leadstatus == "Demo scheduled"){
+          setFilteredDemoSchedule(values.data);
+  
+        }
+        else if(leadstatus == "Visit Happened"){
+          setFilteredVisitHappned(values.data);
+        }
+        else if(leadstatus == "Demo Happened"){
+          setFilteredDemoHappned(values.data);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -164,12 +205,36 @@ export const DataProvider = ({ children }) => {
         },
       })
       .then((values) => {
+        console.log(values)
         setLead(values.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  const filterLeadFunc = (s_startdate, p_endDate)=>{
+    const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+    const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+    
+    axios
+    .get(`${API_BASE_URL}/lead/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        from_date:startDate,
+        to_date: endDate
+      },
+    })
+    .then((values) => {
+      
+      setFilterLeadData(values.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   const serviceFunc = () => {
     const brandID = localStorage.getItem("brand");
@@ -303,6 +368,7 @@ export const DataProvider = ({ children }) => {
       LeadServiceInterested: values.course?.map((servelement, index) => {
         return servelement.value;
       }),
+      captcha_token: recaptcha
     };
     console.log(formData);
 
@@ -313,14 +379,13 @@ export const DataProvider = ({ children }) => {
         },
       })
       .then((response) => {
-        console.log("Lead data submitted successfully:", response.data);
         console.log(values?.course);
         toast.success('Lead Added successfully', {
           position: toast.POSITION.TOP_CENTER,
         });
        
         
-          leadScourceFunc();
+        dashboardFunc()
         resetForm();     
       }).catch((err)=>{
         console.log(err)
@@ -511,9 +576,6 @@ export const DataProvider = ({ children }) => {
     });
   }
 
-
-  
-
   const paymentRefundFeesDetailsFunc = ()=>{
     axios.get(`${API_BASE_URL}/refundfees/`, {
         headers : {
@@ -553,6 +615,230 @@ const navFunc = ()=>{
 }).then((value) => {
     setNavItem(value.data);
 })
+}
+
+
+const todayCallFunc = () => {
+  axios
+    .get(`${API_BASE_URL}/leadnotconverted/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((value) => {
+      console.log(value.data);
+      setTodayCallData(value.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const todayCallFilterFunc = (s_startdate, p_endDate)=>{
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+    const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+    
+  axios
+    .get(`${API_BASE_URL}/leadnotconverted/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+     params: {
+        from_date:startDate,
+        to_date: endDate
+      }
+    })
+    .then((value) => {
+      console.log(value.data);
+      setTodayCallFilterData(value.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+
+const leadAnalyticsFunc = () => {
+  axios
+    .get(`${API_BASE_URL}/leadanalyts/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((values) => {
+      console.log(values.data);
+
+      const filter_data = [];
+      
+      values.data?.forEach((lead, index) => {
+        console.log(index);
+        const existing_date_object = filter_data?.find(
+          (ele) => ele.date?.substring(0,10) == lead?.LeadStatusDate?.substring(0,10)
+        );
+
+        if (existing_date_object) {
+          existing_date_object.leadObject.push(lead);
+          existing_date_object.myLead.push(lead.LeadID);
+
+        } else {
+          filter_data.push({ date: lead?.LeadStatusDate, leadObject: [lead] , myLead : [lead.LeadID] });
+        }
+        setLeadAnyticsObj(filter_data);
+      });
+  
+
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const refundFilterDetailsFunc = (s_startdate, p_endDate)=>{
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+    const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+  axios.get(`${API_BASE_URL}/refundfees/`, {
+    headers : {
+        "Authorization": `Bearer ${token}`
+    },
+    params: {
+      from_date : startDate,
+      to_date: endDate
+    }
+}).then((response)=>{
+    setRefundObj(response.data);
+}).catch((err)=>{
+    console.log(err);
+})
+}
+
+
+const filterLeadAnalyticsFunc = (s_startdate, p_endDate)=>{
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+  const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+  axios
+    .get(`${API_BASE_URL}/leadanalyts/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {from_date : startDate,
+        to_date : endDate
+      }
+    })
+    .then((values) => {
+      console.log(values.data);
+
+      const filter_data = [];
+      values.data?.forEach((lead, index) => {
+        const existing_date_object = filter_data?.find(
+          (ele) => ele.date?.substring(0,10) == lead?.LeadStatusDate?.substring(0,10)
+        );
+
+        if (existing_date_object) {
+          existing_date_object.leadObject.push(lead);
+          existing_date_object.myLead.push(lead.LeadID);
+
+        } else {
+          filter_data.push({ date: lead?.LeadStatusDate, leadObject: [lead] , myLead : [lead.LeadID] });
+        }
+        setFilterLeadAnalist(filter_data);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+
+
+
+const getFilterResisteredStudentAll = (s_startdate, p_endDate) => {
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+  const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+  axios
+    .get(`${API_BASE_URL}/registeredstudent/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {from_date : startDate,
+        to_date : endDate
+      }
+    })
+    .then((values) => {
+      console.log("Data received:", values.data);
+      setFilteredRegisterStudent(values.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const getPaymentAllFunc = ()=>{
+  axios
+      .get(`${API_BASE_URL}/payments/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((value) => {
+        console.log(value.data);
+        setpaymentAllObj(value.data);
+      });
+}
+
+
+const getPaymentFilterFunc = (s_startdate, p_endDate)=>{
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+  const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+
+  axios
+      .get(`${API_BASE_URL}/payments/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {from_date : startDate,
+        to_date : endDate
+      }
+      })
+      .then((value) => {
+        setpaymentFilterObj(value.data);
+      });
+}
+
+
+
+const batchDetails = () => {
+  axios.get(`${API_BASE_URL}/batch/`,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    }).then((value) => {
+      setBatchObj(value.data);
+    }).catch((err) => {
+      console.log(err);
+    })
+}
+
+const filterBatchFunc = (s_startdate, p_endDate)=>{
+
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+  const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+
+  axios.get(`${API_BASE_URL}/batch/`,
+  {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    },
+    params: {
+      from_date : startDate,
+      to_date : endDate
+    }
+  }).then((value) => {
+    setBatchFilterObj(value.data);
+  }).catch((err) => {
+    console.log(err);
+  })
+
 }
 
 
@@ -631,7 +917,34 @@ const navFunc = ()=>{
         navFunc,
         navItem,
         brandPageFunc,
-        brand_cookie_arr
+        brand_cookie_arr,
+        setRecaptchaToken,
+        filterLeadFunc,
+        filteredLead,
+        todayCallFunc,
+        todayCallData,
+        todayCallFilterFunc,
+        todayCallFilterData,
+        leadAnalyticsFunc,
+        filterLeadAnalyticsFunc,
+        filterLeadAanlist,
+        getFilterResisteredStudentAll,
+        filteredRegisteredStudent,
+        refundFilterDetailsFunc,
+        filterPaymentRefundData,
+        getPaymentAllFunc,
+        paymentAllObj,
+        getPaymentFilterFunc,
+        filterPaymentObj,
+        filteredVisitSechudule,
+        filteredvisitHappned,
+        filtereddemoSchedule,
+        filtereddemoHappned,
+        getLeadFollowUpFilter,
+        batchDetails,
+        batchObj,
+        filterBatchFunc,
+        batchFilterObj
       }}
     >
       {children}

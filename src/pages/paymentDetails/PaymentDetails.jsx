@@ -4,61 +4,32 @@ import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DataContext } from "../../context";
-import axios from "axios";
-import API_BASE_URL from "../../config";
 import PaymentSupport from "./PaymentSupport";
 import PaymentLoading from "./PaymentLoading";
 import ExcelDownloadButton from "../../component/ExcelDownloadButton/ExcelDownloadButton";
-import { Button } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { CloseOutlined } from "@mui/icons-material";
 import { format } from "date-fns";
 
 const PaymentDetails = () => {
-  const { GetFeesAll, allFeesObj } = useContext(DataContext);
+
+
+
+  const { getPaymentAllFunc, paymentAllObj,getPaymentFilterFunc,filterPaymentObj } = useContext(DataContext);
   const [isFeesDate, setisFeesDate] = useState(true);
-  const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [paymentObj, setPaymentObj] = useState();
   const [showCalendar, setShowCalendar] = useState(false);
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
-    axios
-      .get(`${API_BASE_URL}/payments/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((value) => {
-        console.log(value.data);
-        setPaymentObj(value.data);
-      });
+    getPaymentAllFunc()
   }, []);
 
   const handleSelect = (date) => {
     setisFeesDate(false);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
-    let filtered = paymentObj?.filter((product) => {
-      let productDate = new Date(product?.payment_date);
-      if (date.selection.endDate == date.selection.startDate) {
-        productDate.setHours(0, 0, 0, 0);
-        return productDate.getTime() === date.selection.startDate.getTime();
-      } else if (date.selection.startDate && date.selection.endDate) {
-        return (
-          productDate <= date.selection.endDate &&
-          productDate >= date.selection.startDate
-        );
-      } else if (date.selection.endDate != date.selection.startDate) {
-        return (
-          productDate >= date.selection.startDate &&
-          productDate <= date.selection.endDate
-        );
-      }
-    });
-    setFilteredAllFeesObj(filtered);
+    getPaymentFilterFunc(date.selection.startDate,date.selection.endDate);
   };
 
   const selectionRange = {
@@ -67,18 +38,23 @@ const PaymentDetails = () => {
     key: "selection",
   };
 
-  useEffect(() => {
-    GetFeesAll();
-  }, []);
+  if (!paymentAllObj) {
+    return <>
+      <div className="flex justify-center items-center h-[70vh] m-20 bg-gray-200">
+        <CircularProgress />
+      </div>
+    </>
+
+  }
 
   return (
     <>
-      <div className="  overflow-x-auto">
+      <div className="overflow-x-auto">
         <div className="w-full rounded">
           <div className='ml-auto flex'>
             {isFeesDate ? (
               <ExcelDownloadButton
-                data={paymentObj?.map((element, index) => ({
+                data={filterPaymentObj?.map((element, index) => ({
                   "S. No.": index + 1,
                   Name: element.name,
                   Email: element.email,
@@ -95,7 +71,7 @@ const PaymentDetails = () => {
               />
             ) : (
               <ExcelDownloadButton
-                data={paymentObj?.map((element, index) => ({
+                data={paymentAllObj?.map((element, index) => ({
                   "S. No.": index + 1,
                   Name: element.name,
                   Email: element.email,
@@ -167,13 +143,13 @@ const PaymentDetails = () => {
             </tr>
           </thead>
 
-          {paymentObj ? (
+          {paymentAllObj ? (
             isFeesDate ? (
-              paymentObj?.map((payment, index) => (
+              paymentAllObj?.map((payment, index) => (
                 <PaymentSupport payment={payment} index={index} key={index} />
               ))
             ) : (
-              filteredallFeesObj?.map((payment, index) => (
+              filterPaymentObj?.map((payment, index) => (
                 <PaymentSupport payment={payment} index={index} key={index} />
               ))
             )

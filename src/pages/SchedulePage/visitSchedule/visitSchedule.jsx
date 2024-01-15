@@ -10,12 +10,13 @@ import ExcelDownloadButton from '../../../component/ExcelDownloadButton/ExcelDow
 import { format } from 'date-fns';
 import { CloseOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
+import NoDataPage from '../../../component/NoDataPage/NoDataPage';
 
 const VisitSchedule = () => {
 
-  const { getLeadFollowUpAll, visitSechudule } = useContext(DataContext);
+  const { getLeadFollowUpAll, visitSechudule, filteredVisitSechudule, getLeadFollowUpFilter } = useContext(DataContext);
+
   const [isVisitDate, setIsVisitDate] = useState(true);
-  const [filteredVisitSechudule, setFilteredVisitSechudle] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
@@ -25,28 +26,7 @@ const VisitSchedule = () => {
     setIsVisitDate(false);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
-    let filtered = visitSechudule?.filter((product) => {
-      let productDate = new Date(product?.LeadStatusDate);
-      if (date.selection.endDate == date.selection.startDate) {
-
-        productDate.setHours(0, 0, 0, 0);
-        return (
-          productDate.getTime() === date.selection.startDate.getTime()
-        );
-      }
-      else if (date.selection.startDate && date.selection.endDate) {
-        return (
-          productDate <= date.selection.endDate &&
-          productDate >= date.selection.startDate
-        )
-      }
-      else if (date.selection.endDate != date.selection.startDate) {
-        return (
-          productDate >= date.selection.startDate &&
-          productDate <= date.selection.endDate)
-      }
-    })
-    setFilteredVisitSechudle(filtered);
+    getLeadFollowUpFilter("Visit scheduled", date.selection.startDate, date.selection.endDate);
   }
 
   const selectionRange = {
@@ -56,8 +36,7 @@ const VisitSchedule = () => {
   }
 
   useEffect(() => {
-
-    getLeadFollowUpAll();
+    getLeadFollowUpAll("Visit scheduled");
   }, [])
 
   return (
@@ -153,6 +132,9 @@ const VisitSchedule = () => {
             </tr>
           </thead>
 
+
+
+
           <thead className="bg-purple-500 text-white md:hidden table-header-group">
             <tr className="border border-gray-300">
               <th className="px-4 py-2 border border-gray-300">Visit Schedule Details</th>
@@ -161,13 +143,28 @@ const VisitSchedule = () => {
 
           {visitSechudule ?
             isVisitDate ?
+
               visitSechudule?.map((visit, index) => (
                 <VisitSupport visit={visit} index={index} key={index} />
               ))
-              : filteredVisitSechudule?.map((visit, index) => (
+              :
+
+              filteredVisitSechudule?.map((visit, index) => (
                 <VisitSupport visit={visit} index={index} key={index} />
               )) : <LoadingTabel />}
         </table>
+
+        {visitSechudule ?
+          isVisitDate ?
+            visitSechudule.length == 0 ? <NoDataPage status={"Visit Schedule"} /> : null
+            : null : null}
+
+        {filteredVisitSechudule ?
+          !isVisitDate ?
+            filteredVisitSechudule.length == 0 ? <NoDataPage status={"Visit Schedule"} /> : null
+            : null : null}
+
+
       </div>
     </>
   )

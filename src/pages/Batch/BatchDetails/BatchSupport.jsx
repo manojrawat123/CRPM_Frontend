@@ -56,7 +56,7 @@ const BatchSupport = (props) => {
                         </div>
                         <div>
                             <span className='font-bold text-black'>Batch StartDate -:  </span>
-                            {props?.item?.BatchEndDate?.substring(0, 10)}
+                            {props?.item?.BatchStartDate?.substring(0, 10)}
                         </div>
                         <div>
                             <span className='font-bold text-black'>Batch End Date -:  </span>

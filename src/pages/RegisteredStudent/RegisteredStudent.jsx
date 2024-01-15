@@ -6,15 +6,14 @@ import { DataContext } from "../../context";
 import RegisteredSupport from "./RegisteredSupport";
 import RegisterStudentLoading from "./RegisterStudentLoading";
 import { CloseOutlined } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import ExcelDownloadButton from "../../component/ExcelDownloadButton/ExcelDownloadButton";
 import { format } from "date-fns";
 
 const RegisteredStudent = () => {
-  const { getResisteredStudentAll, registeredStudent } =
+  const { getResisteredStudentAll, registeredStudent ,getFilterResisteredStudentAll,filteredRegisteredStudent } =
     useContext(DataContext);
   const [isRegisteredDate, setIsRegisteredDate] = useState(true);
-  const [filteredRegisteredStudent, setFilteredRegisterStudent] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
@@ -24,25 +23,7 @@ const RegisteredStudent = () => {
     setIsRegisteredDate(false);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
-    let filtered = registeredStudent?.filter((product) => {
-      let productDate = new Date(product?.ConvertedDateTime);
-
-      if (date.selection.endDate == date.selection.startDate) {
-        productDate.setHours(0, 0, 0, 0);
-        return productDate.getTime() === date.selection.startDate.getTime();
-      } else if (date.selection.startDate && date.selection.endDate) {
-        return (
-          productDate <= date.selection.endDate &&
-          productDate >= date.selection.startDate
-        );
-      } else if (date.selection.endDate != date.selection.startDate) {
-        return (
-          productDate >= date.selection.startDate &&
-          productDate <= date.selection.endDate
-        );
-      }
-    });
-    setFilteredRegisterStudent(filtered);
+    getFilterResisteredStudentAll(date.selection.startDate, date.selection.endDate);
   };
 
   const selectionRange = {
@@ -55,6 +36,14 @@ const RegisteredStudent = () => {
     getResisteredStudentAll();
   }, []);
 
+  if (!registeredStudent){
+    <>
+    <div className="flex justify-center items-center h-[70vh] m-20 bg-gray-200">
+    <CircularProgress />
+    </div>
+    </>
+  }
+
   return (
     <>
      <div className="  overflow-x-auto">
@@ -62,7 +51,7 @@ const RegisteredStudent = () => {
   <div className='ml-auto flex'>
 {isRegisteredDate ? (
   <ExcelDownloadButton
-   data={filteredRegisteredStudent.map((element, index) => ({
+   data={filteredRegisteredStudent?.map((element, index) => ({
   "S. No.": index + 1,
   "Student Name": element.lead_obj?.LeadName, 
   "Student Total Fee" :   element.total_payment,
@@ -82,7 +71,7 @@ fileName={"Registered Student"}
   />
 ) : (
   <ExcelDownloadButton
-    data={filteredRegisteredStudent.map((element, index) => ({
+    data={filteredRegisteredStudent?.map((element, index) => ({
   "S. No.": index + 1,
   "Student Name": element.lead_obj?.LeadName, 
   "Student Total Fee" :   element.total_payment,

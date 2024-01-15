@@ -10,13 +10,14 @@ import { CloseOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import ExcelDownloadButton from '../../../component/ExcelDownloadButton/ExcelDownloadButton';
 import { format } from 'date-fns';
+import NoDataPage from '../../../component/NoDataPage/NoDataPage';
 
 
 const DemoSchedule = () => {
 
-    const { getLeadFollowUpAll, demoSchedule } = useContext(DataContext);
+    const { getLeadFollowUpAll, filtereddemoSchedule, demoSchedule, getLeadFollowUpFilter } = useContext(DataContext);
+
     const [isDemoScheduleDate, setisDemoScheduleDate] = useState(true);
-    const [filtereddemoSchedule, setFilteredDemoSchedule] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [showCalendar, setShowCalendar] = useState(false);
@@ -26,28 +27,7 @@ const DemoSchedule = () => {
         setisDemoScheduleDate(false);
         setStartDate(date.selection.startDate);
         setEndDate(date.selection.endDate);
-        let filtered = demoSchedule?.filter((product) => {
-            let productDate = new Date(product?.LeadEventDate);
-            if (date.selection.endDate == date.selection.startDate) {
-
-                productDate.setHours(0, 0, 0, 0);
-                return (
-                    productDate.getTime() === date.selection.startDate.getTime()
-                );
-            }
-            else if (date.selection.startDate && date.selection.endDate) {
-                return (
-                    productDate <= date.selection.endDate &&
-                    productDate >= date.selection.startDate
-                )
-            }
-            else if (date.selection.endDate != date.selection.startDate) {
-                return (
-                    productDate >= date.selection.startDate &&
-                    productDate <= date.selection.endDate)
-            }
-        })
-        setFilteredDemoSchedule(filtered);
+        getLeadFollowUpFilter("Demo scheduled", date.selection.startDate, date.selection.endDate);
     }
 
     const selectionRange = {
@@ -57,8 +37,8 @@ const DemoSchedule = () => {
     }
 
     useEffect(() => {
+        getLeadFollowUpAll("Demo scheduled");
 
-        getLeadFollowUpAll();
     }, [])
 
     return (
@@ -138,7 +118,7 @@ const DemoSchedule = () => {
                 </div>
             </div>
             <div className='m-8'>
-            <h1 className="text-xl font-bold underline my-4 text-center">Demo Schedule</h1>
+                <h1 className="text-xl font-bold underline my-4 text-center">Demo Schedule</h1>
                 <table className="min-w-full">
                     <thead className="bg-purple-500 text-white hidden md:table-header-group">
                         <tr className="border border-gray-300">
@@ -161,13 +141,26 @@ const DemoSchedule = () => {
 
                     {demoSchedule ?
                         isDemoScheduleDate ?
-                            demoSchedule?.map((visit, index) => (
-                                <DemoScheduleSupport visit={visit} index={index} key={index} />
-                            ))
-                            : filtereddemoSchedule?.map((visit, index) => (
-                                <DemoScheduleSupport visit={visit} index={index} key={index} />
-                            )) : <LoadingTabel />}
+                            demoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> :
+                                demoSchedule?.map((visit, index) => (
+                                    <DemoScheduleSupport visit={visit} index={index} key={index} />
+                                ))
+                            :
+                            filtereddemoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> :
+                                filtereddemoSchedule?.map((visit, index) => (
+                                    <DemoScheduleSupport visit={visit} index={index} key={index} />
+                                )) : <LoadingTabel />}
                 </table>
+
+                {demoSchedule ?
+                    isDemoScheduleDate ?
+                        demoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> : null
+                        : null : null}
+
+                {filtereddemoSchedule ?
+                    !isDemoScheduleDate ?
+                        filtereddemoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> : null
+                        : null : null}
             </div>
         </>
     )

@@ -127,7 +127,7 @@ const PaymentRefundForm = () => {
                   FeeRefundedDateTime: `${value?.leadDate} ${value?.leadTime}`,
                   // ReceiptNumber: 'ABC123',
                   PaymentMode: payment_mode_obj?.payment_mode_id || "",
-                  StudentID: convertedData?.StudentID,
+                  StudentID: convertedData?.StudentID?.CustomerID,
                   ConvertedID: id,
                   UpdatedBY: username,
                   Representative: leadObj?.LeadRepresentativePrimary.id,
@@ -137,8 +137,6 @@ const PaymentRefundForm = () => {
                   Company: company,
                   Brand: brandID,
                 };
-                console.log("---post data---");
-                console.log(postData);
                 axios
                   .post(`${API_BASE_URL}/refundfees/`, postData, {
                     headers: {

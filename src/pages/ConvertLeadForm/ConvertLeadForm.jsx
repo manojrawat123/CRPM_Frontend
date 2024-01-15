@@ -84,7 +84,6 @@ const ConvertLeadForm = () => {
         console.log(errr);
       });
   };
-  const totalPaymentAmount = paymentObj.reduce((sum, payment) => sum + parseInt(payment.payment_amount, 10), 0);
 
 
   if (!leadByIdObj) {
@@ -141,8 +140,6 @@ const ConvertLeadForm = () => {
             onSubmit={(values, { resetForm }) => {
               
               setLoadingButton(true);
-              console.log(values.package)
-              // console.log(values.package.ServiceName)
               const authToken = localStorage.getItem("token");
               const brandID = localStorage.getItem("brand");
               console.log(values.package.length);

@@ -5,6 +5,7 @@ import LeadAnalyticsModal from "./LeadAnalyticsModel";
 import { DateRangePicker } from "react-date-range";
 import { CloseOutlined } from "@mui/icons-material";
 import ExcelDownloadButton from "../../component/ExcelDownloadButton/ExcelDownloadButton";
+import { CircularProgress } from "@mui/material";
 
 const LeadAnalytics = () => {
   const [filterLead, setFilterLead] = useState();
@@ -12,43 +13,23 @@ const LeadAnalytics = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isDate, setIsDate] = useState(true);
-  const [filterLeadAanlist, setFilterLeadAnalist] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
 
 
-  const { getLeadFollowUpAll, leadAnalyticsObj } = useContext(DataContext);
+  const { leadAnalyticsObj,leadAnalyticsFunc,filterLeadAnalyticsFunc,filterLeadAanlist } = useContext(DataContext);
 
 
   useEffect(() => {
-    getLeadFollowUpAll()
-
+    leadAnalyticsFunc();
   }, [])
 
 
   
   const handleSelect = (date) => {
     setIsDate(false);
-    console.log(date);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
-    let filtered = leadAnalyticsObj?.filter((product) => {
-      let productDate = new Date(product?.date); 
-      if (date.selection.endDate == date.selection.startDate) {
-        productDate.setHours(0, 0, 0, 0);
-        return productDate.getTime() === date.selection.startDate.getTime();
-      } else if (date.selection.startDate && date.selection.endDate) {
-        return (
-          productDate <= date.selection.endDate &&
-          productDate >= date.selection.startDate
-        );
-      } else if (date.selection.endDate != date.selection.startDate) {
-        return (
-          productDate >= date.selection.startDate &&
-          productDate <= date.selection.endDate
-        );
-      }
-    });
-    setFilterLeadAnalist(filtered);
+    filterLeadAnalyticsFunc(date.selection.startDate,date.selection.endDate);
   };
 
   const selectionRange = {
@@ -57,10 +38,17 @@ const LeadAnalytics = () => {
     key: "selection",
   };
 
+  if (!leadAnalyticsObj){
+    return <>
+    <div className="flex justify-center items-center h-[70vh] m-20 bg-gray-200">
+    <CircularProgress />
+    </div>
+    </>
+  }
+
   return (
     <div className="mx-8 ">
-      <LeadAnalyticsModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} filterLead={filterLead} />
-      
+      <LeadAnalyticsModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} filterLead={filterLead} />   
       {/* Date fields and Brand option */}
       <div className='ml-auto flex'>
 
@@ -110,7 +98,6 @@ className={`mx-4 mt-8 p-2 rounded-full transition duration-300 ease-in-out sm:mr
       <div className={`grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-10 cursor-pointer`}  >
        { isDate ?
        leadAnalyticsObj?.map((element, index) => {
-        console.log(element)
         let demoSchedule = 0;
         let visitSchedule = 0;
         let callMade = 0;
