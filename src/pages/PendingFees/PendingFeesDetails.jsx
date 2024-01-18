@@ -4,6 +4,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import MySupport from './PendingFeesSupport';
 import API_BASE_URL from "../../config";
 import ConvertedLeadLoading from './PendingFeesLoading';
+import { ToastContainer } from 'react-toastify';
 
 
 const PendingFeeGet = () => {
@@ -34,6 +35,8 @@ const PendingFeeGet = () => {
   
   
   return (
+    <>
+    <ToastContainer />
     <div className="py-4 ">
       <div className="overflow-x-auto mx-4">
         <h1 className='text-center md:text-xl font-bold underline mb-4'>Pending Fees Details</h1>
@@ -67,6 +70,7 @@ const PendingFeeGet = () => {
         </table> 
       </div>
     </div>
+    </>
   );
 };
 
