@@ -12,38 +12,25 @@ import { Button } from "@mui/material";
 import ExcelDownloadButton from "../../component/ExcelDownloadButton/ExcelDownloadButton";
 
 const Lead = () => {
-  const { getLeadFunc, leads, leadGetById, filterLeadFunc, filteredLead } = useContext(DataContext);
+  const { getLeadFunc, leads, filterLeadFunc, filteredLead } = useContext(DataContext);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isDate, setIsDate] = useState(true);
-
   const [showCalendar, setShowCalendar] = useState(false);
-  const { id } = useParams();
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getLeadFunc();
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-    leadGetById(id);
+    getLeadFunc();
   }, []);
 
-  useEffect(() => {
-    console.log("This is filteredLead", filteredLead);
-  }, [JSON.stringify(startDate), JSON.stringify(endDate)]);
+  
 
   const handleSelect = (date) => {
     setIsDate(false);
-    console.log(date);
     setStartDate(date.selection.startDate);
     setEndDate(date.selection.endDate);
 
-    filterLeadFunc(date.selection.startDate, date.selection.endDate);
-      console.log(filteredLead);
+    filterLeadFunc(date.selection.startDate, date.selection.endDate)
   };
 
   const selectionRange = {
@@ -108,8 +95,8 @@ const Lead = () => {
             <button
               onClick={() => setShowCalendar(!showCalendar)}
               className={`mx-4 mt-8 p-2 rounded-full transition duration-300 ease-in-out sm:mr-16 ${isDate ? " ml-auto " : ""} ${showCalendar
-                  ? "border border-red-500 hover:bg-red-500 hover:text-white text-red-500"
-                  : "border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 "
+                ? "border border-red-500 hover:bg-red-500 hover:text-white text-red-500"
+                : "border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 "
                 }`}
             >
               {showCalendar ? <CloseOutlined /> : "Filter Lead's"}

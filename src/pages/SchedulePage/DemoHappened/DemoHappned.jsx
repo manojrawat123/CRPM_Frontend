@@ -141,11 +141,10 @@ const DemoHappned = () => {
 
           {demoHappned ?
             isDemoDate ?
-              demoHappned.length == 0 ? <NoDataPage status={"Demo Happned"} /> : demoHappned?.map((visit, index) => (
+             demoHappned?.map((visit, index) => (
                 <DemoHappnedSupport visit={visit} index={index} key={index} />
               ))
               :
-              filtereddemoHappned.length == 0 ? <NoDataPage status={"Demo Happned"} /> :
                 filtereddemoHappned?.map((visit, index) => (
                   <DemoHappnedSupport visit={visit} index={index} key={index} />
                 )) : <LoadingTabel />}

@@ -9,6 +9,7 @@ import { format } from "date-fns";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+
   const brandId = Cookies.get("brand");
   const [auth, setAuth] = useState(false);
   const [number, setNumber] = useState("");
@@ -34,7 +35,6 @@ export const DataProvider = ({ children }) => {
   const [registeredStudent, setRegisteredStudent] = useState();
   const [allFeesObj, setAllFeesObj] = useState();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
   const [showNavbar, setShowNavbar] = useState(false);
   const [leadSubmitButton, setLeadSubmitButton] = useState(false);
   const [leadScource, setLeadScource] = useState();
@@ -66,8 +66,11 @@ export const DataProvider = ({ children }) => {
   const [filtereddemoHappned, setFilteredDemoHappned] = useState([]);
   const [batchObj, setBatchObj] = useState();
   const [batchFilterObj, setBatchFilterObj] = useState();
+  const [filteredallFeesObj, setFilteredAllFeesObj] = useState([]);
+  const [assignBatchObj, setAssignBatchObj] = useState();
+  const [filterAssignBatchObj, setFilterAssignBatchObj] = useState();
 
- 
+  const token = Cookies.get("token");
   
   var userId;
 
@@ -106,6 +109,31 @@ export const DataProvider = ({ children }) => {
         console.log(err);
       });
   };
+
+
+    /// Fees Details
+    const getFilterFeesFunc = ( s_startdate, p_endDate) => {
+
+      const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+      const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+
+      axios
+        .get(`${API_BASE_URL}/feetracer/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params : {
+            from_date : startDate,
+            to_date : endDate
+          }
+        })
+        .then((values) => {
+          setFilteredAllFeesObj(values.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   /// End Fees Details
 
 
@@ -841,6 +869,43 @@ const filterBatchFunc = (s_startdate, p_endDate)=>{
 
 }
 
+const batchAssignStuDetailsFunc = () => {
+
+  axios.get(`${API_BASE_URL}/batchforconverted/`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    
+  }).then((values) => {
+    setAssignBatchObj(values.data);
+  }).catch((err)=>{
+    console.log(err);
+  });
+}
+
+const filterBatchAssignStuDetailsFunc = (s_startdate, p_endDate) => {
+
+  const startDate = format(new Date(s_startdate), 'yyyy-MM-dd');
+  const endDate = format(new Date(p_endDate), "yyyy-MM-dd");
+
+  axios.get(`${API_BASE_URL}/batchforconverted/`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    params: {
+      from_date : startDate,
+      to_date : endDate
+    }
+  }).then((values) => {
+    setFilterAssignBatchObj(values.data);
+  }).catch((err)=>{
+    console.log(err);
+  });
+}
+
+
+
+
 
   // End OF lead Function
   return (
@@ -944,10 +1009,18 @@ const filterBatchFunc = (s_startdate, p_endDate)=>{
         batchDetails,
         batchObj,
         filterBatchFunc,
-        batchFilterObj
+        batchFilterObj,
+        getFilterFeesFunc,
+        filteredallFeesObj,
+        batchAssignStuDetailsFunc,
+        filterBatchAssignStuDetailsFunc,
+        assignBatchObj,
+        filterAssignBatchObj
       }}
     >
       {children}
     </DataContext.Provider>
   );
 };
+
+

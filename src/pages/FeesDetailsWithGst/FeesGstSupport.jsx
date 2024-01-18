@@ -1,6 +1,4 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import API_BASE_URL from "../../config";
+import React from 'react';
 import MyModal from '../FeesTable/Modal';
 
 
@@ -33,7 +31,7 @@ console.log(props);
         </td>
         <td className='border border-gray-300 px-4 py-2'>
           <span className="font-bold">Pending Fees:</span>&nbsp;
-          {props?.fees.converted_id?.TotalFee - props?.fees?.fee_received}
+          {parseInt(props?.fees?.converted_id?.TotalFee, 10) - parseInt(props?.fees?.paid_fees, 10) }
 
           <br />
           <span className="font-bold">
@@ -99,7 +97,7 @@ console.log(props);
             </div>
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Pending Fees:</div>
-              <div className='col-span-3'> {parseInt(props?.fees?.converted_id?.TotalFee, 10) - parseInt(props?.fees?.fee_received, 10) }</div>
+              <div className='col-span-3'>  {parseInt(props?.fees?.converted_id?.TotalFee, 10) - parseInt(props?.fees?.paid_fees, 10) }</div>
             </div>
             <div className='grid grid-cols-5 gap-10'>
               <div className='col-span-2 font-bold'>Total Fees</div>

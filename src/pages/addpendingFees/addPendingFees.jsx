@@ -91,7 +91,6 @@ const AddFeesDetails = () => {
               const feeTracerData = {
                 lead: leadObj.id,
                 fee_received: values?.fees_paid,
-                fee_created_datetime: feesObj?.fee_created_datetime,
                 fee_payment_datetime: feesObj?.fee_payment_datetime,
                 next_due_date: values?.next_due_date,
                 receipt_number: values?.receipt_number,
@@ -107,9 +106,6 @@ const AddFeesDetails = () => {
                 payment_id: values?.payment_id,
                 next_payment_date: values?.next_due_date
               };
-              console.log(feeTracerData)
-              console.log(values?.fees_paid);
-              console.log(selectedPaymentObj?.payment_amount);
               if (values?.fees_paid != selectedPaymentObj.payment_amount){
                   toast.error('Payment Amount Should Equal to Payment !!', {
                     position: toast.POSITION.TOP_CENTER,})

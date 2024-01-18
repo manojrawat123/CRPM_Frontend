@@ -141,12 +141,10 @@ const DemoSchedule = () => {
 
                     {demoSchedule ?
                         isDemoScheduleDate ?
-                            demoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> :
                                 demoSchedule?.map((visit, index) => (
                                     <DemoScheduleSupport visit={visit} index={index} key={index} />
                                 ))
                             :
-                            filtereddemoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> :
                                 filtereddemoSchedule?.map((visit, index) => (
                                     <DemoScheduleSupport visit={visit} index={index} key={index} />
                                 )) : <LoadingTabel />}
@@ -157,8 +155,7 @@ const DemoSchedule = () => {
                         demoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> : null
                         : null : null}
 
-                {filtereddemoSchedule ?
-                    !isDemoScheduleDate ?
+                { !isDemoScheduleDate ? filtereddemoSchedule ?
                         filtereddemoSchedule.length == 0 ? <NoDataPage status={"Demo Schedule"} /> : null
                         : null : null}
             </div>

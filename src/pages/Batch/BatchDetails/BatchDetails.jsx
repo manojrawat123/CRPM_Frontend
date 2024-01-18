@@ -11,7 +11,7 @@ import { DataContext } from "../../../context";
 import NoDataPage from "../../../component/NoDataPage/NoDataPage";
 
 const BatchDetails = () => {
-  const { batchDetails, batchObj, filterBatchFunc,batchFilterObj} = useContext(DataContext);
+  const { batchDetails, batchObj, filterBatchFunc, batchFilterObj } = useContext(DataContext);
 
   const [isDate, setIsDate] = useState(true);
   const [startDate, setStartDate] = useState(new Date());
@@ -179,8 +179,7 @@ const BatchDetails = () => {
           batchObj.length == 0 ? <NoDataPage status={"Batch "}/> : null : null : null}
 
 
-{!isDate ? 
-         batchFilterObj.length == 0 ? <NoDataPage  status={"Batch "}/>: null  ? <NoDataPage status={"Batch "}/> : null : null }
+{!isDate ? batchFilterObj ? batchFilterObj.length == 0 ? <NoDataPage status={"Batch Created in given Range"}/> : null: null: null}
 
           {!batchObj ? (
             <div className="h-[50vh] flex items-center justify-center">

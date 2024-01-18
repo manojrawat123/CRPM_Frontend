@@ -160,7 +160,6 @@ const ConvertLeadForm = () => {
                 UpdateBY: username,
                 payment_mode: selectedPaymentObject?.payment_mode_id?.payment_mode_id,
                 payment_type: selectedPaymentObject?.payment_type_id?.payment_type_id,
-                fee_created_datetime: values.fee_payment_datetime
               };
               console.log(requestData);
 
