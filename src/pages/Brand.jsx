@@ -10,18 +10,20 @@ const MyBrand = () => {
 
   const navigate = useNavigate();
 
-const {
-  brandPageFunc,
-  brand_cookie_arr} = useContext(DataContext);
+  const
+    {
+      brandPageFunc,
+      brand_cookie_arr
+    } = useContext(DataContext);
 
-  useEffect(()=>{
-    try{
+  useEffect(() => {
+    try {
       brandPageFunc();
     }
-    catch{
+    catch {
       console.log("")
     }
-  })
+  }, [])
 
   return (
     <section className="gradient-form  bg-neutral-200  dark:bg-neutral-700">

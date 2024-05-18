@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import API_BASE_URL from "../../config";
 import { ArrowBack } from '@mui/icons-material';
@@ -9,6 +9,7 @@ import { CircularProgress } from '@mui/material';
 import { DataContext, DataProvider } from '../../context';
 import { useContext } from 'react';
 import LoadingPending from '../addpendingFees/LoadingPending';
+import { toast } from 'react-toastify';
 
 
 
@@ -16,6 +17,7 @@ const AddLostSale = () => {
 
   const [loadingButton, setLoadingButton] = useState(false);
   const [load, setLoad] = useState(false);
+  const navigate = useNavigate();
 
   const { paymentFunc, paymentObj } = useContext(DataContext);
   const { id } = useParams();
@@ -53,19 +55,26 @@ const AddLostSale = () => {
           }}
           validationSchema={Yup.object({
             student: Yup.string().required('This Field is required'),
-            payment_amount: Yup.string().required('This Field is required'),
-            lost_sale_reason: Yup.string().required('This Field is required'),
+            // payment_amount: Yup.string().required('This Field is required'),
+            // lost_sale_reason: Yup.string().required('This Field is required'),
           })}
           onSubmit={(values) => {
+            console.log("----idhar chala mai udhar chala!!");
             setLoadingButton(true);
             axios.put(`${API_BASE_URL}/convertedlead/${id}/`, {
               LostSales: values?.payment_amount,
               LostSalesReason: values?.lost_sale_reason,
               LostSalesDate: new Date().toISOString().substring(0, 10)
-            }, config).then((value) => {
-              console.log(value.data);
+            }, ).then((value) => {
+              toast.success(`Lost Sales Updated Successfully of ${paymentObj?.lead_details?.LeadName} of amount ${values?.payment_amount}`, {
+                position: toast.POSITION.TOP_CENTER,
+              });
+                navigate("/pendingfees")
+              
             }).catch((err) => {
-              console.log(err)
+              toast.error(`Internal Server Error`, {
+                position: toast.POSITION.TOP_CENTER,
+              });
             }).finally(() => {
               setLoadingButton(false);
             })
@@ -76,6 +85,7 @@ const AddLostSale = () => {
             })
           }}
         >
+           {({ handleChange, values, setFieldValue }) => (
           <Form>
             <div className="px-6 pb-4">
               <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -96,7 +106,9 @@ const AddLostSale = () => {
                   <Field
                     type="number"
                     name="payment_amount"
-                    value={paymentObj?.pending_payment}
+                    // value={paymentObj?.pending_payment}
+                    value={values.payment_amount}
+                      onChange={(e) => setFieldValue('payment_amount', e.target.value)}
                     className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                   >
                   </Field>
@@ -107,7 +119,7 @@ const AddLostSale = () => {
                 <h4 className="text-green-600 mb-2">Lost Sale Reason</h4>
                 <Field
                   type="text"
-                  name="lost_sale_reason "
+                  name="lost_sale_reason"
                   className="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600"
                 />
                 <ErrorMessage name="lost_sale_reason " component="div" className="text-red-500 mt-1" />
@@ -122,6 +134,7 @@ const AddLostSale = () => {
               </div>
             </div>
           </Form>
+             )}
         </Formik>
       </div>
     </div>)

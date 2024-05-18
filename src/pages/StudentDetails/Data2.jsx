@@ -4,7 +4,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom';
 
 const Data2 = ({ fees_details }) => {
-
+console.log(fees_details)
 
 
     return (
@@ -17,9 +17,11 @@ const Data2 = ({ fees_details }) => {
                         </Button>
                     </NavLink>
                     &nbsp;&nbsp;
+                    <NavLink to={`/addpendingfee/${fees_details[0]?.converted_id?.ConvertedID}`}>
                     <Button variant='outlined'>
                         <ArrowBack /> Back to Pending Fees
                     </Button>
+                    </NavLink>
 
                 </div>
 
@@ -48,6 +50,7 @@ const Data2 = ({ fees_details }) => {
                 </div>
                 <br />
                 <div className="text-center font-semibold rounded-b-xl">
+                    <NavLink to={`/addlostsale/${fees_details[0]?.converted_id?.ConvertedID}`}>
                     <Button variant='outlined'
                         onClick={() => {
                             console.log("Button Clicked");
@@ -55,6 +58,7 @@ const Data2 = ({ fees_details }) => {
                     >
                         Add Lost Sale
                     </Button>
+                    </NavLink>
                 </div>
             </div>
 

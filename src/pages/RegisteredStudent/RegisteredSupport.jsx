@@ -27,9 +27,11 @@ const RegisteredSupport = (props) => {
             <br />
             <span className="font-bold">Refund Fees -: &nbsp;  </span>
             {props?.student?.fees_refund}
+
             <br />
-            <span className='font-bold'>Primary Course Name -: &nbsp; </span>
-            {props?.student?.CourseID?.ServiceName}</td>
+            <span className='font-bold'>Lost Sale -: &nbsp; </span>
+            {props?.student?.LostSales ? props?.student?.LostSales : "---"}
+            </td>
           <td className="border border-gray-300 px-4 py-2">
 
             <span className='font-bold '>
@@ -54,6 +56,8 @@ const RegisteredSupport = (props) => {
             <span className="font-bold">Representative  -: &nbsp; </span>
             {props.student.lead_obj?.LeadRepresentativePrimary?.name}
             <br />
+            <span className='font-bold'>Primary Course Name -: &nbsp; </span>
+            {props?.student?.CourseID?.ServiceName}
           </td>
 
 

@@ -4,13 +4,6 @@ import { NavLink } from "react-router-dom";
 import API_BASE_URL from "../../config";
 
 const LeadFollowUpSupport = (props) => {
-  console.log("----props items----");
-  console.log(props?.items);
-  console.log("leadId", props?.items?.LeadID);
-  
-
-  
-
   return (
     <>
       <tbody className="md:table-footer-group hidden">
