@@ -1,6 +1,6 @@
 // Define the base API URL here
-const API_BASE_URL = 'http://localhost:8000'; // Replace with your actual API URL
-const API_ROUTE_URL = 'http://localhost:5173'; 
+const API_BASE_URL = 'https://kingbahimunna.pythonanywhere.com'; // Replace with your actual API URL
+const API_ROUTE_URL = 'https://crpm-frontend.vercel.app'; 
 
 export {API_ROUTE_URL}
 
